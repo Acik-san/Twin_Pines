@@ -7,10 +7,21 @@ const initialState = {
   error: null,
 };
 
+const handleRequests = produce((draftState, action) => {
+  draftState.isFetching = true;
+});
+
+const handleError = produce((draftState, action) => {
+  const {
+    payload: { error },
+  } = action;
+  draftState.isFetching = false;
+  draftState.error = error;
+});
+
 const handlers = {
-  [ACTION_TYPES.CREATE_USER_REQUEST]: produce((draftState, action) => {
-    draftState.isFetching = true;
-  }),
+  [ACTION_TYPES.CREATE_USER_REQUEST]: handleRequests,
+  [ACTION_TYPES.GET_USERS_REQUEST]: handleRequests,
   [ACTION_TYPES.CREATE_USER_SUCCESS]: produce((draftState, action) => {
     const {
       payload: { user },
@@ -18,13 +29,15 @@ const handlers = {
     draftState.isFetching = false;
     draftState.users.push(user);
   }),
-  [ACTION_TYPES.CREATE_USER_ERROR]: produce((draftState, action) => {
+  [ACTION_TYPES.GET_USERS_SUCCESS]: produce((draftState, action) => {
     const {
-      payload: { error },
+      payload: { users },
     } = action;
     draftState.isFetching = false;
-    draftState.error = error;
+    draftState.users.push(...users);
   }),
+  [ACTION_TYPES.CREATE_USER_ERROR]: handleError,
+  [ACTION_TYPES.GET_USERS_ERROR]: handleError,
 };
 
 const userReducer = (state = initialState, action) => {
