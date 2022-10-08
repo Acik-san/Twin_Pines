@@ -16,6 +16,31 @@ export const createUser = (data) => {
     headers: { "Content-Type": "multipart/form-data" },
   });
 };
-
 export const getUsers = ({ limit = 5, offset = 0 }) =>
   httpClient.get(`/users?${qs.stringify({ limit, offset })}`);
+
+export const getUser = (id) => httpClient.get(`/users/${id}`);
+export const deleteUser = (id) => httpClient.delete(`/users/${id}`);
+export const updateUser = (data) => {
+  const form = new FormData();
+  form.append("login", data.values.login);
+  form.append("password", data.values.password);
+  if (data.values.avatar !== undefined || null) {
+    form.append("avatar", data.values.avatar);
+  }
+  return httpClient.patch(`/users/${data.id}`, form, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+};
+
+export const createTask = (data) =>
+  httpClient.post(`/users/${data.id}/tasks`, data.values);
+export const getUserTasks = (id) => httpClient.get(`/users/${id}/tasks`);
+export const getUserTask = (data) =>
+  httpClient.get(`/users/${data.userId}/tasks/${data.taskId}`);
+export const updateTask = (data) =>
+  httpClient.patch(`/users/${data.userId}/tasks/${data.taskId}`, data.values);
+export const deleteTask = (data) =>
+  httpClient.delete(`/users/${data.userId}/tasks/${data.taskId}`);
+export const getAllTasks = ({ limit = 5, offset = 0 }) =>
+  httpClient.get(`/tasks?${qs.stringify({ limit, offset })}`);

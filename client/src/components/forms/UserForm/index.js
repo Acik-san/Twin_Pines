@@ -2,7 +2,7 @@ import React from "react";
 import { Formik, Form, Field } from "formik";
 import { useDispatch } from "react-redux";
 import { bindActionCreators } from "redux";
-import * as ActionsUser from "../../actions/userCreators";
+import * as ActionsUser from "../../../actions/userCreators";
 
 const UserForm = (props) => {
   const { createUserRequest } = bindActionCreators(ActionsUser, useDispatch());

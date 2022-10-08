@@ -22,3 +22,34 @@ export function* getUsersSaga(action) {
     yield put(ActionsUser.getUsersError(error));
   }
 }
+export function* getUserSaga(action) {
+  try {
+    const {
+      data: { data: user },
+    } = yield API.getUser(action.payload.id);
+    yield put(ActionsUser.getUserSuccess(user));
+  } catch (error) {
+    yield put(ActionsUser.getUserError(error));
+  }
+}
+export function* updateUserSaga(action) {
+  try {
+    const {
+      data: { data: user },
+    } = yield API.updateUser(action.payload);
+    yield put(ActionsUser.updateUserSuccess(user));
+  } catch (error) {
+    yield put(ActionsUser.updateUserError(error));
+  }
+}
+export function* deleteUserSaga(action) {
+  try {
+    const {
+      data: { data: user },
+    } = yield API.deleteUser(action.payload.id);
+    yield put(ActionsUser.deleteUserSuccess(user));
+  } catch (error) {
+    yield put(ActionsUser.deleteUserError(error));
+  }
+}
+

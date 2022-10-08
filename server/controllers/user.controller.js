@@ -46,10 +46,13 @@ module.exports.getUser = async (req, res, next) => {
 module.exports.updateUser = async (req, res, next) => {
   try {
     const { instanceUser, body } = req;
-    const values = _.pick(body, ["login", "password"]);
-    const updatedUser = await instanceUser.update(values, { returning: true });
-    updatedUser.password = undefined;
-    res.status(200).send({ data: updatedUser });
+    if (req.file) {
+      body.avatar = req.file.filename;
+    }
+    const values = _.pick(body, ["login", "password", "avatar"]);
+    const updatedUser = await instanceUser.update(values);
+    const userPrepare = _.omit(await updatedUser.get(), ["password"]);
+    res.status(200).send({ data: userPrepare });
   } catch (error) {
     next(error);
   }
