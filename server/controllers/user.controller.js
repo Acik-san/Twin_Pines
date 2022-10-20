@@ -66,3 +66,12 @@ module.exports.deleteUser = async (req, res, next) => {
     next(error);
   }
 };
+module.exports.getSumUsers = async (req, res, next) => {
+  try {
+    const users = await User.findAll();
+    const sumUsers = users.length;
+    res.status(200).send({ data: sumUsers });
+  } catch (error) {
+    next(error);
+  }
+};

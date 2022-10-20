@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
   User.init(
     {
       login: {
-        type: DataTypes.STRING(64),
+        type: DataTypes.STRING(16),
         allowNull: false,
         unique: true,
         validate: { notEmpty: true, notNull: true },
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
           this.setDataValue("password", "hash");
         },
       },
-      avatar: { type: DataTypes.TEXT },
+      avatar: { type: DataTypes.TEXT, defaultValue: null },
     },
     {
       sequelize,

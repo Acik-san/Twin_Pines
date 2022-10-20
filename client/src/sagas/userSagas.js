@@ -52,4 +52,13 @@ export function* deleteUserSaga(action) {
     yield put(ActionsUser.deleteUserError(error));
   }
 }
-
+export function* getSumUserSaga(action) {
+  try {
+    const {
+      data: { data: sumUsers },
+    } = yield API.getSumUsers(action);
+    yield put(ActionsUser.getSumUserSuccess(sumUsers));
+  } catch (error) {
+    yield put(ActionsUser.getSumUserError(error));
+  }
+}

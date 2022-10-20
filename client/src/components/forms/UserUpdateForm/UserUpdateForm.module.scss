@@ -1,0 +1,42 @@
+@import "../../../common/styles/breakpoints";
+@import "../../../common/styles/templates";
+@import "../../../common/styles/colors";
+
+.invalid {
+  border: 2px solid red;
+}
+.form {
+  margin-top: 70px;
+}
+.input_container {
+  @include input_container;
+  label + label {
+    margin-top: 10px;
+  }
+}
+.input {
+  @include input;
+}
+.input_none {
+  @include none;
+}
+.upload_avatar {
+  position: relative;
+  cursor: pointer;
+  &::after {
+    content: url("../../../../public/static/images/svg/upload_avatar.svg");
+    position: absolute;
+    right: 67px;
+    top: 10px;
+  }
+}
+.save_settings {
+  position: relative;
+  cursor: pointer;
+  &::after {
+    content: url("../../../../public/static/images/svg/save.svg");
+    position: absolute;
+    right: 0px;
+    top: 10px;
+  }
+}

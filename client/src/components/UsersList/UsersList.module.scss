@@ -1,0 +1,33 @@
+@import "../../common/styles/breakpoints";
+@import "../../common/styles/templates";
+@import "../../common/styles/colors";
+
+.section {
+  @include section;
+}
+.cards_wrapper {
+  margin: auto;
+}
+.user_card {
+  @include user_card;
+  width: 270px;
+}
+
+.photo_wrapper {
+  @include photo_wrapper;
+}
+.photo_inner {
+  @include photo_inner;
+}
+.photo_inner_img {
+  @include photo_inner_img;
+}
+.login {
+  @include login;
+}
+
+@media screen and (min-width: $xs) {
+  .cards_wrapper {
+    max-width: 50%;
+  }
+}

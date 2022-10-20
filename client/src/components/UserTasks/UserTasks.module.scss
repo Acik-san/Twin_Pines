@@ -1,0 +1,45 @@
+@import "../../common/styles/breakpoints";
+@import "../../common/styles/templates";
+@import "../../common/styles/colors";
+
+@media screen and (min-width: $md) {
+  .section {
+    @include section;
+  }
+  h2,
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  h3 {
+    margin-top: 40px;
+  }
+  .user_card {
+    @include user_card;
+    width: 650px;
+  }
+
+  .task {
+    @include task;
+    margin-bottom: 2px;
+    :last-child {
+      margin-bottom: 0px;
+    }
+  }
+  .content {
+    @include word_break;
+  }
+  .button_none {
+    @include none;
+  }
+  .delete_task {
+    position: relative;
+    cursor: pointer;
+    &::after {
+      content: url("../../../public/static/images/svg/delete_task.svg");
+      position: absolute;
+      left: 575px;
+    }
+  }
+}

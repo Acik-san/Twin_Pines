@@ -1,0 +1,33 @@
+@import "../../common/styles/breakpoints";
+@import "../../common/styles/templates";
+@import "../../common/styles/colors";
+
+@media screen and (min-width: $md) {
+  .section {
+    @include section;
+  }
+  .task_wrapper {
+    @include user_card;
+    width: 650px;
+    max-height: 200px;
+  }
+  .task_inner {
+    display: flex;
+  }
+  .task {
+    @include task;
+    width: 555px;
+  }
+  .button_none {
+    @include none;
+  }
+  .edit_task {
+    position: relative;
+    cursor: pointer;
+    &::after {
+      content: url("../../../public/static/images/svg/edit_task.svg");
+      position: absolute;
+      bottom: 1px;
+    }
+  }
+}

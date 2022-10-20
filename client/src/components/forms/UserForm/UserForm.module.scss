@@ -1,0 +1,44 @@
+@import "../../../common/styles/breakpoints";
+@import "../../../common/styles/templates";
+@import "../../../common/styles/colors";
+
+.wrapper {
+  @include section;
+}
+.user_card {
+  @include user_card;
+  width: 270px;
+  height: 175px;
+}
+.input_container {
+  @include input_container;
+  label + label {
+    margin-top: 10px;
+  }
+}
+.input {
+  @include input;
+}
+.input_none {
+  @include none;
+}
+.upload_avatar {
+  position: relative;
+  cursor: pointer;
+  &::after {
+    content: url("../../../../public/static/images/svg/upload_avatar.svg");
+    position: absolute;
+    right: 65px;
+    top: 6px;
+  }
+}
+.save_settings {
+  position: relative;
+  cursor: pointer;
+  &::after {
+    content: url("../../../../public/static/images/svg/save.svg");
+    position: absolute;
+    left: 67px;
+    top: 6px;
+  }
+}

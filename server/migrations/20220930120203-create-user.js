@@ -12,7 +12,7 @@ module.exports = {
       login: {
         allowNull: false,
         unique: true,
-        type: Sequelize.STRING(64),
+        type: Sequelize.STRING(16),
       },
       password: {
         field: "password_hash",
@@ -21,6 +21,7 @@ module.exports = {
       },
       avatar: {
         type: Sequelize.TEXT,
+        defaultValue: null,
       },
       createdAt: {
         field: "created_at",

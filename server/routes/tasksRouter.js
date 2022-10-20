@@ -6,5 +6,6 @@ const { checkUser } = require("../middlewares/user.mw");
 const tasksRouter = Router();
 
 tasksRouter.get("/", paginate, TaskController.getTasks);
+tasksRouter.get("/sum", TaskController.getSumTasks);
 
 module.exports = tasksRouter;

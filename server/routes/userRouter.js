@@ -7,6 +7,7 @@ const { paginate } = require("../middlewares/paginate.mw");
 const { upload } = require("../middlewares/uploadImage.mw");
 
 const usersRouter = Router();
+usersRouter.route("/sum").get(UserController.getSumUsers);
 
 usersRouter
   .route("/")
@@ -23,9 +24,11 @@ usersRouter
   .route("/:userId/tasks")
   .post(checkUser, TaskController.createTask)
   .get(checkUser, TaskController.getUserTasks);
+
 usersRouter
   .route("/:userId/tasks/:taskId")
   .get(checkUser, checkTask, TaskController.getUserTask)
   .patch(checkUser, checkTask, TaskController.updateTask)
   .delete(checkUser, checkTask, TaskController.deleteTask);
+
 module.exports = usersRouter;

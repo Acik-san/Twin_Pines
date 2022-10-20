@@ -74,3 +74,17 @@ export const cleanUsers = () => ({
   type: ACTION_TYPES.CLEAN_USERS,
   payload: {},
 });
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+export const getSumUserRequest = () => ({
+  type: ACTION_TYPES.GET_SUM_USERS_REQUEST,
+  payload: {},
+});
+export const getSumUserSuccess = (sum) => ({
+  type: ACTION_TYPES.GET_SUM_USERS_SUCCESS,
+  payload: { sum },
+});
+export const getSumUserError = (error) => ({
+  type: ACTION_TYPES.GET_SUM_USERS_ERROR,
+  payload: { error },
+});

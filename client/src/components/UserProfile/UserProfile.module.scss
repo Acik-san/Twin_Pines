@@ -1,0 +1,59 @@
+@import "../../common/styles/breakpoints";
+@import "../../common/styles/templates";
+@import "../../common/styles/colors";
+
+.section {
+  @include section;
+}
+.user_card {
+  @include user_card;
+  width: 270px;
+  height: 235px;
+}
+
+.photo_wrapper {
+  @include photo_wrapper;
+}
+.photo_inner {
+  @include photo_inner;
+}
+.photo_inner_img {
+  @include photo_inner_img;
+}
+.login {
+  @include login;
+}
+.buttons {
+  display: flex;
+}
+.button_none {
+  @include none;
+}
+.edit_profile {
+  position: relative;
+  cursor: pointer;
+  &::after {
+    content: url("../../../public/static/images/svg/edit_profile.svg");
+    position: absolute;
+  }
+  left: 31px;
+}
+.delete_user {
+  position: relative;
+  cursor: pointer;
+  &::after {
+    content: url("../../../public/static/images/svg/delete_user.svg");
+    position: absolute;
+    left: 97px;
+    top: 3px;
+  }
+}
+.create_task {
+  position: relative;
+  cursor: pointer;
+  &::after {
+    content: url("../../../public/static/images/svg/create_task.svg");
+    position: absolute;
+    left: 160px;
+  }
+}

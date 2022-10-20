@@ -1,33 +1,34 @@
-import { Routes, Route, NavLink } from "react-router-dom";
-import UserForm from "./components/forms/UserForm";
-import Task from "./components/Task";
-import UserTasks from "./components/UserTasks";
-import UserProfile from "./components/UserProfile";
-import UsersList from "./components/UsersList";
-import TasksList from "./components/TasksList";
+import React, { Suspense, lazy } from "react";
+import { Routes, Route } from "react-router-dom";
+import Header from "./components/Header";
+import Spinner from "./components/Spinner";
+import PageNotFound from "./pages/PageNotFound";
+
+const HomePage = lazy(() => import("./pages/HomePage"));
+const TasksPage = lazy(() => import("./pages/TasksPage"));
+const UserCreatePage = lazy(() => import("./pages/UserCreatePage"));
+const UserPage = lazy(() => import("./pages/UserPage"));
+const UserTasksPage = lazy(() => import("./pages/UserTasksPage"));
+const UserTaskPage = lazy(() => import("./pages/UserTaskPage"));
 
 const App = () => {
   return (
     <>
-      <ul>
-        <li>
-          <NavLink to="/">Home</NavLink>
-        </li>
-        <li>
-          <NavLink to="/tasks">Tasks</NavLink>
-        </li>
-        <li>
-          <NavLink to="/create-user">Create user</NavLink>
-        </li>
-      </ul>
-      <Routes>
-        <Route path="/" element={<UsersList />} />
-        <Route path="/tasks" element={<TasksList />} />
-        <Route path="/create-user" element={<UserForm />} />
-        <Route path="/users/:userId/" element={<UserProfile />} />
-        <Route path="/users/:userId/tasks" element={<UserTasks />} />
-        <Route path="/users/:userId/tasks/:taskId" element={<Task />} />
-      </Routes>
+      <Header />
+      <Suspense fallback={<Spinner />}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/tasks" element={<TasksPage />} />
+          <Route path="/create-user" element={<UserCreatePage />} />
+          <Route path="/users/:userId" element={<UserPage />} />
+          <Route path="/users/:userId/tasks" element={<UserTasksPage />} />
+          <Route
+            path="/users/:userId/tasks/:taskId"
+            element={<UserTaskPage />}
+          />
+          <Route path="/*" element={<PageNotFound />} />
+        </Routes>
+      </Suspense>
     </>
   );
 };

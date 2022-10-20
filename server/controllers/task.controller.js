@@ -55,3 +55,12 @@ module.exports.deleteTask = async (req, res, next) => {
     next(error);
   }
 };
+module.exports.getSumTasks = async (req, res, next) => {
+  try {
+    const tasks = await Task.findAll();
+    const sumTasks = tasks.length;
+    res.status(200).send({ data: sumTasks });
+  } catch (error) {
+    next(error);
+  }
+};
