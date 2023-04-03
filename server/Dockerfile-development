@@ -1,0 +1,15 @@
+FROM node:16.20.0-alpine3.16
+
+ARG NODE_ENV="development"
+
+RUN mkdir /server
+
+WORKDIR /server
+
+COPY . .
+
+RUN npm install -g nodemon && npm install -g sequelize-cli && npm install
+
+EXPOSE 5000
+
+CMD sequelize db:migrate && sequelize db:seed:all && npm start

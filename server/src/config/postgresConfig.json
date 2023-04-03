@@ -1,0 +1,13 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "password",
+    "database": "todo-dev",
+    "host": "db-dev",
+    "port": 5432,
+    "dialect": "postgres",
+    "seederStorage": "sequelize"
+  },
+  "test": {},
+  "production": {}
+}

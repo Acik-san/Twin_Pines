@@ -1,0 +1,8 @@
+.*
+!.gitignore
+!.sequelizerc
+!.dockerignore
+!.vscode/
+/server/node_modules
+/server/public
+/client/node_modules

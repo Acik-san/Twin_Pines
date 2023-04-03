@@ -1,0 +1,8 @@
+{
+  "development": {
+    "database": "chats",
+    "host": "mongo-dev",
+    "port": 27017
+  },
+  "production": {}
+}
