@@ -1,6 +1,6 @@
 const { Router } = require("express");
-const UserController = require("../controllers/user.controller");
-const TaskController = require("../controllers/task.controller");
+const UserController = require("../controllers/userController");
+const TaskController = require("../controllers/taskController");
 const { checkUser } = require("../middlewares/user.mw");
 const { checkTask } = require("../middlewares/task.mw");
 const { paginate } = require("../middlewares/paginate.mw");
@@ -16,7 +16,7 @@ usersRouter
 
 usersRouter
   .route("/:userId")
-  .get(checkUser, UserController.getUser)
+  // .get(checkUser, UserController.getUser)
   .patch(checkUser, upload, UserController.updateUser)
   .delete(checkUser, UserController.deleteUser);
 

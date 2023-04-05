@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { bindActionCreators } from "redux";
-import { dateToString } from "../../common/usefulFunc";
+import { dateToString } from "../../utils/usefulFunctions";
 import * as ActionsTask from "../../actions/taskCreators";
 import * as Creators from "../../actions/creators";
 import Error from "../Error";
@@ -28,7 +28,7 @@ const Task = () => {
   }, []);
   return (
     <section className={styles.section}>
-      {error && <Error error={error} />}
+      {/* {error && <Error error={error} />} */}
       <div className={styles.task_wrapper}>
         <div className={styles.task_inner}>
           <article className={styles.task}>

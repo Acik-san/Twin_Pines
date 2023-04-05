@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { bindActionCreators } from "redux";
-import { Link } from "react-router-dom";
-import * as ActionsUser from "../../actions/userCreators";
-import * as Creators from "../../actions/creators";
-import { getInitials, stringToColour } from "../../common/usefulFunc";
-import Spinner from "../Spinner";
-import Error from "../Error";
-import styles from "./UsersList.module.scss";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Link } from 'react-router-dom';
+import * as ActionsUser from '../../actions/userCreators';
+import * as Creators from '../../actions/creators';
+import { getInitials, stringToColour } from '../../utils/usefulFunctions';
+import Spinner from '../Spinner';
+import Error from '../Error';
+import styles from './UsersList.module.scss';
 
 const UsersList = () => {
   const { users, isFetching, error, sumUsers } = useSelector(
@@ -20,14 +20,14 @@ const UsersList = () => {
   );
   const { cleanError } = bindActionCreators(Creators, useDispatch());
 
-  useEffect(() => {
-    getUsersRequest({ limit: 15, offset: 0 });
-    return () => {
-      cleanUsers();
-      cleanError();
-    }; // eslint-disable-next-line
-  }, []);
-  const handlerScroll = (e) => {
+  // useEffect(() => {
+  //   getUsersRequest({ limit: 15, offset: 0 });
+  //   return () => {
+  //     cleanUsers();
+  //     cleanError();
+  //   }; // eslint-disable-next-line
+  // }, []);
+  const handlerScroll = e => {
     if (
       e.target.documentElement.scrollHeight -
         (e.target.documentElement.scrollTop + window.innerHeight) <
@@ -39,17 +39,17 @@ const UsersList = () => {
     }
   };
   useEffect(() => {
-    window.addEventListener("scroll", handlerScroll);
+    window.addEventListener('scroll', handlerScroll);
     return () => {
-      window.removeEventListener("scroll", handlerScroll);
+      window.removeEventListener('scroll', handlerScroll);
     }; // eslint-disable-next-line
   }, [offset]);
 
   return (
     <section className={styles.section}>
-      {error && <Error error={error} />}
+      {/* {error && <Error error={error} />} */}
       <article className={styles.cards_wrapper}>
-        {users.map((u) => (
+        {users.map(u => (
           <Link to={`/users/${u.id}`} key={u.id}>
             <article className={styles.user_card}>
               <div className={styles.photo_wrapper}>
@@ -59,9 +59,9 @@ const UsersList = () => {
                 >
                   {getInitials(u.login)}
                 </div>
-                {u.avatar && (
+                {u.avatar !== 'anon.png' && (
                   <img
-                    alt="avatar"
+                    alt='avatar'
                     src={`http://localhost:5000/images/${u.avatar}`}
                     className={styles.photo_inner_img}
                   />

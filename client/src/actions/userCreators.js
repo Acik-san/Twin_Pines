@@ -28,18 +28,18 @@ export const getUsersError = (error) => ({
 });
 //-----------------------------------------------------------
 //-----------------------------------------------------------
-export const getUserRequest = (id) => ({
-  type: ACTION_TYPES.GET_USER_REQUEST,
-  payload: { id },
-});
-export const getUserSuccess = (user) => ({
-  type: ACTION_TYPES.GET_USER_SUCCESS,
-  payload: { user },
-});
-export const getUserError = (error) => ({
-  type: ACTION_TYPES.GET_USER_ERROR,
-  payload: { error },
-});
+// export const getUserRequest = (id) => ({
+//   type: ACTION_TYPES.GET_USER_REQUEST,
+//   payload: { id },
+// });
+// export const getUserSuccess = (user) => ({
+//   type: ACTION_TYPES.GET_USER_SUCCESS,
+//   payload: { user },
+// });
+// export const getUserError = (error) => ({
+//   type: ACTION_TYPES.GET_USER_ERROR,
+//   payload: { error },
+// });
 //-----------------------------------------------------------
 //-----------------------------------------------------------
 export const updateUserRequest = (id, values) => ({

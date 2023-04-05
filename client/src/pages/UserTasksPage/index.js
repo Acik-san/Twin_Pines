@@ -1,8 +1,14 @@
-import React from "react";
-import UserTasks from "../../components/UserTasks";
+import React from 'react';
+import Header from '../../components/Header';
+import UserTasks from '../../components/UserTasks';
 
 const UserTasksPage = () => {
-  return <UserTasks />;
+  return (
+    <>
+      <Header />
+      <UserTasks />
+    </>
+  );
 };
 
 export default UserTasksPage;

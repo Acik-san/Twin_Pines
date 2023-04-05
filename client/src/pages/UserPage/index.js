@@ -1,8 +1,16 @@
-import React from "react";
-import UserProfile from "../../components/UserProfile";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import Header from '../../components/Header';
+import UserProfile from '../../components/UserProfile';
 
 const UserPage = () => {
-  return <UserProfile />;
+  const { user } = useSelector(({ auth }) => auth);
+  return (
+    <>
+      <Header />
+      {user && <UserProfile />}
+    </>
+  );
 };
 
 export default UserPage;

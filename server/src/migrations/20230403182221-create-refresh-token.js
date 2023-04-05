@@ -2,32 +2,30 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('users', {
+    await queryInterface.createTable('refresh_tokens', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      login: {
-        type: Sequelize.STRING,
+      userId: {
+        field: 'user_id',
+        type: Sequelize.INTEGER,
         allowNull: false,
-        unique: true,
+        references: { model: { tableName: 'users' }, key: 'id' },
+        onUpdate: 'restrict',
+        onDelete: 'cascade',
       },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
-      },
-      password: {
-        type: Sequelize.STRING,
-        field: 'password_hash',
+      value: {
+        type: Sequelize.TEXT,
         allowNull: false,
       },
-      avatar: {
+      ua: {
         type: Sequelize.STRING,
-        allowNull: false,
-        defaultValue: 'anon.png',
+      },
+      fingerprint: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         field: 'created_at',
@@ -44,6 +42,6 @@ module.exports = {
     });
   },
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('users');
+    await queryInterface.dropTable('refresh_tokens');
   },
 };

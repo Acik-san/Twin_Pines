@@ -1,5 +1,5 @@
-import produce from "immer";
-import ACTION_TYPES from "../actions/type";
+import produce from 'immer';
+import ACTION_TYPES from '../actions/type';
 
 const initialState = {
   users: [],
@@ -24,7 +24,7 @@ const handleError = produce((draftState, action) => {
 const handlers = {
   [ACTION_TYPES.CREATE_USER_REQUEST]: handleRequests,
   [ACTION_TYPES.GET_USERS_REQUEST]: handleRequests,
-  [ACTION_TYPES.GET_USER_REQUEST]: handleRequests,
+  // [ACTION_TYPES.GET_USER_REQUEST]: handleRequests,
   [ACTION_TYPES.UPDATE_USER_REQUEST]: handleRequests,
   [ACTION_TYPES.DELETE_USER_REQUEST]: handleRequests,
   [ACTION_TYPES.GET_SUM_USERS_REQUEST]: handleRequests,
@@ -41,13 +41,13 @@ const handlers = {
     draftState.isFetching = false;
     draftState.users.push(...users);
   }),
-  [ACTION_TYPES.GET_USER_SUCCESS]: produce((draftState, action) => {
-    const {
-      payload: { user },
-    } = action;
-    draftState.isFetching = false;
-    draftState.selectedUser = user;
-  }),
+  // [ACTION_TYPES.GET_USER_SUCCESS]: produce((draftState, action) => {
+  //   const {
+  //     payload: { user },
+  //   } = action;
+  //   draftState.isFetching = false;
+  //   draftState.selectedUser = user;
+  // }),
   [ACTION_TYPES.UPDATE_USER_SUCCESS]: produce((draftState, action) => {
     const {
       payload: { user },
@@ -61,7 +61,7 @@ const handlers = {
     } = action;
     draftState.isFetching = false;
     draftState.users = draftState.users.filter(
-      (u) => Number(u.id) !== Number(user.id)
+      u => Number(u.id) !== Number(user.id)
     );
   }),
   [ACTION_TYPES.GET_SUM_USERS_SUCCESS]: produce((draftState, action) => {
@@ -73,7 +73,7 @@ const handlers = {
   }),
   [ACTION_TYPES.CREATE_USER_ERROR]: handleError,
   [ACTION_TYPES.GET_USERS_ERROR]: handleError,
-  [ACTION_TYPES.GET_USER_ERROR]: handleError,
+  // [ACTION_TYPES.GET_USER_ERROR]: handleError,
   [ACTION_TYPES.UPDATE_USER_ERROR]: handleError,
   [ACTION_TYPES.DELETE_USER_ERROR]: handleError,
   [ACTION_TYPES.GET_SUM_USERS_ERROR]: handleError,

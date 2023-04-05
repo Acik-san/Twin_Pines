@@ -1,13 +1,19 @@
-import { takeLatest } from "redux-saga/effects";
-import ACTION_TYPES from "../actions/type";
+import { takeLatest, takeEvery, takeLeading } from 'redux-saga/effects';
+import ACTION_TYPES from '../actions/type';
+import {
+  signInSaga,
+  signUpSaga,
+  refreshSaga,
+  getAuthUserSaga,
+} from './authSagas';
 import {
   createUserSaga,
   getUsersSaga,
-  getUserSaga,
+  // getUserSaga,
   updateUserSaga,
   deleteUserSaga,
   getSumUserSaga,
-} from "./userSagas";
+} from './userSagas';
 import {
   createTaskSaga,
   getTasksSaga,
@@ -16,12 +22,15 @@ import {
   deleteTaskSaga,
   getAllTasksSaga,
   getSumTasksSaga,
-} from "./taskSagas";
+} from './taskSagas';
 
-function* rootSaga() {
+function* rootSaga () {
+  yield takeLatest(ACTION_TYPES.SIGN_IN_REQUEST, signInSaga);
+  yield takeLatest(ACTION_TYPES.SIGN_UP_REQUEST, signUpSaga);
+  // yield takeLatest(ACTION_TYPES.REFRESH_REQUEST, refreshSaga);
+  yield takeLatest(ACTION_TYPES.GET_AUTH_USER_REQUEST, getAuthUserSaga);
   yield takeLatest(ACTION_TYPES.CREATE_USER_REQUEST, createUserSaga);
   yield takeLatest(ACTION_TYPES.GET_USERS_REQUEST, getUsersSaga);
-  yield takeLatest(ACTION_TYPES.GET_USER_REQUEST, getUserSaga);
   yield takeLatest(ACTION_TYPES.UPDATE_USER_REQUEST, updateUserSaga);
   yield takeLatest(ACTION_TYPES.DELETE_USER_REQUEST, deleteUserSaga);
   yield takeLatest(ACTION_TYPES.GET_SUM_USERS_REQUEST, getSumUserSaga);

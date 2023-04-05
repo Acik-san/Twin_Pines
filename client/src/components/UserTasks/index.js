@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import TaskForm from "../forms/TaskForm";
 import styles from "./UserTasks.module.scss";
 import Error from "../Error";
-import { dateToString } from "../../common/usefulFunc";
+import { dateToString } from "../../utils/usefulFunctions";
 import * as ActionsTask from "../../actions/taskCreators";
 import * as Creators from "../../actions/creators";
 
@@ -26,7 +26,7 @@ const UserTasks = () => {
   }, []);
   return (
     <section className={styles.section}>
-      {error && <Error error={error} />}
+      {/* {error && <Error error={error} />} */}
       <div className={styles.user_card}>
         <h2>Create task:</h2>
         <TaskForm userId={userId} />

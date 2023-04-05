@@ -22,16 +22,16 @@ export function* getUsersSaga(action) {
     yield put(ActionsUser.getUsersError(error));
   }
 }
-export function* getUserSaga(action) {
-  try {
-    const {
-      data: { data: user },
-    } = yield API.getUser(action.payload.id);
-    yield put(ActionsUser.getUserSuccess(user));
-  } catch (error) {
-    yield put(ActionsUser.getUserError(error));
-  }
-}
+// export function* getUserSaga(action) {
+//   try {
+//     const {
+//       data: { data: user },
+//     } = yield API.getUser(action.payload.id);
+//     yield put(ActionsUser.getUserSuccess(user));
+//   } catch (error) {
+//     yield put(ActionsUser.getUserError(error));
+//   }
+// }
 export function* updateUserSaga(action) {
   try {
     const {

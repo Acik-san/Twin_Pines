@@ -1,36 +1,65 @@
-"use strict";
-const { Model } = require("sequelize");
+'use strict';
+const { Model } = require('sequelize');
+const bcrypt = require('bcrypt');
+const { SALT_ROUNDS } = require('../constants');
+
+async function hashPassword (user, options) {
+  if (user.changed('password')) {
+    const { password } = user;
+    const passwordHashed = await bcrypt.hash(password, SALT_ROUNDS);
+    user.password = passwordHashed;
+  }
+}
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    static associate(models) {
-      User.hasMany(models.Task, { foreignKey: "userId" });
+    static associate (models) {
+      User.hasMany(models.RefreshToken, {
+        foreignKey: 'userId',
+      });
+      User.hasMany(models.Task, { foreignKey: 'userId' });
+    }
+    async comparePassword (password) {
+      return bcrypt.compare(password, this.getDataValue('password'));
     }
   }
   User.init(
     {
       login: {
-        type: DataTypes.STRING(16),
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: { notEmpty: true, notNull: true },
+      },
+      email: {
+        type: DataTypes.STRING,
         allowNull: false,
         unique: true,
         validate: { notEmpty: true, notNull: true },
       },
       password: {
-        field: "password_hash",
-        type: DataTypes.TEXT,
+        field: 'password_hash',
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      avatar: {
+        type: DataTypes.STRING,
         allowNull: false,
         validate: { notEmpty: true, notNull: true },
-        set() {
-          this.setDataValue("password", "hash");
-        },
+        defaultValue: 'anon.png',
       },
-      avatar: { type: DataTypes.TEXT, defaultValue: null },
     },
     {
       sequelize,
-      modelName: "User",
-      tableName: "users",
+      modelName: 'User',
+      tableName: 'users',
       underscored: true,
+      timestamps: true,
     }
   );
+
+  User.beforeCreate(hashPassword);
+  User.beforeUpdate(hashPassword);
+
   return User;
 };

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import Spinner from "../Spinner";
 import Error from "../Error";
-import { dateToString } from "../../common/usefulFunc";
+import { dateToString } from "../../utils/usefulFunctions";
 import * as ActionsTask from "../../actions/taskCreators";
 import * as Creators from "../../actions/creators";
 import styles from "./TasksList.module.scss";
@@ -45,7 +45,7 @@ const TasksList = () => {
   return (
     <section className={styles.section}>
       {isFetching && <Spinner />}
-      {error && <Error error={error} />}
+      {/* {error && <Error error={error} />} */}
       <article className={styles.user_card}>
         {tasks.map((task) => (
           <article key={task.id} className={styles.task}>
