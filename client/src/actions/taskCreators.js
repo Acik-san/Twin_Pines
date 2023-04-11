@@ -68,36 +68,10 @@ export const deleteTaskError = (error) => ({
   type: ACTION_TYPES.DELETE_TASK_ERROR,
   payload: { error },
 });
-//------------------------------------------
-//------------------------------------------
-export const getAllTasksRequest = ({ limit, offset }) => ({
-  type: ACTION_TYPES.GET_ALL_TASKS_REQUEST,
-  payload: { limit, offset },
-});
-export const getAllTasksSuccess = (tasks) => ({
-  type: ACTION_TYPES.GET_ALL_TASKS_SUCCESS,
-  payload: { tasks },
-});
-export const getAllTasksError = (error) => ({
-  type: ACTION_TYPES.GET_ALL_TASKS_ERROR,
-  payload: { error },
-});
+
 //------------------------------------------
 export const cleanTasks = () => ({
   type: ACTION_TYPES.CLEAN_TASKS,
   payload: {},
 });
-//------------------------------------------
-//------------------------------------------
-export const getSumTasksRequest = () => ({
-  type: ACTION_TYPES.GET_SUM_TASKS_REQUEST,
-  payload: {},
-});
-export const getSumTasksSuccess = (sumTasks) => ({
-  type: ACTION_TYPES.GET_SUM_TASKS_SUCCESS,
-  payload: { sumTasks },
-});
-export const getSumTasksError = (error) => ({
-  type: ACTION_TYPES.GET_SUM_TASKS_ERROR,
-  payload: { error },
-});
+

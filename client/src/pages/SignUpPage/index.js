@@ -7,12 +7,14 @@ import Header from '../../components/Header';
 import * as ActionsAuth from '../../actions/authCreators';
 
 const SignUpPage = () => {
-  const { user } = useSelector(({ auth }) => auth);
+  const { user } = useSelector(({ users }) => users);
   const { signUpRequest } = bindActionCreators(ActionsAuth, useDispatch());
   const navigate = useNavigate();
+  useEffect(() => {
+    user && navigate('/', { replace: true });
+  }, [user]);
   return (
     <>
-      {user && navigate('/', { replace: true })}
       <Header />
       <div style={{ position: 'relative', top: '100px' }}>
         <Formik

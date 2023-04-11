@@ -45,15 +45,4 @@ export function* refreshSaga (action) {
     yield put(ActionsAuth.refreshError(error));
   }
 }
-export function* getAuthUserSaga (action) {
-  try {
-    const {
-      data: {
-        data: { user },
-      },
-    } = yield API.getAuthUser();
-    yield put(ActionsAuth.getAuthUserSuccess(user));
-  } catch (error) {
-    yield put(ActionsAuth.getAuthUserError(error));
-  }
-}
+

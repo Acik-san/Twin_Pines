@@ -3,16 +3,10 @@ import ACTION_TYPES from '../actions/type';
 import {
   signInSaga,
   signUpSaga,
-  refreshSaga,
-  getAuthUserSaga,
 } from './authSagas';
 import {
-  createUserSaga,
-  getUsersSaga,
-  // getUserSaga,
+  getAuthUserSaga,
   updateUserSaga,
-  deleteUserSaga,
-  getSumUserSaga,
 } from './userSagas';
 import {
   createTaskSaga,
@@ -20,27 +14,18 @@ import {
   getTaskSaga,
   updateTaskSaga,
   deleteTaskSaga,
-  getAllTasksSaga,
-  getSumTasksSaga,
 } from './taskSagas';
 
 function* rootSaga () {
   yield takeLatest(ACTION_TYPES.SIGN_IN_REQUEST, signInSaga);
   yield takeLatest(ACTION_TYPES.SIGN_UP_REQUEST, signUpSaga);
-  // yield takeLatest(ACTION_TYPES.REFRESH_REQUEST, refreshSaga);
   yield takeLatest(ACTION_TYPES.GET_AUTH_USER_REQUEST, getAuthUserSaga);
-  yield takeLatest(ACTION_TYPES.CREATE_USER_REQUEST, createUserSaga);
-  yield takeLatest(ACTION_TYPES.GET_USERS_REQUEST, getUsersSaga);
   yield takeLatest(ACTION_TYPES.UPDATE_USER_REQUEST, updateUserSaga);
-  yield takeLatest(ACTION_TYPES.DELETE_USER_REQUEST, deleteUserSaga);
-  yield takeLatest(ACTION_TYPES.GET_SUM_USERS_REQUEST, getSumUserSaga);
   yield takeLatest(ACTION_TYPES.CREATE_TASK_REQUEST, createTaskSaga);
   yield takeLatest(ACTION_TYPES.GET_TASKS_REQUEST, getTasksSaga);
   yield takeLatest(ACTION_TYPES.GET_TASK_REQUEST, getTaskSaga);
   yield takeLatest(ACTION_TYPES.UPDATE_TASK_REQUEST, updateTaskSaga);
   yield takeLatest(ACTION_TYPES.DELETE_TASK_REQUEST, deleteTaskSaga);
-  yield takeLatest(ACTION_TYPES.GET_ALL_TASKS_REQUEST, getAllTasksSaga);
-  yield takeLatest(ACTION_TYPES.GET_SUM_TASKS_REQUEST, getSumTasksSaga);
 }
 
 export default rootSaga;

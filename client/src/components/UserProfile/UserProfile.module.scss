@@ -35,8 +35,8 @@
   &::after {
     content: url("../../../public/static/images/svg/edit_profile.svg");
     position: absolute;
+    left: 60px;
   }
-  left: 31px;
 }
 .delete_user {
   position: relative;
@@ -54,6 +54,6 @@
   &::after {
     content: url("../../../public/static/images/svg/create_task.svg");
     position: absolute;
-    left: 160px;
+    left: 120px;
   }
 }

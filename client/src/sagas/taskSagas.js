@@ -52,23 +52,4 @@ export function* deleteTaskSaga(action) {
     yield put(ActionsTask.deleteTaskError(error));
   }
 }
-export function* getAllTasksSaga(action) {
-  try {
-    const {
-      data: { data: tasks },
-    } = yield API.getAllTasks(action.payload);
-    yield put(ActionsTask.getAllTasksSuccess(tasks));
-  } catch (error) {
-    yield put(ActionsTask.getAllTasksError(error));
-  }
-}
-export function* getSumTasksSaga(action) {
-  try {
-    const {
-      data: { data: sumTasks },
-    } = yield API.getSumTasks(action);
-    yield put(ActionsTask.getSumTasksSuccess(sumTasks));
-  } catch (error) {
-    yield put(ActionsTask.getSumTasksError(error));
-  }
-}
+

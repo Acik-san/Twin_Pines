@@ -25,8 +25,6 @@ const handlers = {
   [ACTION_TYPES.GET_TASK_REQUEST]: handleRequests,
   [ACTION_TYPES.UPDATE_TASK_REQUEST]: handleRequests,
   [ACTION_TYPES.DELETE_TASK_REQUEST]: handleRequests,
-  [ACTION_TYPES.GET_ALL_TASKS_REQUEST]: handleRequests,
-  [ACTION_TYPES.GET_SUM_TASKS_REQUEST]: handleRequests,
   [ACTION_TYPES.CREATE_TASK_SUCCESS]: produce((draftState, action) => {
     const {
       payload: { task },
@@ -64,27 +62,11 @@ const handlers = {
       (t) => Number(t.id) !== Number(task.id)
     );
   }),
-  [ACTION_TYPES.GET_ALL_TASKS_SUCCESS]: produce((draftState, action) => {
-    const {
-      payload: { tasks },
-    } = action;
-    draftState.isFetching = false;
-    draftState.tasks.push(...tasks);
-  }),
-  [ACTION_TYPES.GET_SUM_TASKS_SUCCESS]: produce((draftState, action) => {
-    const {
-      payload: { sumTasks },
-    } = action;
-    draftState.isFetching = false;
-    draftState.sumTasks = sumTasks;
-  }),
   [ACTION_TYPES.CREATE_TASK_ERROR]: handleError,
   [ACTION_TYPES.GET_TASKS_ERROR]: handleError,
   [ACTION_TYPES.GET_TASK_ERROR]: handleError,
   [ACTION_TYPES.UPDATE_TASK_ERROR]: handleError,
   [ACTION_TYPES.DELETE_TASK_ERROR]: handleError,
-  [ACTION_TYPES.GET_ALL_TASKS_ERROR]: handleError,
-  [ACTION_TYPES.GET_SUM_TASKS_ERROR]: handleError,
   [ACTION_TYPES.CLEAN_TASKS]: produce((draftState, action) => {
     draftState.tasks = [];
   }),

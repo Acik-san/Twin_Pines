@@ -1,17 +1,18 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import * as ActionAuth from '../../actions/authCreators';
 import CONSTANTS from '../../constants';
 import styles from './Header.module.scss';
 
 const Header = () => {
-  const { user } = useSelector(({ auth }) => auth);
+  const { user } = useSelector(({ users }) => users);
   const { logoutSuccess } = bindActionCreators(ActionAuth, useDispatch());
+  const navigate = useNavigate();
   const handleLogout = () => {
     logoutSuccess(window.localStorage.getItem(CONSTANTS.REFRESH_TOKEN));
-    // window.localStorage.removeItem(CONSTANTS.REFRESH_TOKEN);
+    navigate('/');
   };
   return (
     <div className={styles.header}>
@@ -28,22 +29,19 @@ const Header = () => {
             Home
           </NavLink>
         </li>
-        <li className={styles.list_item}>
-          <NavLink to='/tasks' className={styles.list_item_link}>
-            Tasks
-          </NavLink>
-        </li>
-        {/* <li className={styles.list_item}>
-          <NavLink to="/create-user" className={styles.list_item_link}>
-            Create user
-          </NavLink>
-        </li> */}
         {user ? (
-          <li className={styles.list_item}>
-            <NavLink to={'/profile'} className={styles.list_item_link}>
-              Profile
-            </NavLink>
-          </li>
+          <>
+            <li className={styles.list_item}>
+              <NavLink to={'/profile'} className={styles.list_item_link}>
+                Profile
+              </NavLink>
+            </li>
+            <li className={styles.list_item}>
+              <button className={styles.list_item_link} onClick={handleLogout}>
+                Logout
+              </button>
+            </li>
+          </>
         ) : (
           <>
             <li className={styles.list_item}>
@@ -58,11 +56,6 @@ const Header = () => {
             </li>
           </>
         )}
-        <li className={styles.list_item}>
-          <button className={styles.list_item_link} onClick={handleLogout}>
-            Logout
-          </button>
-        </li>
       </ul>
     </div>
   );

@@ -54,17 +54,4 @@ export const logoutError = error => ({
   type: ACTION_TYPES.LOGOUT_ERROR,
   payload: { error },
 });
-//---------------------------------------
-//---------------------------------------
-export const getAuthUserRequest = () => ({
-  type: ACTION_TYPES.GET_AUTH_USER_REQUEST,
-  payload: {},
-});
-export const getAuthUserSuccess = user => ({
-  type: ACTION_TYPES.GET_AUTH_USER_SUCCESS,
-  payload: { user },
-});
-export const getAuthUserError = error => ({
-  type: ACTION_TYPES.GET_AUTH_USER_ERROR,
-  payload: { error },
-});
+

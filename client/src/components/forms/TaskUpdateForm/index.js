@@ -11,19 +11,19 @@ import styles from "./TaskUpdateForm.module.scss";
 const TaskUpdateForm = (props) => {
   const { selectedTask } = useSelector(({ tasks }) => tasks);
   const {
-    props: { userId, taskId, isEdit, setIsEdit },
+    props: { taskId, isEdit, setIsEdit },
   } = props;
   const { updateTaskRequest, getTaskRequest } = bindActionCreators(
     ActionsTask,
     useDispatch()
   );
   const onSubmit = (values, formikBag) => {
-    updateTaskRequest(userId, taskId, values);
+    updateTaskRequest(null, taskId, values);
     setIsEdit(!isEdit);
     formikBag.resetForm();
   };
   useEffect(() => {
-    getTaskRequest(userId, taskId); // eslint-disable-next-line
+    getTaskRequest(null, taskId); // eslint-disable-next-line
   }, []);
   return (
     <Formik

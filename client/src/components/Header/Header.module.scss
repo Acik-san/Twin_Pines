@@ -24,13 +24,15 @@
 }
 .list {
   align-items: center;
-  color: $white;
   :hover {
     text-shadow: 0px 0px 7px $white;
   }
 }
 .list_item_link {
   padding: 40px 20px;
+  border: none;
+  background-color: inherit;
+  color: $white;
   &:active {
     background-color: $header_active_button;
   }

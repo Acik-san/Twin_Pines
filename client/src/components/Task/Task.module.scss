@@ -9,7 +9,7 @@
   .task_wrapper {
     @include user_card;
     width: 650px;
-    max-height: 200px;
+    max-height: 265px;
   }
   .task_inner {
     display: flex;
@@ -20,6 +20,9 @@
   }
   .button_none {
     @include none;
+  }
+  .content {
+    @include word_break;
   }
   .edit_task {
     position: relative;

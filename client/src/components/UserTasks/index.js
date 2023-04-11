@@ -10,7 +10,6 @@ import * as ActionsTask from "../../actions/taskCreators";
 import * as Creators from "../../actions/creators";
 
 const UserTasks = () => {
-  const { userId } = useParams();
   const { tasks, error } = useSelector(({ tasks }) => tasks);
   const { getTasksRequest, cleanTasks, deleteTaskRequest } = bindActionCreators(
     ActionsTask,
@@ -18,10 +17,10 @@ const UserTasks = () => {
   );
   const { cleanError } = bindActionCreators(Creators, useDispatch());
   useEffect(() => {
-    getTasksRequest(userId);
+    getTasksRequest();
     return () => {
       cleanTasks();
-      cleanError();
+      // cleanError();
     }; // eslint-disable-next-line
   }, []);
   return (
@@ -29,7 +28,7 @@ const UserTasks = () => {
       {/* {error && <Error error={error} />} */}
       <div className={styles.user_card}>
         <h2>Create task:</h2>
-        <TaskForm userId={userId} />
+        <TaskForm  />
         <h3>Tasks list: </h3>
         <ul>
           {tasks.map((task) => (
@@ -38,11 +37,11 @@ const UserTasks = () => {
               <button
                 id={task.id}
                 onClick={() => {
-                  deleteTaskRequest(userId, task.id);
+                  deleteTaskRequest(null,task.id);
                 }}
                 className={styles.button_none}
               ></button>
-              <Link to={`/users/${userId}/tasks/${task.id}`}>
+              <Link to={`/profile/tasks/${task.id}`}>
                 <div className={styles.content}>{task.content}</div>
                 <div>State: {task.isDone ? "Done" : "Not Done"}</div>
                 <div>Deadline: {dateToString(task)}</div>

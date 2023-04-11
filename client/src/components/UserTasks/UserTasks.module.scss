@@ -1,6 +1,6 @@
-@import "../../common/styles/breakpoints";
-@import "../../common/styles/templates";
-@import "../../common/styles/colors";
+@import '../../common/styles/breakpoints';
+@import '../../common/styles/templates';
+@import '../../common/styles/colors';
 
 @media screen and (min-width: $md) {
   .section {
@@ -29,6 +29,7 @@
   }
   .content {
     @include word_break;
+    width: 90%;
   }
   .button_none {
     @include none;
@@ -37,9 +38,12 @@
     position: relative;
     cursor: pointer;
     &::after {
-      content: url("../../../public/static/images/svg/delete_task.svg");
+      content: url('../../../public/static/images/svg/delete_task.svg');
       position: absolute;
       left: 575px;
+    }
+    &:hover::after {
+      content: url('../../../public/static/images/svg/delete_task_hover.svg');
     }
   }
 }
