@@ -15,7 +15,7 @@ const Header = () => {
     navigate('/');
   };
   return (
-    <div className={styles.header}>
+    <header className={styles.header}>
       <Link to='/'>
         <img
           src={`${__dirname}static/images/todo_logo.png`}
@@ -57,7 +57,7 @@ const Header = () => {
           </>
         )}
       </ul>
-    </div>
+    </header>
   );
 };
 

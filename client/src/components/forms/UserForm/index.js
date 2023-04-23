@@ -2,7 +2,6 @@ import React from "react";
 import { Formik, Form } from "formik";
 import { useDispatch } from "react-redux";
 import { bindActionCreators } from "redux";
-import { SCHEMA_USER } from "../../../utils/validateSchemas";
 import * as ActionsUser from "../../../actions/userCreators";
 import Input from "../Input";
 import styles from "./UserForm.module.scss";
@@ -19,7 +18,7 @@ const UserForm = (props) => {
         <Formik
           initialValues={{ login: "", password: "", avatar: "" }}
           onSubmit={onSubmit}
-          validationSchema={SCHEMA_USER}
+          // validationSchema={SCHEMA_USER}
         >
           {(formikProps) => (
             <Form>

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Formik, Form, Field } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { SCHEMA_TASK } from "../../../utils/validateSchemas";
+import Schems from "../../../utils/validateSchemas";
 import { dateToString } from "../../../utils/usefulFunctions";
 import * as ActionsTask from "../../../actions/taskCreators";
 import Input from "../Input";
@@ -33,7 +33,7 @@ const TaskUpdateForm = (props) => {
         deadLine: dateToString(selectedTask),
       }}
       onSubmit={onSubmit}
-      validationSchema={SCHEMA_TASK}
+      validationSchema={Schems.TaskSchem}
     >
       <Form className={styles.form}>
         <div className={styles.input_container}>
