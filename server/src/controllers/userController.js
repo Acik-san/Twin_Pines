@@ -1,6 +1,6 @@
-const createError = require("http-errors");
-const _ = require("lodash");
-const { User } = require("../models");
+const createError = require('http-errors');
+const _ = require('lodash');
+const { User } = require('../models');
 
 module.exports.createUser = async (req, res, next) => {
   try {
@@ -8,12 +8,12 @@ module.exports.createUser = async (req, res, next) => {
     if (req.file) {
       body.avatar = req.file.filename;
     }
-    const values = _.pick(body, ["login", "password", "avatar"]);
+    const values = _.pick(body, ['login', 'password', 'avatar']);
     const createdUser = await User.create(values);
     if (!createdUser) {
-      next(createError(400, "Invalid data"));
+      next(createError(400, 'Invalid data'));
     }
-    const userPrepare = _.omit(await createdUser.get(), ["password"]);
+    const userPrepare = _.omit(await createdUser.get(), ['password']);
     res.status(201).send({ data: userPrepare });
   } catch (error) {
     next(error);
@@ -21,14 +21,13 @@ module.exports.createUser = async (req, res, next) => {
 };
 module.exports.getUsers = async (req, res, next) => {
   try {
-    const { pagination = {} } = req;
     const users = await User.findAll({
       attributes: {
-        exclude: ["password"],
+        exclude: ['password', 'createdAt', 'updatedAt'],
       },
-      ...pagination,
     });
-    res.status(200).send({ data: users });
+    users.forEach(user => user.dataValues.status = 'offline');
+    res.status(200).send({ data: { users } });
   } catch (error) {
     next(error);
   }
@@ -49,9 +48,9 @@ module.exports.updateUser = async (req, res, next) => {
     if (req.file) {
       body.avatar = req.file.filename;
     }
-    const values = _.pick(body, ["login", "password", "avatar"]);
+    const values = _.pick(body, ['login', 'password', 'avatar']);
     const updatedUser = await instanceUser.update(values);
-    const userPrepare = _.omit(await updatedUser.get(), ["password"]);
+    const userPrepare = _.omit(await updatedUser.get(), ['password']);
     res.status(200).send({ data: userPrepare });
   } catch (error) {
     next(error);

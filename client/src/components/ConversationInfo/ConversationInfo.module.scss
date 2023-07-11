@@ -1,0 +1,14 @@
+.chat_info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 60px;
+  background-color: #32114d;
+  color: white;
+  & > h3 {
+    margin: 10px 0 5px 10px;
+  }
+  & > p {
+    margin-left: 10px;
+  }
+}

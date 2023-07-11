@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { dateToString } from '../../utils/usefulFunctions';
 import * as ActionsTask from '../../actions/taskCreators';
@@ -26,6 +27,10 @@ const Task = () => {
       }
     }; // eslint-disable-next-line
   }, []);
+  const navigate = useNavigate();
+  useEffect(() => {
+    error && navigate('/profile/tasks', { replace: true });
+  }, [error]);
   return (
     <section className={styles.section}>
       {/* {error && <Error error={error} />} */}
@@ -49,9 +54,7 @@ const Task = () => {
             ></button>
           </label>
         </div>
-        {isEdit && (
-          <TaskUpdateForm props={{  taskId, isEdit, setIsEdit }} />
-        )}
+        {isEdit && <TaskUpdateForm props={{ taskId, isEdit, setIsEdit }} />}
       </div>
     </section>
   );

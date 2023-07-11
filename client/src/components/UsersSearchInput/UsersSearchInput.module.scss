@@ -1,0 +1,28 @@
+.container {
+  position: relative;
+}
+.search_results {
+  position: absolute;
+  z-index: 1;
+  top: 40px;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border: 1px solid gray;
+  min-height: 37px;
+  max-height: 177px;
+  overflow-y: auto;
+  &:first-child {
+    border-top: 1px solid #ddd;
+  }
+  & > li {
+    padding: 8px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-top: none;
+    cursor: pointer;
+  }
+  & > li:hover {
+    background-color: #f5f5f5;
+  }
+}

@@ -22,10 +22,14 @@ export const updateUser = data => {
 };
 
 export const getUserTasks = () => httpClient.get('profile/tasks');
-export const createTask = (data) => httpClient.post('profile/tasks', data.values);
+export const createTask = data => httpClient.post('profile/tasks', data.values);
 export const getUserTask = data =>
   httpClient.get(`profile/tasks/${data.taskId}`);
 export const updateTask = data =>
   httpClient.patch(`profile/tasks/${data.taskId}`, data.values);
 export const deleteTask = data =>
   httpClient.delete(`profile/tasks/${data.taskId}`);
+
+export const getChats = () => httpClient.get('chats');
+export const getUsers = () => httpClient.get('chats/users');
+export const getMessages = id => httpClient.get(`chats/chat/${id}`);

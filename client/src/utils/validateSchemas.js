@@ -44,7 +44,17 @@ const Schems = {
         /^(20[2][2-9]|20[3-9]\d|2099)\-(0[1-9]|10|11|12)\-(0[1-9]|1\d|2\d|3[0-1]) (0\d|1\d|2[0-3]):(0\d|[1-5][0-9]):(0\d|[1-5][0-9])$/,
         'Invalid date'
       )
-      .required('required'),
+      .required('Must be required'),
+  }),
+  ChatSchem: Yup.object({
+    messageBody: Yup.string('Must be string')
+      .matches(/^[\s\S]{1,4096}$/, 'Invalid amount of symbols')
+      .test('has-content', 'Invalid amount of symbols', value => {
+        if (!value) return false;
+        const strippedValue = value.replace(/\n/g, '');
+        return strippedValue.length > 0;
+      })
+      .required('Must be required'),
   }),
 };
 
