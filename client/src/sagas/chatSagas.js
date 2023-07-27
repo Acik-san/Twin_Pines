@@ -16,10 +16,10 @@ export function* getMessagesSaga (action) {
   try {
     const {
       data: {
-        data: { messages },
+        data: { messages, haveMore },
       },
-    } = yield API.getMessages(action.payload.id);
-    yield put(ActionsChats.getMessagesSuccess(messages));
+    } = yield API.getMessages(action.payload);
+    yield put(ActionsChats.getMessagesSuccess({ messages, haveMore }));
   } catch (error) {
     yield put(ActionsChats.getMessagesError(error));
   }
@@ -29,10 +29,10 @@ export function* getChatsSaga (action) {
   try {
     const {
       data: {
-        data: { conversations },
+        data: { conversations,unreadMessages },
       },
     } = yield API.getChats();
-    yield put(ActionsChats.getChatsSuccess(conversations));
+    yield put(ActionsChats.getChatsSuccess({conversations,unreadMessages}));
   } catch (error) {
     yield put(ActionsChats.getChatsError(error));
   }
@@ -59,5 +59,13 @@ export function* stopTypingSaga (action) {
     yield WsApi.stopTyping(action.payload.conversationId);
   } catch (error) {
     yield put(ActionsChats.stopTypingError(error));
+  }
+}
+
+export function* setSeenMessageSaga (action) {
+  try {
+    yield WsApi.setSeenMessage(action.payload.messageId);
+  } catch (error) {
+    yield put(ActionsChats.setSeenMessageError(error));
   }
 }

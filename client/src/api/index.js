@@ -32,4 +32,5 @@ export const deleteTask = data =>
 
 export const getChats = () => httpClient.get('chats');
 export const getUsers = () => httpClient.get('chats/users');
-export const getMessages = id => httpClient.get(`chats/chat/${id}`);
+export const getMessages = ({ id, limit, offset }) =>
+  httpClient.get(`chats/chat/${id}?${qs.stringify({ limit, offset })}`);

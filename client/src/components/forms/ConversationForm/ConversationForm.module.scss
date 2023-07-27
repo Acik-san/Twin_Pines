@@ -1,7 +1,10 @@
+@import '../../../common/styles/breakpoints';
+@import '../../../common/styles/templates';
+@import '../../../common/styles/colors';
+
 .message_form {
-  // margin-top: 10px;
   padding: 10px;
-  background-color: #32114d;
+  background-color: $dark_purple;
   border: 1px solid;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
@@ -14,12 +17,12 @@
   resize: none;
   overflow-y: scroll;
   background-color: transparent;
-  color: white;
+  color: $white;
   &::-webkit-scrollbar {
     width: 8px;
   }
   &::placeholder {
     font-size: 14px;
-    color: white;
+    color: $white;
   }
 }

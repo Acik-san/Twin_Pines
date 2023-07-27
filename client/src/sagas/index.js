@@ -22,6 +22,7 @@ import {
   subscribeChatsSaga,
   startTypingSaga,
   stopTypingSaga,
+  setSeenMessageSaga,
 } from './chatSagas';
 
 function* rootSaga () {
@@ -43,6 +44,7 @@ function* rootSaga () {
   yield takeLatest(ACTION_TYPES.GET_ONLINE_USERS_REQUEST, getOnlineUsersSaga);
   yield takeLatest(ACTION_TYPES.START_TYPING_REQUEST, startTypingSaga);
   yield takeLatest(ACTION_TYPES.STOP_TYPING_REQUEST, stopTypingSaga);
+  yield takeLatest(ACTION_TYPES.SET_SEEN_MESSAGE_REQUEST, setSeenMessageSaga);
 }
 
 export default rootSaga;

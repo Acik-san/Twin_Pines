@@ -14,6 +14,11 @@ const Schema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       required: true,
     },
+    isRead: {
+      type: 'Boolean',
+      required: true,
+      default: false,
+    },
   },
   {
     timestamps: true,

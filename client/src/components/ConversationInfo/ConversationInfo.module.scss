@@ -1,14 +1,54 @@
+@import '../../common/styles/breakpoints';
+@import '../../common/styles/templates';
+@import '../../common/styles/colors';
+
 .chat_info {
+  display: flex;
+  height: 60px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  background-color: $dark_purple;
+  color: $white;
+}
+.back-button {
+  position: relative;
+  cursor: pointer;
+  &::after {
+    content: url('../../../public/static/images/svg/arrow-back.svg');
+    display: inline-block;
+    width: 59px;
+    height: 59px;
+  }
+  &:hover::after {
+    filter: invert(18%) sepia(10%) saturate(1291%) hue-rotate(334deg)
+      brightness(101%) contrast(101%);
+  }
+}
+.button-none {
+  display: none;
+}
+.wrapper {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  height: 60px;
-  background-color: #32114d;
-  color: white;
   & > h3 {
     margin: 10px 0 5px 10px;
   }
   & > p {
     margin-left: 10px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .chat_info {
+    height: 75px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .back-button {
+    display: none;
   }
 }

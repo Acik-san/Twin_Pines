@@ -22,7 +22,7 @@ socket.io.on('reconnect', () => {
       status: 'online',
     })
   );
-  store.dispatch(UserCreator.getOnlineUsersRequest())
+  store.dispatch(UserCreator.getOnlineUsersRequest());
 });
 
 socket.on('disconnect', () => {
@@ -44,6 +44,10 @@ socket.on(CONSTANTS.SOCKET_EVENTS.NEW_MESSAGE, data => {
 
 socket.on(CONSTANTS.SOCKET_EVENTS.TYPING_STATUS, data => {
   store.dispatch(ChatCreator.setTypingStatus(data));
+});
+
+socket.on(CONSTANTS.SOCKET_EVENTS.SEEN_MESSAGE, data => {
+  store.dispatch(ChatCreator.setSeenMessageSuccess(data))
 });
 
 export default socket;

@@ -19,13 +19,13 @@ export const createMessageError = error => ({
 });
 //---------------------------------------
 //---------------------------------------
-export const getMessagesRequest = id => ({
+export const getMessagesRequest = ({ id, limit, offset }) => ({
   type: ACTION_TYPES.GET_MESSAGES_REQUEST,
-  payload: { id },
+  payload: { id, limit, offset },
 });
-export const getMessagesSuccess = messages => ({
+export const getMessagesSuccess = ({ messages, haveMore }) => ({
   type: ACTION_TYPES.GET_MESSAGES_SUCCESS,
-  payload: { messages },
+  payload: { messages, haveMore },
 });
 export const getMessagesError = error => ({
   type: ACTION_TYPES.GET_MESSAGES_ERROR,
@@ -37,9 +37,9 @@ export const getChatsRequest = () => ({
   type: ACTION_TYPES.GET_CHATS_REQUEST,
   payload: {},
 });
-export const getChatsSuccess = conversations => ({
+export const getChatsSuccess = ({conversations,unreadMessages}) => ({
   type: ACTION_TYPES.GET_CHATS_SUCCESS,
-  payload: { conversations },
+  payload: { conversations,unreadMessages },
 });
 export const getChatsError = error => ({
   type: ACTION_TYPES.GET_CHATS_ERROR,
@@ -76,9 +76,9 @@ export const startTypingError = error => ({
   type: ACTION_TYPES.START_TYPING_ERROR,
   payload: { error },
 });
-export const stopTypingRequest = (conversationId, timerId) => ({
+export const stopTypingRequest = conversationId => ({
   type: ACTION_TYPES.STOP_TYPING_REQUEST,
-  payload: { conversationId, timerId },
+  payload: { conversationId },
 });
 export const stopTypingError = error => ({
   type: ACTION_TYPES.STOP_TYPING_ERROR,
@@ -100,7 +100,18 @@ export const subscribeChatsError = error => ({
 });
 //---------------------------------------
 //---------------------------------------
-// export const getOnlineUsers = users => ({
-//   type: ACTION_TYPES.GET_ONLINE_USERS,
-//   payload: { users },
-// });
+export const setSeenMessageRequest = messageId => ({
+  type: ACTION_TYPES.SET_SEEN_MESSAGE_REQUEST,
+  payload: { messageId },
+});
+export const setSeenMessageSuccess = ({ id, conversationId, status }) => ({
+  type: ACTION_TYPES.SET_SEEN_MESSAGE_SUCCESS,
+  payload: { id, conversationId, status },
+});
+export const setSeenMessageError = error => ({
+  type: ACTION_TYPES.SET_SEEN_MESSAGE_ERROR,
+  payload: { error },
+});
+//---------------------------------------
+//---------------------------------------
+

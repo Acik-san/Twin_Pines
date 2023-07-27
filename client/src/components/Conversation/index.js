@@ -1,6 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import classNames from 'classnames';
 import ConversationInfo from '../ConversationInfo';
 import ConversationMessagesList from '../ConversationMessagesList';
 import ConversationForm from '../forms/ConversationForm';
@@ -17,46 +24,44 @@ const Conversation = () => {
   const [isTouched, setIsTouched] = useState(false);
   const textArea = useRef(null);
 
+  const dialog = useMemo(() => currentDialog, [currentDialog]);
+  const setTypingStatus = useCallback(status => setIsTyping(status), []);
+  const setTouchedStatus = useCallback(status => setIsTouched(status), []);
+
   useEffect(() => {
-    let timerId;
     let intervalId;
     if (isTyping) {
-      timerId = setTimeout(() => {
-        startTypingRequest(currentDialog?.conversationId);
-        intervalId = setInterval(
-          () => startTypingRequest(currentDialog?.conversationId),
-          3000
-        );
-      }, 1000);
-    } else if (isTouched && !isTyping && textArea.current?.value === '') {
-      setIsTouched(false);
-      timerId = setTimeout(
-        () => stopTypingRequest(currentDialog?.conversationId, timerId),
-        1000
+      startTypingRequest(currentDialog?.conversationId);
+      intervalId = setInterval(
+        () => startTypingRequest(currentDialog?.conversationId),
+        3000
       );
+    } else if (isTouched && !isTyping && textArea.current?.value === '') {
+      stopTypingRequest(currentDialog?.conversationId);
     }
     return () => {
       clearInterval(intervalId);
-      clearTimeout(timerId);
       if (currentDialog && isTyping && textArea.current?.value !== '') {
-        const timerId = setTimeout(() => {
-          stopTypingRequest(currentDialog?.conversationId, timerId);
-        }, 1000);
+        stopTypingRequest(currentDialog?.conversationId);
       }
     };
   }, [isTyping, currentDialog?.conversationId]);
 
   return (
-    <div className={styles.container}>
+    <div
+      className={classNames(styles.container, {
+        [styles.none]: !currentDialog,
+      })}
+    >
       {currentDialog && (
         <>
-          <ConversationInfo currentDialog={currentDialog} />
-          <ConversationMessagesList currentDialog={currentDialog} />
+          <ConversationInfo currentDialog={dialog} />
+          <ConversationMessagesList currentDialog={dialog} />
           <ConversationForm
             currentDialog={currentDialog}
             textArea={textArea}
-            setIsTyping={setIsTyping}
-            setIsTouched={setIsTouched}
+            setIsTyping={setTypingStatus}
+            setIsTouched={setTouchedStatus}
           />
         </>
       )}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Formik, Form, Field } from 'formik';
@@ -7,16 +7,14 @@ import * as ActionChat from '../../../actions/chatsCreator';
 import Schems from '../../../utils/validateSchemas';
 import styles from './ConversationForm.module.scss';
 
-const ConversationForm = props => {
-  const { currentDialog } = props;
-  const { textArea, setIsTyping, setIsTouched } = props;
+const ConversationForm = memo(props => {
+  const { currentDialog, textArea, setIsTyping, setIsTouched } = props;
   const { user } = useSelector(({ users }) => users);
   const { messagesPreview } = useSelector(({ chats }) => chats);
   const { createMessageRequest } = bindActionCreators(
     ActionChat,
     useDispatch()
   );
-
   const onSubmit = (values, formikBag) => {
     values.interlocutor = currentDialog.interlocutorId;
     createMessageRequest(values);
@@ -67,6 +65,6 @@ const ConversationForm = props => {
       )}
     </Formik>
   );
-};
+});
 
 export default ConversationForm;

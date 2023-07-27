@@ -1,22 +1,24 @@
+@import '../../common/styles/breakpoints';
+@import '../../common/styles/templates';
+@import '../../common/styles/colors';
+
 .container {
-  background-color: #ffffff;
-  padding: 20px;
+  background-color: $white;
   border-radius: 10px;
+  border-bottom-right-radius: 5px;
   margin: 10px;
-  box-shadow: 0px 5px 19px -4px #585858;
+  box-shadow: 0px 5px 19px -4px $shadow_grey;
   width: 32%;
   max-height: 850px;
-  overflow-y: scroll;
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-  &::-webkit-scrollbar-track {
-    background-color: rgb(133, 133, 133);
-    border-radius: 4px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: rgb(216, 215, 215);
-    border-radius: 4px;
-  }
+  overflow: hidden;
+  @include scrollbar;
 }
 
+@media screen and (max-width: 767px) {
+  .container {
+    width: 100%;
+  }
+  .none {
+    display: none;
+  }
+}

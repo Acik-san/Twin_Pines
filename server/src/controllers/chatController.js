@@ -6,6 +6,7 @@ const { Message, Conversation } = require('../models/mongo');
 module.exports.getChat = async (req, res, next) => {
   const {
     params: { id },
+    query: { limit, offset },
   } = req;
   const participants = [req.tokenData.userId, Number(id)];
   participants.sort(
@@ -22,13 +23,20 @@ module.exports.getChat = async (req, res, next) => {
         },
       },
       { $match: { 'conversationData.participants': participants } },
-      { $sort: { createdAt: 1 } },
+      { $sort: { createdAt: -1 } },
+      {
+        $skip: parseInt(offset),
+      },
+      {
+        $limit: parseInt(limit),
+      },
       {
         $project: {
           _id: 1,
           sender: 1,
           body: 1,
           conversation: 1,
+          isRead: 1,
           createdAt: 1,
           updatedAt: 1,
         },
@@ -37,9 +45,11 @@ module.exports.getChat = async (req, res, next) => {
     // const interlocutor = await userQueries.findUser({
     //   id: Number(id),
     // });
-    res.send({
+    const haveMore = messages.length > 0 ? true : false;
+    res.status(200).send({
       data: {
         messages,
+        haveMore,
         // interlocutor: {
         //   firstName: interlocutor.firstName,
         //   lastName: interlocutor.lastName,
@@ -81,18 +91,50 @@ module.exports.getPreview = async (req, res, next) => {
       {
         $group: {
           _id: '$conversationData._id',
+          messageId: { $first: '$_id' },
           sender: { $first: '$sender' },
           body: { $first: '$body' },
           createdAt: { $first: '$createdAt' },
           participants: { $first: '$conversationData.participants' },
           blackList: { $first: '$conversationData.blackList' },
           favoriteList: { $first: '$conversationData.favoriteList' },
+          isRead: { $first: '$isRead' },
         },
       },
     ]);
     const interlocutors = [];
+    const unreadMessages = await Message.aggregate([
+      {
+        $match: {
+          isRead: false,
+          sender: { $ne: req.tokenData.userId },
+        },
+      },
+      {
+        $lookup: {
+          from: 'conversations',
+          localField: 'conversation',
+          foreignField: '_id',
+          as: 'conversationData',
+        },
+      },
+      {
+        $unwind: '$conversationData',
+      },
+      {
+        $match: {
+          'conversationData.participants': req.tokenData.userId,
+        },
+      },
+      {
+        $group: {
+          _id: '$conversationData._id',
+          count: { $sum: 1 },
+        },
+      },
+    ]);
     conversations.forEach(conversation => {
-      conversation.isTyping = false
+      conversation.isTyping = false;
       interlocutors.push(
         conversation.participants.find(
           participant => participant !== req.tokenData.userId
@@ -117,7 +159,7 @@ module.exports.getPreview = async (req, res, next) => {
         }
       });
     });
-    res.send({ data: { conversations } });
+    res.status(200).send({ data: { conversations, unreadMessages } });
   } catch (err) {
     next(err);
   }

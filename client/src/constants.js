@@ -1,5 +1,5 @@
 const env = process.env.NODE_ENV || 'development';
-const serverIP = 'localhost';
+const serverIP = '192.168.0.107';
 const serverPort = 5000;
 const CONSTANTS = {
   SIGN_IN_FORM_FIELDS: [
@@ -35,6 +35,8 @@ const CONSTANTS = {
     ONLINE_STATUS: 'ONLINE_STATUS',
     GET_ONLINE_USERS: 'GET_ONLINE_USERS',
     ONLINE_USERS: 'ONLINE_USERS',
+    SET_SEEN_MESSAGE: 'SET_SEEN_MESSAGE',
+    SEEN_MESSAGE: 'SEEN_MESSAGE',
   },
   ACCESS_TOKEN: 'accessToken',
   REFRESH_TOKEN: 'refreshToken',

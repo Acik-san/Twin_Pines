@@ -1,0 +1,262 @@
+@import '../../common/styles/breakpoints';
+@import '../../common/styles/templates';
+@import '../../common/styles/colors';
+
+.conversation_container,
+.preview,
+.name_preview {
+  display: flex;
+}
+
+.not_read {
+  background-color: $not_read_blue;
+  border-radius: 10px;
+}
+.conversation_container {
+  // height: 60px;
+  padding: 7px;
+  align-items: center;
+  cursor: pointer;
+  &:hover {
+    border-radius: 10px;
+    background-color: $hovered_grey;
+    .online-wrapper {
+      background-color: $hovered_grey;
+    }
+  }
+}
+.conversation_container_choosed {
+  background-color: $choosed_grey;
+  border-radius: 10px;
+  .online-wrapper {
+    background-color: $choosed_grey;
+  }
+  .online {
+    background-color: $checked_blue;
+  }
+  .badge {
+    background-color: $checked_blue;
+  }
+  &:hover {
+    background-color: $choosed_grey;
+    .online-wrapper {
+      background-color: $choosed_grey;
+    }
+  }
+}
+
+.photo_wrapper {
+  @include photo_wrapper;
+  margin: 0;
+  flex: none;
+}
+.photo_inner {
+  @include photo_inner;
+}
+.photo_inner_img {
+  @include photo_inner_img;
+  padding: 0;
+}
+
+.photo_wrapper,
+.photo_inner,
+.photo_inner_img {
+  width: 60px;
+  height: 60px;
+}
+
+.online-wrapper {
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: $white;
+  opacity: 0;
+}
+.online-wrapper-not-read {
+  background-color: #e1e6f7;
+}
+.zoomOut {
+  animation: zoomOut 1s forwards;
+}
+.zoomIn {
+  opacity: 1;
+  animation: zoomIn 0.5s;
+}
+.online {
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background-color: $pinky_purple;
+}
+.preview {
+  position: relative;
+  margin-left: 10px;
+  width: 100%;
+  height: 60px;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: left;
+  overflow: hidden;
+}
+.body_wrapper {
+  display: flex;
+  height: 22px;
+  justify-content: space-between;
+  & > p {
+    height: 19px;
+    width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+.badge {
+  border-radius: calc(22px / 2);
+  font-weight: bold;
+  color: $white;
+  background-color: $pinky_purple;
+  font-size: 14px;
+  text-align: center;
+  height: 22px;
+  min-width: 22px;
+  line-height: 22px;
+  padding: 0 7px;
+}
+.name_preview {
+  justify-content: space-between;
+  & > h3 {
+    width: 50%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+.message_delivered,
+.message_read {
+  position: relative;
+  margin-left: auto;
+}
+.message_delivered {
+  &::after {
+    content: url('../../../public/static/images/svg/message_delivered.svg');
+  }
+}
+
+.message_read {
+  &::after {
+    content: url('../../../public/static/images/svg/message_read.svg');
+  }
+}
+
+.typing {
+  opacity: 1;
+}
+.notTyping {
+  opacity: 0;
+}
+.typingPosition {
+  position: absolute;
+  bottom: 0;
+}
+
+.fadeIn {
+  opacity: 1;
+  animation: fadeIn 0.5s;
+}
+
+.fadeOut {
+  opacity: 0;
+  animation: fadeOut 0.5s;
+}
+
+@keyframes zoomIn {
+  0% {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes zoomOut {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .photo_wrapper,
+  .photo_inner,
+  .photo_inner_img {
+    width: 50px;
+    height: 50px;
+  }
+  .online-wrapper {
+    width: 13px;
+    height: 13px;
+  }
+  .online {
+    width: 9px;
+    height: 9px;
+  }
+  .preview {
+    height: 50px;
+    font-size: 15px;
+  }
+}
+@media screen and (min-width: 1024px) {
+  .photo_wrapper,
+  .photo_inner,
+  .photo_inner_img {
+    width: 60px;
+    height: 60px;
+  }
+  .online-wrapper {
+    width: 16px;
+    height: 16px;
+  }
+  .online {
+    width: 12px;
+    height: 12px;
+  }
+  .preview {
+    height: 60px;
+    font-size: 16px;
+  }
+}
+@media screen and (min-width: 1280px) {
+}

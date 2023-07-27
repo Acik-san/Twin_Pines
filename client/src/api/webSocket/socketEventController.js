@@ -37,10 +37,12 @@ export const startTyping = conversationId => {
     socket.emit(CONSTANTS.SOCKET_EVENTS.START_TYPING, conversationId);
   }
 };
-export const stopTyping = (conversationId, timerId) => {
+export const stopTyping = conversationId => {
   if (conversationId !== undefined) {
-    console.log('stop');
-    clearTimeout(timerId);
     socket.emit(CONSTANTS.SOCKET_EVENTS.STOP_TYPING, conversationId);
   }
+};
+
+export const setSeenMessage = messageId => {
+  socket.emit(CONSTANTS.SOCKET_EVENTS.SET_SEEN_MESSAGE, messageId);
 };

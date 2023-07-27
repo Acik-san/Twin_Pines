@@ -2,58 +2,10 @@
 @import '../../common/styles/templates';
 @import '../../common/styles/colors';
 
-.conversation_container,
-.preview,
-.name_preview {
-  display: flex;
-}
-
-.conversation_container {
-  // height: 60px;
-  padding: 7px;
-  align-items: center;
-  cursor: pointer;
-  &:hover {
-    background-color: #d8d8d8;
-  }
-}
-.conversation_container_choosed {
-  background-color: #c4c9d1;
-  &:hover {
-    background-color: #c4c9d1;
-  }
-}
-
-.photo_wrapper {
-  @include photo_wrapper;
-  width: 68px;
-  height: 60px;
-  margin: 0;
-}
-.photo_inner {
-  @include photo_inner;
-  width: 60px;
-  height: 60px;
-}
-.photo_inner_img {
-  @include photo_inner_img;
-  width: 60px;
-  height: 60px;
-  padding: 0;
-}
-.preview {
-  margin-left: 10px;
-  width: 100%;
-  height: 60px;
-  flex-direction: column;
-  justify-content: space-between;
-  text-align: left;
-  overflow: hidden;
-  & > p {
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-.name_preview {
-  justify-content: space-between;
+.preview-list {
+  overflow-y: scroll;
+  height: 100%;
+  max-height: 790px;
+  padding: 0 10px;
+  @include scrollbar;
 }

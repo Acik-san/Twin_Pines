@@ -1,28 +1,79 @@
+@import '../../common/styles/breakpoints';
+@import '../../common/styles/templates';
+@import '../../common/styles/colors';
+
 .container {
   position: relative;
+  padding: 16px;
+  background-color: $dark_purple;
+}
+.input {
+  width: 100%;
+  padding: 5px 10px;
+  background-color: $purple;
+  border: none;
+  border-radius: 5px;
+  color: $white;
+  &::placeholder {
+    color: $white;
+  }
 }
 .search_results {
   position: absolute;
-  z-index: 1;
-  top: 40px;
+  z-index: 2;
+  top: 45px;
   left: 0;
   right: 0;
-  background-color: white;
-  border: 1px solid gray;
-  min-height: 37px;
-  max-height: 177px;
+  background-color: $purple;
+  min-height: 68px;
+  max-height: 332px;
   overflow-y: auto;
+  @include scrollbar;
   &:first-child {
     border-top: 1px solid #ddd;
   }
   & > li {
+    display: flex;
     padding: 8px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-top: none;
+    background-color: $purple;
+    color: $white;
     cursor: pointer;
   }
   & > li:hover {
-    background-color: #f5f5f5;
+    background-color: $hover_purple;
   }
+}
+.text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  overflow: hidden;
+  margin-left: 10px;
+  text-align: left;
+  & > h3 {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.photo_wrapper {
+  @include photo_wrapper;
+  margin: 0;
+  flex: none;
+}
+.photo_inner {
+  @include photo_inner;
+}
+.photo_inner_img {
+  @include photo_inner_img;
+  padding: 0;
+}
+
+.photo_wrapper,
+.photo_inner,
+.photo_inner_img {
+  width: 50px;
+  height: 50px;
 }

@@ -1,73 +1,92 @@
-import React, { useEffect } from 'react';
+import React, { memo,useEffect, useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { format, isSameDay, parseISO } from 'date-fns';
-import classNames from 'classnames';
+import ConversationMessagesListItem from '../ConversationMessagesListItem';
 import * as ActionChat from '../../actions/chatsCreator';
 import styles from './ConversationMessagesList.module.scss';
 
-const ConversationMessagesList = props => {
+const ConversationMessagesList = memo(props => {
   const { currentDialog } = props;
-  const { user } = useSelector(({ users }) => users);
-  const { messages, messagesPreview } = useSelector(({ chats }) => chats);
-  const { getMessagesRequest } = bindActionCreators(ActionChat, useDispatch());
+  const { messages, messagesPreview, limit, offset, haveMore } = useSelector(
+    ({ chats }) => chats
+  );
+  const { getMessagesRequest, setSeenMessageRequest } = bindActionCreators(
+    ActionChat,
+    useDispatch()
+  );
+  const chatContainerRef = useRef(null);
+  const previousScrollHeightRef = useRef(0);
+  const observer = useMemo(
+    () =>
+      new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const messageId = entry.target.attributes.id.value;
+              setSeenMessageRequest(messageId);
+            }
+          });
+        },
+        { threshold: 1 }
+      ),
+    []
+  );
+  const typingStatus = useMemo(
+    () =>
+      messagesPreview.find(chat => chat._id === currentDialog?.conversationId)
+        ?.isTyping,
+    [messagesPreview, currentDialog.conversationId]
+  );
+
+  const handleScroll = () => {
+    const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
+    previousScrollHeightRef.current = scrollHeight - clientHeight - scrollTop;
+    if (chatContainerRef.current.scrollTop === 0 && haveMore) {
+      getMessagesRequest({ id: currentDialog.interlocutorId, limit, offset });
+    }
+  };
+
   useEffect(() => {
     if (currentDialog !== null && messages.length === 0) {
-      getMessagesRequest(currentDialog.interlocutorId);
+      getMessagesRequest({ id: currentDialog.interlocutorId, limit, offset });
     }
   }, [currentDialog]);
+
   useEffect(() => {
-    if (currentDialog) {
-      const dialog = document.getElementById('dialog');
-      dialog.scrollTop = dialog.scrollHeight;
-    }
+    const { scrollHeight, clientHeight } = chatContainerRef.current;
+    chatContainerRef.current.scrollTop =
+      scrollHeight - clientHeight - previousScrollHeightRef.current;
   }, [messages]);
+
+  useEffect(() => {
+    previousScrollHeightRef.current = 0;
+  }, [currentDialog.conversationId]);
   return (
-    <ul className={styles.dialog} id='dialog'>
-      {messages.map(({ _id, body, sender, createdAt }, i) => (
-        <li
-          key={_id}
-          className={classNames({
-            [styles['my_message']]: user.id === sender,
-            [styles.message]: user.id !== sender,
-          })}
-        >
-          {i === 0 ? (
-            <div className={styles.date}>
-              {format(parseISO(messages[i].createdAt), 'dd.MM')}
-            </div>
-          ) : null}
-          <div
-            className={classNames({
-              [styles['my_message_body']]: user.id === sender,
-              [styles['message_body']]: user.id !== sender,
-            })}
-          >
-            <p>{body}</p>
-            <div className={styles.a}> </div>
-            <span>{format(parseISO(createdAt), 'HH:mm')}</span>
-          </div>
-          {messages[i] !== messages[messages.length - 1] &&
-          !isSameDay(
-            parseISO(createdAt),
-            parseISO(messages[i + 1].createdAt)
-          ) ? (
-            <div className={styles.date}>
-              {format(parseISO(messages[i + 1].createdAt), 'dd.MM')}
-            </div>
-          ) : null}
-          {i === messages.length - 1 &&
-          messagesPreview.find(
-            chat => chat._id === currentDialog?.conversationId
-          )?.isTyping ? (
-            <div style={{ textAlign: 'left', marginLeft: '20px' }}>
-              {currentDialog.login} is typing...
-            </div>
-          ) : null}
-        </li>
-      ))}
-    </ul>
+    <>
+      <ul
+        className={styles.dialog}
+        ref={chatContainerRef}
+        onScroll={handleScroll}
+      >
+        {messages.map(
+          ({ _id, body, sender, createdAt, isRead, conversation }, i) => (
+            <ConversationMessagesListItem
+              key={_id}
+              body={body}
+              sender={sender}
+              createdAt={createdAt}
+              typingStatus={typingStatus}
+              conversation={conversation}
+              isRead={isRead}
+              i={i}
+              observer={observer}
+              id={_id}
+            />
+          )
+        )}
+      </ul>
+    </>
   );
-};
+});
 
 export default ConversationMessagesList;

@@ -62,7 +62,7 @@ const UsersList = () => {
                 {u.avatar !== 'anon.png' && (
                   <img
                     alt='avatar'
-                    src={`http://localhost:5000/images/${u.avatar}`}
+                    src={`http://192.168.0.107:5000/images/${u.avatar}`}
                     className={styles.photo_inner_img}
                   />
                 )}

@@ -19,6 +19,8 @@ module.exports = {
     STOP_TYPING: 'STOP_TYPING',
     TYPING_STATUS: 'TYPING_STATUS',
     DISCONNECT: 'disconnect',
+    SET_SEEN_MESSAGE: 'SET_SEEN_MESSAGE',
+    SEEN_MESSAGE: 'SEEN_MESSAGE',
   },
   STATUS: {
     ONLINE: 'online',

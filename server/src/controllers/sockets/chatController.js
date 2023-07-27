@@ -8,6 +8,8 @@ const {
     START_TYPING,
     STOP_TYPING,
     TYPING_STATUS,
+    SET_SEEN_MESSAGE,
+    SEEN_MESSAGE,
   },
 } = require('../../constants');
 
@@ -71,6 +73,7 @@ module.exports.sendMessage = socket =>
         sender: message.sender,
         body: message.body,
         participants,
+        isRead: message.isRead,
         createdAt: message.createdAt,
         updatedAt: message.updatedAt,
       };
@@ -80,7 +83,7 @@ module.exports.sendMessage = socket =>
         },
         attributes: ['id', 'login', 'email', 'avatar'],
       });
-      const userPreview = {
+      const preview = {
         _id: newConversation._id.toString(),
         sender: userId,
         body: messageBody,
@@ -89,29 +92,51 @@ module.exports.sendMessage = socket =>
         blackList: newConversation.blackList,
         favoriteList: newConversation.favoriteList,
         isTyping: false,
-        interlocutor: users.filter(
-          user => user.dataValues.id === interlocutor
-        )[0].dataValues,
       };
-      const interlocutorPreview = userPreview;
-      interlocutorPreview.interlocutor = users.filter(
-        user => user.dataValues.id === userId
-      )[0].dataValues;
 
       if (!conversations.includes(newConversation._id.toString())) {
         socket.join(newConversation._id.toString());
-        socket.to(interlocutor).emit(NEW_MESSAGE, {
-          message: newMessage,
-          preview: interlocutorPreview,
-        });
       }
       socket.to(interlocutor).emit(NEW_MESSAGE, {
         message: newMessage,
-        preview: interlocutorPreview,
+        preview: {
+          ...preview,
+          interlocutor: users.filter(user => user.dataValues.id === userId)[0]
+            .dataValues,
+        },
       });
       socket.emit(NEW_MESSAGE, {
         message: newMessage,
-        preview: userPreview,
+        preview: {
+          ...preview,
+          interlocutor: users.filter(
+            user => user.dataValues.id === interlocutor
+          )[0].dataValues,
+        },
       });
     }
   );
+module.exports.setSeenMessage = socket => {
+  socket.on(SET_SEEN_MESSAGE, async messageId => {
+    const message = await Message.findOneAndUpdate(
+      { _id: messageId },
+      { isRead: true },
+      {
+        upsert: true,
+        new: true,
+        setDefaultsOnInsert: true,
+        useFindAndModify: false,
+      }
+    );
+    socket.to(message.conversation.toString()).emit(SEEN_MESSAGE, {
+      id: message._id,
+      conversationId: message.conversation,
+      status: true,
+    });
+    socket.emit(SEEN_MESSAGE, {
+      id: message._id,
+      conversationId: message.conversation,
+      status: true,
+    });
+  });
+};
