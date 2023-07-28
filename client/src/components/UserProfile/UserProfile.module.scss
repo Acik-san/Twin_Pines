@@ -38,22 +38,3 @@
     left: 60px;
   }
 }
-.delete_user {
-  position: relative;
-  cursor: pointer;
-  &::after {
-    content: url("../../../public/static/images/svg/delete_user.svg");
-    position: absolute;
-    left: 97px;
-    top: 3px;
-  }
-}
-.create_task {
-  position: relative;
-  cursor: pointer;
-  &::after {
-    content: url("../../../public/static/images/svg/create_task.svg");
-    position: absolute;
-    left: 120px;
-  }
-}

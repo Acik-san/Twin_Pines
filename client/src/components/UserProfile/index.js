@@ -1,5 +1,5 @@
-import React, {  useState } from 'react';
-import {  useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import UserUpdateForm from '../forms/UserUpdateForm';
 import { getInitials, stringToColour } from '../../utils/usefulFunctions';
@@ -49,13 +49,6 @@ const UserProfile = () => {
               id='edit_profile'
               className={styles.button_none}
               onClick={editProfile}
-            ></button>
-          </label>
-          <label htmlFor='create_task' className={styles.create_task}>
-            <button
-              id='create_task'
-              className={styles.button_none}
-              onClick={() => navigate(`/profile/tasks`)}
             ></button>
           </label>
         </div>

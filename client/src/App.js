@@ -11,8 +11,6 @@ import * as ActionUser from './actions/userCreators';
 const AuthPage = lazy(() => import('./pages/AuthPage'));
 const HomePage = lazy(() => import('./pages/HomePage'));
 const UserPage = lazy(() => import('./pages/UserPage'));
-const UserTasksPage = lazy(() => import('./pages/UserTasksPage'));
-const UserTaskPage = lazy(() => import('./pages/UserTaskPage'));
 const ChatsPage = lazy(() => import('./pages/ChatsPage'));
 
 const App = () => {
@@ -47,12 +45,6 @@ const App = () => {
           {user ? (
             <>
               <Route exact path='/profile' element={<UserPage />} />
-              <Route exact path='/profile/tasks' element={<UserTasksPage />} />
-              <Route
-                exact
-                path='/profile/tasks/:taskId'
-                element={<UserTaskPage />}
-              />
               <Route exact path='/chats' element={<ChatsPage />} />
             </>
           ) : (

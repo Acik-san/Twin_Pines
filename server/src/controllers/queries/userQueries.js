@@ -26,16 +26,6 @@ module.exports.findUser = async (predicate, transaction) => {
   }
 };
 
-module.exports.userCreation = async data => {
-  const newUser = await db.User.create(data);
-  if (!newUser) {
-    // throw new ServerError('server error on user creation');
-    throw new Error('server error on user creation');
-  } else {
-    return newUser.get({ plain: true });
-  }
-};
-
 module.exports.passwordCompare = async (pass1, pass2) => {
   const passwordCompare = await bcrypt.compare(pass1, pass2);
   if (!passwordCompare) {

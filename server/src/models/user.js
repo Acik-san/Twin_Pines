@@ -17,7 +17,6 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.RefreshToken, {
         foreignKey: 'userId',
       });
-      User.hasMany(models.Task, { foreignKey: 'userId' });
     }
     async comparePassword (password) {
       return bcrypt.compare(password, this.getDataValue('password'));
