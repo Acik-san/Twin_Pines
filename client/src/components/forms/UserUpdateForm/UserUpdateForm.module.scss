@@ -1,42 +1,51 @@
-@import "../../../common/styles/breakpoints";
-@import "../../../common/styles/templates";
-@import "../../../common/styles/colors";
+@import '../../../common/styles/breakpoints';
+@import '../../../common/styles/templates';
+@import '../../../common/styles/colors';
 
-.invalid {
-  border: 2px solid red;
+.container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #0000003d;
+}
+.cropper,
+.form {
+  @include user_card;
+  display: block;
+  position: absolute;
+}
+.cropper {
+  width: 100%;
+  height: 100%;
 }
 .form {
-  margin-top: 70px;
+  bottom: 19px;
 }
-.input_container {
-  @include input_container;
-  label + label {
-    margin-top: 10px;
+
+.button_wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media screen and (max-width: 767px) {
+  .form {
+    left: 40px;
+    width: 251px;
+  }
+  .cropper {
+    top: -10px;
+    left: -10px;
   }
 }
-.input {
-  @include input;
-}
-.input_none {
-  @include none;
-}
-.upload_avatar {
-  position: relative;
-  cursor: pointer;
-  &::after {
-    content: url("../../../../public/static/images/svg/upload_avatar.svg");
-    position: absolute;
-    right: 67px;
-    top: 10px;
-  }
-}
-.save_settings {
-  position: relative;
-  cursor: pointer;
-  &::after {
-    content: url("../../../../public/static/images/svg/save.svg");
-    position: absolute;
-    right: 0px;
-    top: 10px;
+@media screen and (max-width: 320px) {
+  .form {
+    left: 15px;
   }
 }

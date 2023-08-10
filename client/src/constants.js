@@ -44,6 +44,66 @@ const CONSTANTS = {
     env === 'production'
       ? `http://${serverIP}:80/images/`
       : `http://${serverIP}:${serverPort}/images/`,
+  HEADER: {
+    HAMBURGER_MENU: [{ id: 1 }, { id: 2 }, { id: 3 }],
+    LOGINED_BUTTONS: [
+      {
+        id: 1,
+        type: 'link',
+        path: '/profile',
+        text: 'Profile',
+        name: 'profile',
+      },
+      { id: 2, type: 'link', path: '/chats', text: 'Chats', name: 'chats' },
+      { id: 3, type: 'button', text: 'Logout', name: 'logout' },
+    ],
+    AUTH_BUTTONS: [
+      {
+        id: 1,
+        type: 'link',
+        path: '/sign-in',
+        text: 'Sign-in',
+        name: 'sign-in',
+      },
+      {
+        id: 2,
+        type: 'link',
+        path: '/sign-up',
+        text: 'Sign-up',
+        name: 'sign-up',
+      },
+    ],
+  },
+  USER_PROFILE_SETTINGS: [
+    {
+      id: 1,
+      iconName: 'avatar_icon',
+      propertyName: 'Change profile photo',
+      name: 'avatar',
+      type: 'file',
+    },
+    {
+      id: 2,
+      iconName: 'user_icon',
+      propertyName: 'User login',
+      name: 'login',
+      type: 'text',
+    },
+    {
+      id: 3,
+      iconName: 'email_icon',
+      propertyName: 'User email',
+      name: 'email',
+      type: 'text',
+    },
+    {
+      id: 4,
+      iconName: 'password_icon',
+      propertyName: 'Change password',
+      name: 'password',
+      type: 'password',
+    },
+  ],
 };
 
 export default CONSTANTS;

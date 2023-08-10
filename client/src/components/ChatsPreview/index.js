@@ -122,12 +122,12 @@ const ChatsPreview = props => {
           <p>{calculateMessageDate(createdAt)}</p>
         </div>
         <div className={styles.body_wrapper}>
-          <TypingAnimation
+          {currentStatus === 'online'?<TypingAnimation
             classes={classNames(styles.notTyping, styles.typingPosition, {
               [styles.fadeIn]: previousTypingStatus && isTyping,
               [styles.fadeOut]: previousTypingStatus && !isTyping,
             })}
-          />
+          />:null}
           <p
             className={classNames(styles.typing, {
               [styles.fadeIn]: previousTypingStatus && !isTyping,
@@ -137,7 +137,9 @@ const ChatsPreview = props => {
             {body}
           </p>
           {unreadMessagesCount ? (
-            <div className={styles.badge}>{unreadMessagesCount}</div>
+            <div className={styles.badge}>
+              {unreadMessagesCount > 9999 ? '9999+' : unreadMessagesCount}
+            </div>
           ) : null}
         </div>
       </div>

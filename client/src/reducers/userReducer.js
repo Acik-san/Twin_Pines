@@ -88,6 +88,9 @@ const handlers = {
         : (user.status = 'offline')
     );
   }),
+  [ACTION_TYPES.CLEAN_USER_ERROR]: produce((draftState, action) => {
+    draftState.error = null;
+  }),
   [ACTION_TYPES.SIGN_IN_ERROR]: handleError,
   [ACTION_TYPES.SIGN_UP_ERROR]: handleError,
   [ACTION_TYPES.LOGOUT_ERROR]: handleError,

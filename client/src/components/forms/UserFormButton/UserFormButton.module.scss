@@ -1,0 +1,31 @@
+@import '../../../common/styles/breakpoints';
+@import '../../../common/styles/templates';
+@import '../../../common/styles/colors';
+
+.button,
+.button_invalid,
+.button_valid {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: transparent;
+  transition: color 0.3s ease;
+  &:hover {
+    background-color: $hovered_grey;
+  }
+  &:active {
+    background-color: $choosed_grey;
+  }
+  &:first-child {
+    margin-right: 5px;
+  }
+}
+.button {
+  color: $purple;
+}
+.button_invalid {
+  color: $invalid;
+}
+.button_valid {
+  color: $valid;
+}

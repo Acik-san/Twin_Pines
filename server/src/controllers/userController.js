@@ -1,4 +1,5 @@
 const createError = require('http-errors');
+const { UniqueConstraintError } = require('sequelize');
 const _ = require('lodash');
 const { User } = require('../models');
 
@@ -26,7 +27,7 @@ module.exports.getUsers = async (req, res, next) => {
         exclude: ['password', 'createdAt', 'updatedAt'],
       },
     });
-    users.forEach(user => user.dataValues.status = 'offline');
+    users.forEach(user => (user.dataValues.status = 'offline'));
     res.status(200).send({ data: { users } });
   } catch (error) {
     next(error);
@@ -48,29 +49,15 @@ module.exports.updateUser = async (req, res, next) => {
     if (req.file) {
       body.avatar = req.file.filename;
     }
-    const values = _.pick(body, ['login', 'password', 'avatar']);
+    const values = _.pick(body, ['login', 'email', 'password', 'avatar']);
     const updatedUser = await instanceUser.update(values);
     const userPrepare = _.omit(await updatedUser.get(), ['password']);
     res.status(200).send({ data: userPrepare });
   } catch (error) {
-    next(error);
-  }
-};
-module.exports.deleteUser = async (req, res, next) => {
-  try {
-    const { instanceUser } = req;
-    await instanceUser.destroy();
-    res.status(200).send({ data: instanceUser });
-  } catch (error) {
-    next(error);
-  }
-};
-module.exports.getSumUsers = async (req, res, next) => {
-  try {
-    const users = await User.findAll();
-    const sumUsers = users.length;
-    res.status(200).send({ data: sumUsers });
-  } catch (error) {
+    if (error instanceof UniqueConstraintError) {
+      next(createError(409, 'Login or email are already used'));
+      return;
+    }
     next(error);
   }
 };

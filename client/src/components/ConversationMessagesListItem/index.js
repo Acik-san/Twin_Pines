@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { format, isSameDay, parseISO } from 'date-fns';
 import classNames from 'classnames';
@@ -6,32 +6,19 @@ import TypingAnimation from '../TypingAnimation';
 import styles from './ConversationMessagesListItem.module.scss';
 
 const ConversationMessagesListItem = props => {
-  const {
-    body,
-    sender,
-    createdAt,
-    typingStatus,
-    conversation,
-    isRead,
-    i,
-    id,
-    observer,
-  } = props;
+  const { body, sender, createdAt, typingStatus, isRead, i, id, observer } =
+    props;
   const { user } = useSelector(({ users }) => users);
-  const { messagesPreview, messages } = useSelector(({ chats }) => chats);
+  const { messages } = useSelector(({ chats }) => chats);
   const [previousTypingStatus, setPreviousTypingStatus] = useState(false);
-  const currentTypingStatus = useMemo(
-    () => messagesPreview.find(({ _id }) => _id === conversation)?.isTyping,
-    [messagesPreview, conversation]
-  );
   useEffect(() => {
     setPreviousTypingStatus(prevStatus => {
-      if (currentTypingStatus && !prevStatus) {
-        return currentTypingStatus;
+      if (typingStatus && !prevStatus) {
+        return typingStatus;
       }
       return prevStatus;
     });
-  }, [currentTypingStatus]);
+  }, [typingStatus]);
 
   useEffect(() => {
     let messageItem;
@@ -45,7 +32,6 @@ const ConversationMessagesListItem = props => {
       }
     };
   }, []);
-
   return (
     <li
       className={classNames({

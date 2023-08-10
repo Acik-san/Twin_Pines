@@ -1,14 +1,23 @@
-@import "../../common/styles/breakpoints";
-@import "../../common/styles/templates";
-@import "../../common/styles/colors";
+@import '../../common/styles/breakpoints';
+@import '../../common/styles/templates';
+@import '../../common/styles/colors';
 
 .section {
   @include section;
+  margin-top: 0;
+  height: 100vh;
 }
+.section_background_dark {
+  background-color: #0000003d;
+  position: relative;
+  z-index: 100;
+}
+
 .user_card {
   @include user_card;
-  width: 270px;
-  height: 235px;
+  width: 350px;
+  margin-top: 110px;
+  position: relative;
 }
 
 .photo_wrapper {
@@ -23,18 +32,20 @@
 .login {
   @include login;
 }
-.buttons {
-  display: flex;
+
+@media screen and (max-width: 767px) {
+  .section {
+    min-height: 463px;
+  }
 }
-.button_none {
-  @include none;
-}
-.edit_profile {
-  position: relative;
-  cursor: pointer;
-  &::after {
-    content: url("../../../public/static/images/svg/edit_profile.svg");
-    position: absolute;
-    left: 60px;
+@media screen and (max-width: 320px) {
+  .user_card {
+    width: 300px;
+  }
+  .photo_wrapper,
+  .photo_inner,
+  .photo_inner_img {
+    width: 90px;
+    height: 90px;
   }
 }

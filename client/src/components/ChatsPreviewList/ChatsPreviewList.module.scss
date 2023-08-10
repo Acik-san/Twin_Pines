@@ -9,3 +9,12 @@
   padding: 0 10px;
   @include scrollbar;
 }
+
+@media screen and (max-width: 320px) {
+  .preview-list {
+    height: 500px;
+    max-height: 390px;
+    // max-height: 736px;
+    // height: 466px;
+  }
+}

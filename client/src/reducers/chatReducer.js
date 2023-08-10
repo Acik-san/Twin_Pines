@@ -35,7 +35,7 @@ const handlers = {
     } = action;
     draftState.isFetching = false;
     draftState.offset += 1;
-    if (draftState.currentDialog?.conversationId === preview._id) {
+    if (draftState.currentDialog?.interlocutorId === preview.interlocutor.id) {
       draftState.messages.push(message);
     }
     if (
@@ -51,7 +51,7 @@ const handlers = {
     let isNew = true;
     draftState.messagesPreview.forEach(conversation => {
       if (isEqual(conversation.participants, message.participants)) {
-        conversation.messageId = message._id
+        conversation.messageId = message._id;
         conversation.body = message.body;
         conversation.sender = message.sender;
         conversation.createdAt = message.createdAt;
@@ -106,8 +106,11 @@ const handlers = {
   }),
   [ACTION_TYPES.CLEAR_CHATS_SUCCESS]: produce(draftState => {
     draftState.isFetching = false;
+    draftState.offset = 0;
+    draftState.haveMore = true;
     draftState.messages = [];
     draftState.messagesPreview = [];
+    draftState.unreadMessages = [];
     draftState.currentDialog = null;
   }),
   [ACTION_TYPES.CLEAR_CURRENT_CHAT]: produce(draftState => {

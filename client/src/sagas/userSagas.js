@@ -23,7 +23,12 @@ export function* updateUserSaga (action) {
     } = yield API.updateUser(action.payload);
     yield put(ActionsUser.updateUserSuccess(user));
   } catch (error) {
-    yield put(ActionsUser.updateUserError(error));
+    yield put(
+      ActionsUser.updateUserError({
+        message: error.response.data.message,
+        status: error.response.status,
+      })
+    );
   }
 }
 

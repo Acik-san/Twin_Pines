@@ -14,9 +14,7 @@ export const getAuthUser = () => httpClient.get('auth');
 
 export const updateUser = data => {
   const form = new FormData();
-  form.append('login', data.values.login);
-  form.append('password', data.values.password);
-  form.append('avatar', data.values.avatar);
+  form.append(Object.keys(data.values)[0], Object.values(data.values)[0]);
   return httpClient.patch('profile', form, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });

@@ -20,8 +20,9 @@
     height: 59px;
   }
   &:hover::after {
-    filter: invert(18%) sepia(10%) saturate(1291%) hue-rotate(334deg)
-      brightness(101%) contrast(101%);
+    // filter: invert(18%) sepia(10%) saturate(1291%) hue-rotate(334deg)
+    //   brightness(101%) contrast(101%);
+    filter: invert(66%) sepia(32%) saturate(3504%) hue-rotate(251deg) brightness(88%) contrast(105%);
   }
 }
 .button-none {
@@ -42,9 +43,9 @@
 }
 
 @media screen and (max-width: 320px) {
-  .chat_info {
-    height: 75px;
-  }
+  // .chat_info {
+  //   height: 75px;
+  // }
 }
 
 @media screen and (min-width: 768px) {

@@ -1,4 +1,4 @@
-import React, { memo,useEffect, useMemo, useRef } from 'react';
+import React, { memo, useEffect, useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import ConversationMessagesListItem from '../ConversationMessagesListItem';
@@ -76,7 +76,6 @@ const ConversationMessagesList = memo(props => {
               sender={sender}
               createdAt={createdAt}
               typingStatus={typingStatus}
-              conversation={conversation}
               isRead={isRead}
               i={i}
               observer={observer}

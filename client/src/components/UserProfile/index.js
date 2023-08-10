@@ -1,26 +1,57 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import UserUpdateForm from '../forms/UserUpdateForm';
+import { toast, ToastContainer } from 'react-toastify';
+import { useSettingsForUser, useIsFirstRender } from '../../hooks';
+import classNames from 'classnames';
+import UserProfileSettings from '../UserProfileSettings';
 import { getInitials, stringToColour } from '../../utils/usefulFunctions';
-import Error from '../Error';
 import CONSTANTS from '../../constants';
+import 'react-toastify/dist/ReactToastify.css';
 import styles from './UserProfile.module.scss';
 
 const UserProfile = () => {
-  const [isEdit, setIsEdit] = useState(false);
-  const { user } = useSelector(({ users }) => users);
-  const editProfile = () => {
-    setIsEdit(!isEdit);
-  };
-  const navigate = useNavigate();
+  const {
+    isEdit,
+    name,
+    value,
+    type,
+    containerRef,
+    editProfile,
+    handleSetting,
+  } = useSettingsForUser();
+  const isFirstRender = useIsFirstRender();
+
+  const { user, error } = useSelector(({ users }) => users);
+
+  useEffect(() => {
+    if (!isFirstRender && error?.status === 409) {
+      toast.error(`This ${name} is already used`);
+    }
+  }, [error]);
+  useEffect(() => {
+    if (!isFirstRender) {
+      toast.success(`Your ${name} is changed successfully`);
+    }
+  }, [user]);
   return (
-    <section className={styles.section}>
-      {/* {error && <Error error={error} />} */}
-      <article
-        className={styles.user_card}
-        style={{ height: isEdit && '410px' }}
-      >
+    <section
+      className={classNames(styles.section, {
+        [styles.section_background_dark]: isEdit,
+      })}
+    >
+      <ToastContainer
+        position='top-center'
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme='light'
+      />
+      <article className={styles.user_card} ref={containerRef}>
         <div className={styles.photo_wrapper}>
           <div
             className={styles.photo_inner}
@@ -28,31 +59,21 @@ const UserProfile = () => {
           >
             {getInitials([user.login])}
           </div>
-          {user.avatar === 'anon.png' ? (
-            <img
-              alt='avatar'
-              src={`${CONSTANTS.ANONYM_IMAGE_PATH}`}
-              className={styles.photo_inner_img}
-            />
-          ) : (
-            <img
-              alt='avatar'
-              src={`${CONSTANTS.publicURL}${user.avatar}`}
-              className={styles.photo_inner_img}
-            />
-          )}
+          <img
+            alt='avatar'
+            src={`${
+              user.avatar === 'anon.png'
+                ? CONSTANTS.ANONYM_IMAGE_PATH
+                : CONSTANTS.publicURL + user.avatar
+            }`}
+            className={styles.photo_inner_img}
+          />
         </div>
         <h3 className={styles.login}>{user.login}</h3>
-        <div className={styles.buttons}>
-          <label htmlFor='edit_profile' className={styles.edit_profile}>
-            <button
-              id='edit_profile'
-              className={styles.button_none}
-              onClick={editProfile}
-            ></button>
-          </label>
-        </div>
-        {isEdit && <UserUpdateForm editProfile={editProfile} />}
+        <UserProfileSettings
+          user={user}
+          settings={{ isEdit, name, value, type, editProfile, handleSetting }}
+        />
       </article>
     </section>
   );

@@ -85,6 +85,7 @@ module.exports.sendMessage = socket =>
       });
       const preview = {
         _id: newConversation._id.toString(),
+        messageId: message._id,
         sender: userId,
         body: messageBody,
         createdAt: message.createdAt,

@@ -1,0 +1,48 @@
+@import '../../common/styles/breakpoints';
+@import '../../common/styles/templates';
+@import '../../common/styles/colors';
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.container-cropper {
+  height: 220px;
+}
+
+.cropper {
+  height: 90%;
+  position: relative;
+}
+
+.forrest {
+  &::after {
+    content: url('../../../public/static/images/svg/forrest.svg');
+    display: flex;
+    height: 220px;
+    border: 2px solid rebeccapurple;
+    background-color: #b6ffe7;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.slider {
+  display: flex;
+  align-items: center;
+  margin: auto;
+  width: 60%;
+}
+
+.button_wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}

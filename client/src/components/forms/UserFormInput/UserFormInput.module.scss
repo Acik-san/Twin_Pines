@@ -1,0 +1,79 @@
+@import '../../../common/styles/breakpoints';
+@import '../../../common/styles/templates';
+@import '../../../common/styles/colors';
+
+.input_wrapper,
+.input_wrapper_invalid,
+.input_wrapper_valid {
+  min-height: 75px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: $purple;
+  transition: color 0.3s ease;
+  & p::first-letter {
+    text-transform: capitalize;
+  }
+}
+
+.input_wrapper {
+  &:focus-within {
+    color: $checked_blue;
+  }
+}
+
+.input_wrapper_invalid {
+  color: $invalid;
+  &:focus-within {
+    color: $invalid;
+  }
+}
+.input_wrapper_valid {
+  color: $valid;
+  &:focus-within {
+    color: $valid;
+  }
+}
+
+.input,
+.input_invalid,
+.input_valid {
+  border: none;
+  border-bottom: 2px solid;
+  border-radius: 0px;
+  margin-top: 10px;
+  transition: border-color 0.3s ease;
+  &:focus {
+    border-bottom: 2px solid;
+  }
+  &::placeholder {
+    text-transform: capitalize;
+  }
+}
+
+.input {
+  border-bottom-color: $purple;
+  &:focus {
+    border-bottom-color: $checked_blue;
+  }
+}
+
+.input_invalid {
+  border-bottom-color: $invalid;
+  &:focus {
+    border-bottom-color: $invalid;
+  }
+}
+
+.input_valid {
+  border-bottom-color: $valid;
+  &:focus {
+    border-bottom-color: $valid;
+  }
+}
+
+.error{
+  position: absolute;
+  bottom: 60px;
+  color: $invalid;
+}

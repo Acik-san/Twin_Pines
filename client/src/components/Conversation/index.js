@@ -4,7 +4,7 @@ import ConversationInfo from '../ConversationInfo';
 import ConversationMessagesList from '../ConversationMessagesList';
 import ConversationForm from '../forms/ConversationForm';
 import styles from './Conversation.module.scss';
-import useTypingStatus from '../../hooks/useTypingStatus';
+import {useTypingStatus} from '../../hooks';
 
 const Conversation = () => {
   const { textArea, dialog, setTypingStatus, setTouchedStatus } =

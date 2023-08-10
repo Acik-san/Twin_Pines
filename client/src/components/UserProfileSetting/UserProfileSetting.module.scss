@@ -1,0 +1,57 @@
+@import '../../common/styles/breakpoints';
+@import '../../common/styles/templates';
+@import '../../common/styles/colors';
+
+.info_group {
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  &:hover {
+    background-color: $hovered_grey;
+    border-radius: 5px;
+  }
+  & > h4 {
+    margin-left: 10px;
+  }
+  & > p {
+    margin-left: auto;
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: $purple;
+  }
+}
+.avatar_icon,
+.user_icon,
+.email_icon,
+.password_icon {
+  // position: relative;
+  &::after {
+    display: inline-block;
+    border-radius: 5px;
+    width: 23px;
+    height: 23px;
+    // background-color: $light_grey_blue;
+  }
+}
+.avatar_icon {
+  &::after {
+    content: url('../../../public/static/images/svg/avatar-icon.svg');
+  }
+}
+.user_icon {
+  &::after {
+    content: url('../../../public/static/images/svg/user-icon.svg');
+  }
+}
+.email_icon {
+  &::after {
+    content: url('../../../public/static/images/svg/email-icon.svg');
+  }
+}
+.password_icon {
+  &::after {
+    content: url('../../../public/static/images/svg/password-icon.svg');
+  }
+}

@@ -1,5 +1,5 @@
 .formContainer {
-  width: 90%;
+  width: 100%;
   padding: 70px 30px 44px;
   border-radius: 22px;
   background: #161616;
@@ -40,11 +40,14 @@
     background: transparent;
     border: 2px solid rgba(255, 255, 255, 0.1);
     font-size: 18px;
-    padding: 0 20px 0 50px;
+    padding: 0 20px;
     color: #f9f9f9;
     &:focus {
       // border-color: #157ae1;
       border-color: #8b15e1;
+    }
+    @media screen and (min-width: 450px) {
+      padding: 0 20px 0 50px;
     }
   }
   & button {
@@ -109,8 +112,9 @@
   margin-top: 20px;
   & > a {
     display: block;
+    padding: 5px;
     margin: auto;
-    width: 20%;
+    width: 30%;
     &:hover {
       color: #8b15e1;
     }

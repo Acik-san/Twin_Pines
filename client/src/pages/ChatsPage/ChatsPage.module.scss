@@ -1,7 +1,7 @@
 .section {
-  height: 870px;
+  height: 963px;
   // height: 89vh;
-  margin-top: 100px;
+  // margin-top: 100px;
   text-align: center;
   display: flex;
   justify-content: center;
@@ -10,6 +10,8 @@
 @media screen and (max-width: 320px) {
   .section {
     // max-height: 86vh;
-    height: 448px;
+    // height: 448px;
+    // height: 545px;
+    height: 100%;
   }
 }

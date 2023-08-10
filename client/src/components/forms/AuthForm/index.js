@@ -30,7 +30,7 @@ const AuthForm = props => {
             </label>
           ))}
           <button type='submit'>
-            {formType === CONSTANTS.SIGN_IN ? 'LOGIN' : 'SIGN-UP'}
+            {formType === CONSTANTS.SIGN_IN ? 'SIGN-IN' : 'SIGN-UP'}
           </button>
         </Form>
         {formType === CONSTANTS.SIGN_IN ? (
