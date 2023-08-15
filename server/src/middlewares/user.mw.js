@@ -4,7 +4,6 @@ const { User } = require('../models');
 module.exports.checkUser = async (req, res, next) => {
   try {
     const {
-      // params: { userId },
       tokenData:{userId}
     } = req;
     const instanceUser = await User.findByPk(Number(userId));

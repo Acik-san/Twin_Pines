@@ -76,7 +76,6 @@ const handlers = {
           user.id === userId ? (user.status = status) : null
         )
       : draftState.users.forEach(user => (user.status = status));
-    console.log(userId, status);
   }),
   [ACTION_TYPES.GET_ONLINE_USERS]: produce((draftState, action) => {
     const {

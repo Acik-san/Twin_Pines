@@ -1,10 +1,11 @@
 import React from 'react';
 import { useDataForAuthForm } from '../../../hooks';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import Schems from '../../../utils/validateSchemas';
-import styles from './AuthForm.module.scss';
-import CONSTANTS from '../../../constants';
+import { Formik, Form } from 'formik';
 import { Link } from 'react-router-dom';
+import Schems from '../../../utils/validateSchemas';
+import CONSTANTS from '../../../constants';
+import styles from './AuthForm.module.scss';
+import AuthInput from './AuthInput';
 
 const AuthForm = props => {
   const { formType } = props;
@@ -20,14 +21,12 @@ const AuthForm = props => {
       <div className={styles.formContainer}>
         <Form className={styles.form}>
           {inputs.map(({ id, name, type, placeholder }) => (
-            <label key={id} className={styles.label}>
-              <Field type={type} name={name} placeholder={placeholder} />
-              <ErrorMessage
-                name={name}
-                component='span'
-                className={styles.error}
-              />
-            </label>
+            <AuthInput
+              key={id}
+              name={name}
+              type={type}
+              placeholder={placeholder}
+            />
           ))}
           <button type='submit'>
             {formType === CONSTANTS.SIGN_IN ? 'SIGN-IN' : 'SIGN-UP'}

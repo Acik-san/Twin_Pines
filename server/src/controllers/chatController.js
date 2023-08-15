@@ -42,21 +42,11 @@ module.exports.getChat = async (req, res, next) => {
         },
       },
     ]);
-    // const interlocutor = await userQueries.findUser({
-    //   id: Number(id),
-    // });
     const haveMore = messages.length > 0 ? true : false;
     res.status(200).send({
       data: {
         messages,
         haveMore,
-        // interlocutor: {
-        //   firstName: interlocutor.firstName,
-        //   lastName: interlocutor.lastName,
-        //   displayName: interlocutor.displayName,
-        //   id: interlocutor.id,
-        //   avatar: interlocutor.avatar,
-        // },
       },
     });
   } catch (err) {

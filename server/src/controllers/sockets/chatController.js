@@ -65,11 +65,11 @@ module.exports.sendMessage = socket =>
       const message = await new Message({
         sender: userId,
         body: messageBody,
-        conversation: newConversation._id.toString(),
+        conversation: newConversation._id,
       }).save();
       const newMessage = {
         _id: message._id,
-        conversationId: message.conversation.toString(),
+        conversationId: message.conversation,
         sender: message.sender,
         body: message.body,
         participants,
@@ -84,7 +84,7 @@ module.exports.sendMessage = socket =>
         attributes: ['id', 'login', 'email', 'avatar'],
       });
       const preview = {
-        _id: newConversation._id.toString(),
+        _id: newConversation._id,
         messageId: message._id,
         sender: userId,
         body: messageBody,

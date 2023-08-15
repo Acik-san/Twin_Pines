@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const router = require('./routes');
+const handlerError = require('./middlewares/handlerErrors.mw');
 
 app.use(cors({ origin: '*' }));
 app.use(express.json());
@@ -9,10 +10,6 @@ app.use(express.static('public'));
 
 app.use(router);
 
-app.use((err, req, res, next) => {
-  const status = err.status || 500;
-  const message = err.message || 'Server message';
-  res.status(status).send({message});
-});
+app.use(handlerError);
 
 module.exports = app;

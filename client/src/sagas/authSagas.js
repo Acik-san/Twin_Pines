@@ -11,7 +11,10 @@ export function* signInSaga (action) {
     } = yield API.signIn(action.payload.values);
     yield put(ActionsAuth.signInSuccess(user));
   } catch (error) {
-    yield put(ActionsAuth.signInError(error));
+    yield put(ActionsAuth.signInError({
+      message: error.response.data.message,
+      status: error.response.status,
+    }));
   }
 }
 
@@ -24,7 +27,10 @@ export function* signUpSaga (action) {
     } = yield API.signUp(action.payload.values);
     yield put(ActionsAuth.signUpSuccess(user));
   } catch (error) {
-    yield put(ActionsAuth.signUpError(error));
+    yield put(ActionsAuth.signUpError({
+      message: error.response.data.message,
+      status: error.response.status,
+    }));
   }
 }
 
@@ -42,7 +48,10 @@ export function* refreshSaga (action) {
     } = yield API.refresh(action.payload.refreshToken);
     yield put(ActionsAuth.refreshSuccess(user, tokenPair));
   } catch (error) {
-    yield put(ActionsAuth.refreshError(error));
+    yield put(ActionsAuth.refreshError({
+      message: error.response.data.message,
+      status: error.response.status,
+    }));
   }
 }
 

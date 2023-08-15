@@ -1,4 +1,4 @@
-const httpError = require('http-errors');
+const createError = require('http-errors');
 const userQueries = require('../controllers/queries/userQueries');
 const JwtService = require('../services/jwtService');
 
@@ -14,7 +14,7 @@ module.exports.checkAuth = async (req, res, next) => {
       foundUser.password = undefined;
       return res.send({ data: { user: foundUser } });
     }
-    next(httpError(408, 'Need token'));
+    next(createError(408, 'Need token'));
   } catch (err) {
     next(err);
   }

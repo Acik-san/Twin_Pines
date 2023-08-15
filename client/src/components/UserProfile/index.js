@@ -25,12 +25,12 @@ const UserProfile = () => {
 
   useEffect(() => {
     if (!isFirstRender && error?.status === 409) {
-      toast.error(`This ${name} is already used`);
+      toast.error(error?.message);
     }
   }, [error]);
   useEffect(() => {
     if (!isFirstRender) {
-      toast.success(`Your ${name} is changed successfully`);
+      toast.success(`Your ${name} has changed successfully`);
     }
   }, [user]);
   return (

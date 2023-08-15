@@ -110,3 +110,26 @@
   transform: translate3d(0, 0, 0);
   transition: transform ease-out 200ms;
 }
+
+@mixin auth_container {
+  @keyframes background {
+    100% {
+      background-size: 4000px 1000px;
+    }
+  }
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 0 24px;
+  background-image: url('../../../public/static/images/svg/background_wave.svg');
+  background-size: 2500px 1000px;
+  background-position: -500px 0;
+  color: #f9f9f9;
+  font-family: 'Euclid Circular A';
+  animation: background 10s infinite alternate;
+  align-items: start;
+  @media screen and (min-width: 500px) {
+    padding: 0;
+  }
+}

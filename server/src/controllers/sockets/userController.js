@@ -32,11 +32,11 @@ module.exports.getOnlineUsers = (socket, users) =>
 
 module.exports.disconnect = (socket, users) =>
   socket.on(DISCONNECT, reason => {
-    socket.broadcast.emit(TYPING_STATUS, {
-      status: false,
-      userId: users.get(socket.id),
-    });
     if (users.has(socket.id)) {
+      socket.broadcast.emit(TYPING_STATUS, {
+        status: false,
+        userId: users.get(socket.id),
+      });
       socket.broadcast.emit(ONLINE_STATUS, {
         userId: users.get(socket.id),
         status: OFFLINE,

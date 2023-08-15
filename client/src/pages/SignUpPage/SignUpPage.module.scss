@@ -1,0 +1,6 @@
+@import '../../common/styles/templates';
+
+.container {
+  @include auth_container;
+}
+

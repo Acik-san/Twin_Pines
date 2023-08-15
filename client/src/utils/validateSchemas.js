@@ -1,20 +1,70 @@
 import * as Yup from 'yup';
 
 const SCHEMA_LOGIN = Yup.string('Must be string')
-  // .matches(/^\w{4,16}$/, 'Invalid login')
-  .matches(/^[a-zA-Z0-9_]{2,16}$/, 'Invalid login')
-  .required('Must be required');
+  .test('length-validation', 'Invalid length', (value, context) => {
+    if (value && (value.length < 2 || value.length > 16)) {
+      return context.createError({
+        message: 'Must contain 2-16 symbols',
+        path: 'login',
+        type: 'invalid-length',
+      });
+    }
+    return true;
+  })
+  .test('login-validation', 'Invalid login', (value, context) => {
+    if (!/^[a-zA-Z0-9_]{2,16}$/.test(value)) {
+      return context.createError({
+        message: 'Allowed letters(a-z), digits(0-9) and symbol "_"',
+        path: 'login',
+        type: 'invalid-format',
+      });
+    }
+    return true;
+  })
+  .required('Login is required');
 const SCHEMA_EMAIL = Yup.string()
-  .matches(/@gmail\.com$/, 'Only gmail.com are allowed')
+  .matches(
+    /^[a-zA-Z0-9.@]+$/,
+    'Allowed letters(a-z), digits(0-9) and symbol "."'
+  )
+  .test('email-validation', 'Only gmail.com addresses are allowed', value => {
+    if (value) {
+      return value.endsWith('@gmail.com');
+    }
+    return true;
+  })
+  .test('length-validation', 'Invalid length', (value, context) => {
+    if (value && (value.length < 16 || value.length > 40)) {
+      return context.createError({
+        message: 'Must contain 6-30 symbols',
+        path: 'email',
+        type: 'invalid-length',
+      });
+    }
+    return true;
+  })
   .email('Invalid email format')
   .required('Email is required');
 const SCHEMA_PASSWORD = Yup.string('Must be string')
   .matches(
-    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-_]).{8,16}$/,
-    'Invalid password'
+    /^[A-Za-z0-9#?!@$%^&*_\-]+$/,
+    'Allowed letters(a-z), digits(0-9) and "#?!@$%^&*_-"'
   )
-  // .matches(/^(?=.*?[a-z]).{6,32}$/, 'Invalid password')
-  .required('Must be required');
+  .matches(/[A-Z]/, 'Must contain at least one uppercase letter')
+  .matches(/[a-z]/, 'Must contain at least one lowercase letter')
+  .matches(/\d/, 'Must contain at least one digit')
+  .matches(/[#?!@$%^&*_\-]/, 'Must contain at least one of "#?!@$%^&*_-"')
+  .test('length-validation', 'Invalid length', (value, context) => {
+    if (value && (value.length < 8 || value.length > 16)) {
+      return context.createError({
+        message: 'Must contain 8-16 symbols',
+        path: 'password',
+        type: 'invalid-length',
+      });
+    }
+    return true;
+  })
+  .required('Password is required');
 
 const Schems = {
   SignInSchem: Yup.object().shape({
@@ -24,20 +74,10 @@ const Schems = {
   SignUpSchem: Yup.object().shape({
     email: SCHEMA_EMAIL,
     login: SCHEMA_LOGIN,
-    password:SCHEMA_PASSWORD,
+    password: SCHEMA_PASSWORD,
     confirmPassword: Yup.string()
       .required('Confirm password is required')
-      .oneOf([Yup.ref('password')], 'confirmation pass must match password'),
-  }),
-  UpdateUserSchem: Yup.object().shape({
-    login: Yup.string().required('required'),
-    password: Yup.string()
-      .test(
-        'test-password',
-        'min 6 symbols',
-        value => value && value.trim().length >= 6
-      )
-      .required('required'),
+      .oneOf([Yup.ref('password')], 'Confirmation pass must match password'),
   }),
   ChatSchem: Yup.object({
     messageBody: Yup.string('Must be string')
@@ -61,25 +101,3 @@ const Schems = {
 };
 
 export default Schems;
-
-// export const SCHEMA_CONTENT = Yup.string('Must be string')
-//   .matches(/^.{1,255}$/, 'Invalid amount of symbols')
-//   .required('Must be required');
-// export const SCHEMA_DEADLINE = Yup.string('Must be string').matches(
-//   /^(\d{4})\-(\d{2})\-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/,
-//   'Invalid date'
-// );Yup.string('Must be string')
-// .matches(
-//   /^(20[2][2-9]|20[3-9]\d|2099)\-(0[1-9]|10|11|12)\-(0[1-9]|1\d|2\d|3[0-1]) (0\d|1\d|2[0-3]):(0\d|[1-5][0-9]):(0\d|[1-5][0-9])$/,
-//   'Invalid date'
-// )
-// .required('required');
-
-// export const SCHEMA_USER = Yup.object({
-//   login: SCHEMA_LOGIN,
-//   password: SCHEMA_PASSWORD,
-// });
-// export const SCHEMA_TASK = Yup.object({
-//   content: SCHEMA_CONTENT,
-//   deadLine: SCHEMA_DEADLINE,
-// });

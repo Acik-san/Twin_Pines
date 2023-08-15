@@ -5,10 +5,10 @@ import { Routes, Route } from 'react-router-dom';
 import Spinner from './components/Spinner';
 import PageNotFound from './pages/PageNotFound';
 import OnlyForLoginedUser from './pages/OnlyForLoginedUser';
-import CONSTANTS from './constants';
 import * as ActionUser from './actions/userCreators';
 
-const AuthPage = lazy(() => import('./pages/AuthPage'));
+const SignInPage = lazy(() => import('./pages/SignInPage'));
+const SignUpPage = lazy(() => import('./pages/SignUpPage'));
 const HomePage = lazy(() => import('./pages/HomePage'));
 const UserPage = lazy(() => import('./pages/UserPage'));
 const ChatsPage = lazy(() => import('./pages/ChatsPage'));
@@ -31,16 +31,8 @@ const App = () => {
     <>
       <Suspense fallback={<Spinner />}>
         <Routes>
-          <Route
-            exact
-            path='/sign-in'
-            element={<AuthPage formType={CONSTANTS.SIGN_IN} />}
-          />
-          <Route
-            exact
-            path='/sign-up'
-            element={<AuthPage formType={CONSTANTS.SIGN_UP} />}
-          />
+          <Route exact path='/sign-in' element={<SignInPage />} />
+          <Route exact path='/sign-up' element={<SignUpPage />} />
           <Route exact path='/' element={<HomePage />} />
           {user ? (
             <>

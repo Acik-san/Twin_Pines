@@ -38,7 +38,7 @@ const UserUpdateForm = props => {
     };
   }, []);
   useEffect(() => {
-    if (error) {
+    if (error?.status===409) {
       setInitialFormValues(prevValues);
     }
   }, [error]);

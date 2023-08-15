@@ -1,4 +1,4 @@
-const httpError = require('http-errors');
+const createError = require('http-errors');
 const JwtService = require('../services/jwtService');
 
 module.exports.checkAccessToken = async (req, res, next) => {
@@ -11,9 +11,9 @@ module.exports.checkAccessToken = async (req, res, next) => {
       req.tokenData = await JwtService.verifyAccessToken(token);
       return next();
     }
-    next(httpError(401, 'Need token'));
+    next(createError(401, 'Need token'));
   } catch (error) {
-    next(httpError(401, 'Need token'));
+    next(createError(401, 'Need token'));
   }
 };
 
@@ -25,6 +25,6 @@ module.exports.checkRefreshToken = async (req, res, next) => {
     req.tokenData = await JwtService.verifyRefreshToken(refreshToken);
     next();
   } catch (error) {
-    next(httpError(419, 'Need refreshtoken'));
+    next(createError(419, 'Need refreshtoken'));
   }
 };

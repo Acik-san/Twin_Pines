@@ -9,25 +9,35 @@ const socket = io(CONSTANTS.WS_BASE_URL, {
 });
 
 socket.io.on('reconnect', () => {
-  const { users, chats } = store.getState();
-  store.dispatch(
-    ChatCreator.subscribeChatsRequest({
-      userId: users.user.id,
-      conversations: chats.messagesPreview.map(({ _id }) => _id),
-    })
-  );
-  store.dispatch(
-    UserCreator.setOnlineStatusRequest({
-      userId: users.user.id,
-      status: 'online',
-    })
-  );
-  store.dispatch(UserCreator.getOnlineUsersRequest());
+  const {
+    users: { user },
+    chats: { messagesPreview },
+  } = store.getState();
+  if (user) {
+    store.dispatch(
+      ChatCreator.subscribeChatsRequest({
+        userId: user.id,
+        conversations: messagesPreview.map(({ _id }) => _id),
+      })
+    );
+    store.dispatch(
+      UserCreator.setOnlineStatusRequest({
+        userId: user.id,
+        status: 'online',
+      })
+    );
+    store.dispatch(UserCreator.getOnlineUsersRequest());
+  }
 });
 
 socket.on('disconnect', () => {
-  store.dispatch(UserCreator.setOnlineStatus({ status: 'offline' }));
-  store.dispatch(ChatCreator.setTypingStatus({ status: false }));
+  const {
+    users: { user },
+  } = store.getState();
+  if (user) {
+    store.dispatch(UserCreator.setOnlineStatus({ status: 'offline' }));
+    store.dispatch(ChatCreator.setTypingStatus({ status: false }));
+  }
 });
 
 socket.on(CONSTANTS.SOCKET_EVENTS.ONLINE_STATUS, data => {
@@ -47,7 +57,7 @@ socket.on(CONSTANTS.SOCKET_EVENTS.TYPING_STATUS, data => {
 });
 
 socket.on(CONSTANTS.SOCKET_EVENTS.SEEN_MESSAGE, data => {
-  store.dispatch(ChatCreator.setSeenMessageSuccess(data))
+  store.dispatch(ChatCreator.setSeenMessageSuccess(data));
 });
 
 export default socket;

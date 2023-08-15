@@ -1,3 +1,7 @@
+@import '../../common/styles/breakpoints';
+@import '../../common/styles/templates';
+@import '../../common/styles/colors';
+
 .loader,
 .loader:before,
 .loader:after {
@@ -10,7 +14,7 @@
   animation: load7 1.8s infinite ease-in-out;
 }
 .loader {
-  color: #cccccc;
+  color: $dark_purple;
   font-size: 10px;
   margin: 80px auto;
   position: relative;

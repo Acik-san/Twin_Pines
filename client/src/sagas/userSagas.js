@@ -12,7 +12,10 @@ export function* getAuthUserSaga (action) {
     } = yield API.getAuthUser();
     yield put(ActionsUser.getAuthUserSuccess(user));
   } catch (error) {
-    yield put(ActionsUser.getAuthUserError(error));
+    yield put(ActionsUser.getAuthUserError({
+      message: error.response.data.message,
+      status: error.response.status,
+    }));
   }
 }
 
@@ -41,7 +44,6 @@ export function* getUsersSaga (action) {
     } = yield API.getUsers();
     yield put(ActionsUser.getUsersSuccess(users));
   } catch (error) {
-    console.log(error);
     yield put(ActionsUser.getUsersError(error));
   }
 }

@@ -1,8 +1,14 @@
-import React from "react";
-import styles from "./Spinner.module.scss";
+import React from 'react';
+import FixedBackground from '../FixedBackground';
+import styles from './Spinner.module.scss';
 
 const Spinner = () => {
-  return <div className={styles.loader}></div>;
+  return (
+    <>
+      <FixedBackground />
+      <div className={styles.loader}></div>
+    </>
+  );
 };
 
 export default Spinner;
