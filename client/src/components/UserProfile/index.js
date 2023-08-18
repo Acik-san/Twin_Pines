@@ -3,9 +3,8 @@ import { useSelector } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 import { useSettingsForUser, useIsFirstRender } from '../../hooks';
 import classNames from 'classnames';
+import Avatar from '../Avatar';
 import UserProfileSettings from '../UserProfileSettings';
-import { getInitials, stringToColour } from '../../utils/usefulFunctions';
-import CONSTANTS from '../../constants';
 import 'react-toastify/dist/ReactToastify.css';
 import styles from './UserProfile.module.scss';
 
@@ -52,23 +51,15 @@ const UserProfile = () => {
         theme='light'
       />
       <article className={styles.user_card} ref={containerRef}>
-        <div className={styles.photo_wrapper}>
-          <div
-            className={styles.photo_inner}
-            style={{ backgroundColor: stringToColour(`${user.login}`) }}
-          >
-            {getInitials([user.login])}
-          </div>
-          <img
-            alt='avatar'
-            src={`${
-              user.avatar === 'anon.png'
-                ? CONSTANTS.ANONYM_IMAGE_PATH
-                : CONSTANTS.publicURL + user.avatar
-            }`}
-            className={styles.photo_inner_img}
-          />
-        </div>
+        <Avatar
+          login={user.login}
+          avatar={user.avatar}
+          classes={{
+            photoWrapper: styles.photo_wrapper,
+            photoInner: styles.photo_inner,
+            photoInnerImg: styles.photo_inner_img,
+          }}
+        />
         <h3 className={styles.login}>{user.login}</h3>
         <UserProfileSettings
           user={user}

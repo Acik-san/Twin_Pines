@@ -3,7 +3,7 @@ const CONSTANTS = require('../constants');
 
 const generateUser = key => ({
   login: `user_${key}`,
-  email: `user_${key}@gmail.com`,
+  email: `user.${key}@gmail.com`,
   password_hash: bcrypt.hashSync(
     '1Qwerty_',
     bcrypt.genSaltSync(CONSTANTS.SALT_ROUNDS)

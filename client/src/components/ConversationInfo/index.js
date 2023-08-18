@@ -1,6 +1,7 @@
-import React, { memo,useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { ConversationInfoPropTypes } from '../../propTypes';
 import * as ActionChat from '../../actions/chatsCreator';
 import styles from './ConversationInfo.module.scss';
 
@@ -10,7 +11,7 @@ const ConversationInfo = memo(props => {
   const { clearCurrentChat } = bindActionCreators(ActionChat, useDispatch());
   const onlineStatus = useMemo(
     () => users.find(({ id }) => id === currentDialog.interlocutorId).status,
-    [currentDialog,users]
+    [currentDialog, users]
   );
   return (
     <div className={styles['chat_info']}>
@@ -27,5 +28,7 @@ const ConversationInfo = memo(props => {
     </div>
   );
 });
+
+ConversationInfo.propTypes = ConversationInfoPropTypes;
 
 export default ConversationInfo;

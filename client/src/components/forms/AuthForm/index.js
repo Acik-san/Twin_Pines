@@ -1,7 +1,8 @@
 import React from 'react';
-import { useDataForAuthForm } from '../../../hooks';
 import { Formik, Form } from 'formik';
 import { Link } from 'react-router-dom';
+import { AuthFormPropTypes } from '../../../propTypes';
+import { useDataForAuthForm } from '../../../hooks';
 import Schems from '../../../utils/validateSchemas';
 import CONSTANTS from '../../../constants';
 import styles from './AuthForm.module.scss';
@@ -47,5 +48,7 @@ const AuthForm = props => {
     </Formik>
   );
 };
+
+AuthForm.propTypes = AuthFormPropTypes;
 
 export default AuthForm;

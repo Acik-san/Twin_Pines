@@ -1,4 +1,5 @@
 import React from 'react';
+import { UserProfileSettingsPropTypes } from '../../propTypes';
 import UserProfileSetting from '../UserProfileSetting';
 import UserUpdateForm from '../forms/UserUpdateForm';
 import CONSTANTS from '../../constants';
@@ -36,5 +37,7 @@ const UserProfileSettings = props => {
     </>
   );
 };
+
+UserProfileSettings.propTypes = UserProfileSettingsPropTypes;
 
 export default UserProfileSettings;

@@ -7,7 +7,6 @@ const HomePage = () => {
     <>
       <FixedBackground />
       <Header />
-      {/* <UsersList /> */}
     </>
   );
 };

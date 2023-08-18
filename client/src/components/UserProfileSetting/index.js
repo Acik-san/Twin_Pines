@@ -1,4 +1,5 @@
 import React from 'react';
+import { UserProfileSettingPropTypes } from '../../propTypes';
 import styles from './UserProfileSetting.module.scss';
 
 const UserProfileSetting = props => {
@@ -17,5 +18,7 @@ const UserProfileSetting = props => {
     </>
   );
 };
+
+UserProfileSetting.propTypes = UserProfileSettingPropTypes;
 
 export default UserProfileSetting;

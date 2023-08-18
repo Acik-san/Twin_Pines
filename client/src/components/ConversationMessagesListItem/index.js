@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { format, isSameDay, parseISO } from 'date-fns';
 import classNames from 'classnames';
+import { ConversationMessagesListItemPropTypes } from '../../propTypes';
 import TypingAnimation from '../TypingAnimation';
 import styles from './ConversationMessagesListItem.module.scss';
 
@@ -82,5 +83,7 @@ const ConversationMessagesListItem = props => {
     </li>
   );
 };
+
+ConversationMessagesListItem.propTypes = ConversationMessagesListItemPropTypes;
 
 export default ConversationMessagesListItem;

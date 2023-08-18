@@ -8,6 +8,8 @@ services:
 
     environment:
       NODE_ENV: development
+    networks:
+      - view_controller
     depends_on:
       - server-dev
     volumes:
@@ -23,6 +25,9 @@ services:
 
     environment:
       NODE_ENV: development
+    networks:
+      - view_controller
+      - controller_model
     ports:
       - "5000:5000"
     depends_on:
@@ -35,19 +40,29 @@ services:
 
   mongo-dev:
     image: mongo:4.4.6-bionic
+    restart: always
     ports:
       - "27017:27017"
+    networks:
+      - controller_model
 
 
 
   db-dev:
     image: postgres:15.2-alpine
+    restart: always
     environment:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=postgres
       - POSTGRES_DB=todo-dev
     ports:
       - "5432:5432"
+    networks:
+      - controller_model
 
 volumes:
   server-dev:
+
+networks:
+  view_controller:
+  controller_model:

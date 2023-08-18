@@ -12,9 +12,9 @@ const SCHEMA_LOGIN = Yup.string('Must be string')
     return true;
   })
   .test('login-validation', 'Invalid login', (value, context) => {
-    if (!/^[a-zA-Z0-9_]{2,16}$/.test(value)) {
+    if (!/^[a-zA-Z0-9_\-]{2,16}$/.test(value)) {
       return context.createError({
-        message: 'Allowed letters(a-z), digits(0-9) and symbol "_"',
+        message: 'Allowed letters(a-z), digits(0-9) and "_-"',
         path: 'login',
         type: 'invalid-format',
       });

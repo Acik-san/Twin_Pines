@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { ConversationMessagesListPropTypes } from '../../propTypes';
 import ConversationMessagesListItem from '../ConversationMessagesListItem';
 import * as ActionChat from '../../actions/chatsCreator';
 import styles from './ConversationMessagesList.module.scss';
@@ -87,5 +88,7 @@ const ConversationMessagesList = memo(props => {
     </>
   );
 });
+
+ConversationMessagesList.propTypes = ConversationMessagesListPropTypes;
 
 export default ConversationMessagesList;

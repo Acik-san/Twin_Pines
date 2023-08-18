@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Formik, Form, Field } from 'formik';
 import TextareaAutosize from 'react-textarea-autosize';
+import { ConversationFormPropTypes } from '../../../propTypes';
 import * as ActionChat from '../../../actions/chatsCreator';
 import Schems from '../../../utils/validateSchemas';
 import styles from './ConversationForm.module.scss';
@@ -66,5 +67,7 @@ const ConversationForm = memo(props => {
     </Formik>
   );
 });
+
+ConversationForm.propTypes = ConversationFormPropTypes;
 
 export default ConversationForm;

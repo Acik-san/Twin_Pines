@@ -1,6 +1,7 @@
 import React from 'react';
 import { ErrorMessage, useField } from 'formik';
 import classNames from 'classnames';
+import { AuthInputPropTypes } from '../../../../propTypes';
 import styles from './AuthInput.module.scss';
 
 const AuthInput = props => {
@@ -22,4 +23,5 @@ const AuthInput = props => {
   );
 };
 
+AuthInput.propTypes = AuthInputPropTypes;
 export default AuthInput;

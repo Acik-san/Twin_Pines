@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useFormikContext } from 'formik';
 import Cropper from 'react-easy-crop';
 import Slider from '@mui/material/Slider';
+import { AvatarCropperPropTypes } from '../../propTypes';
 import UserFormButton from '../forms/UserFormButton';
 import getCroppedImg from '../../utils/cropImage';
 import styles from './AvatarCropper.module.scss';
@@ -125,5 +126,7 @@ const AvatarCropper = props => {
     </div>
   );
 };
+
+AvatarCropper.propTypes = AvatarCropperPropTypes;
 
 export default AvatarCropper;

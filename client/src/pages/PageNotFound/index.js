@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import FixedBackground from '../../components/FixedBackground';
 import styles from './PageNotFound.module.scss';
 
 const PageNotFound = () => {
@@ -12,6 +13,7 @@ const PageNotFound = () => {
   }, []);
   return (
     <div className={styles.container}>
+      <FixedBackground />
       <h1 >Page not found: 404</h1>
       <p >Now you'll be redirect to Home</p>
     </div>

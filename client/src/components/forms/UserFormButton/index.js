@@ -1,11 +1,11 @@
 import React from 'react';
 import { useField, useFormikContext } from 'formik';
 import classNames from 'classnames';
+import { UserFormButtonPropTypes } from '../../../propTypes';
 import styles from './UserFormButton.module.scss';
 
 const UserFormButton = props => {
-  const { fieldName, type, style, onClick, isValidatable, children } =
-    props;
+  const { fieldName, type, style, onClick, isValidatable, children } = props;
   const { dirty, isValid } = useFormikContext();
   const [field, meta] = useField(fieldName);
   return (
@@ -16,12 +16,14 @@ const UserFormButton = props => {
         [styles.button_valid]: isValidatable && dirty && isValid,
       })}
       style={style}
-      type={type ? type : null}
+      type={type}
       onClick={onClick}
     >
-      {children instanceof Function ? children() : children}
+      {children}
     </button>
   );
 };
+
+UserFormButton.propTypes = UserFormButtonPropTypes;
 
 export default UserFormButton;

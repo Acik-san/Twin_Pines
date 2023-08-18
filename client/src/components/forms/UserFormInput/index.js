@@ -1,6 +1,7 @@
 import React from 'react';
 import { ErrorMessage, useField, useFormikContext } from 'formik';
 import classNames from 'classnames';
+import { UserFormInputPropTypes } from '../../../propTypes';
 import styles from './UserFormInput.module.scss';
 
 const UserFormInput = props => {
@@ -30,5 +31,7 @@ const UserFormInput = props => {
     </>
   );
 };
+
+UserFormInput.propTypes = UserFormInputPropTypes;
 
 export default UserFormInput;

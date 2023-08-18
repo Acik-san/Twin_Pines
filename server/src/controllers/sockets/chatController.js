@@ -93,6 +93,7 @@ module.exports.sendMessage = socket =>
         blackList: newConversation.blackList,
         favoriteList: newConversation.favoriteList,
         isTyping: false,
+        isRead: message.isRead,
       };
 
       if (!conversations.includes(newConversation._id.toString())) {

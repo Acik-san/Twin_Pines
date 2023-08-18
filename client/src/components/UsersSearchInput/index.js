@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getInitials, stringToColour } from '../../utils/usefulFunctions';
 import * as ActionsChats from '../../actions/chatsCreator';
-import CONSTANTS from '../../constants';
 import styles from './UsersSearchInput.module.scss';
+import Avatar from '../Avatar';
 
 const UsersSearchInput = () => {
   const { user, users } = useSelector(({ users }) => users);
@@ -66,25 +65,15 @@ const UsersSearchInput = () => {
                 });
               }}
             >
-              <div className={styles.photo_wrapper}>
-                <div
-                  className={styles.photo_inner}
-                  style={{
-                    backgroundColor: stringToColour(`${login}`),
-                  }}
-                >
-                  {getInitials([login])}
-                </div>
-                <img
-                  alt='avatar'
-                  src={`${
-                    avatar === 'anon.png'
-                      ? CONSTANTS.ANONYM_IMAGE_PATH
-                      : CONSTANTS.publicURL + avatar
-                  }`}
-                  className={styles.photo_inner_img}
-                />
-              </div>
+              <Avatar
+                login={user.login}
+                avatar={user.avatar}
+                classes={{
+                  photoWrapper: styles.photo_wrapper,
+                  photoInner: styles.photo_inner,
+                  photoInnerImg: styles.photo_inner_img,
+                }}
+              />
               <div className={styles['text-container']}>
                 <h3>{login}</h3>
                 <p>{status}</p>

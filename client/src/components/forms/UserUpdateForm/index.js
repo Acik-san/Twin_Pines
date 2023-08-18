@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Form, Formik } from 'formik';
 import classNames from 'classnames';
+import { UserUpdateFormPropTypes } from '../../../propTypes';
 import AvatarCropper from '../../AvatarCropper';
 import UserFormInput from '../UserFormInput';
 import Schems from '../../../utils/validateSchemas';
@@ -38,7 +39,7 @@ const UserUpdateForm = props => {
     };
   }, []);
   useEffect(() => {
-    if (error?.status===409) {
+    if (error?.status === 409) {
       setInitialFormValues(prevValues);
     }
   }, [error]);
@@ -93,5 +94,7 @@ const UserUpdateForm = props => {
     </div>
   );
 };
+
+UserUpdateForm.propTypes = UserUpdateFormPropTypes;
 
 export default UserUpdateForm;

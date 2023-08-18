@@ -2,13 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import classNames from 'classnames';
+import { ChatsPreviewPropTypes } from '../../propTypes';
+import Avatar from '../Avatar';
+import OnlineBadge from '../OnlineBadge';
 import TypingAnimation from '../TypingAnimation';
-import {
-  getInitials,
-  stringToColour,
-  calculateMessageDate,
-} from '../../utils/usefulFunctions';
-import CONSTANTS from '../../constants';
+import { calculateMessageDate } from '../../utils/usefulFunctions';
 import * as ActionsChats from '../../actions/chatsCreator';
 import styles from './ChatsPreview.module.scss';
 
@@ -23,8 +21,9 @@ const ChatsPreview = props => {
     isRead,
   } = props;
   const { user, users } = useSelector(({ users }) => users);
-  const { messages, messagesPreview, unreadMessages, currentDialog } =
-    useSelector(({ chats }) => chats);
+  const { messagesPreview, unreadMessages, currentDialog } = useSelector(
+    ({ chats }) => chats
+  );
   const { chooseCurrentChat } = bindActionCreators(ActionsChats, useDispatch());
   const [previousStatus, setPreviousStatus] = useState('offline');
   const [previousTypingStatus, setPreviousTypingStatus] = useState(false);
@@ -79,35 +78,30 @@ const ChatsPreview = props => {
         });
       }}
     >
-      <div className={styles.photo_wrapper}>
-        <div
-          className={styles.photo_inner}
-          style={{
-            backgroundColor: stringToColour(`${interlocutor.login}`),
-          }}
-        >
-          <div
-            className={classNames(styles['online-wrapper'], {
-              [styles.zoomIn]: currentStatus === 'online',
-              [styles.zoomOut]:
-                currentStatus === 'offline' && previousStatus === 'online',
-              [styles['online-wrapper-not-read']]: !isRead,
-            })}
-          >
-            <div className={styles.online}></div>
-          </div>
-          {getInitials([interlocutor.login])}
-        </div>
-        <img
-          alt='avatar'
-          src={`${
-            interlocutor?.avatar === 'anon.png'
-              ? CONSTANTS.ANONYM_IMAGE_PATH
-              : CONSTANTS.publicURL + interlocutor?.avatar
-          }`}
-          className={styles.photo_inner_img}
-        />
-      </div>
+      <Avatar
+        login={interlocutor.login}
+        avatar={interlocutor.avatar}
+        onlineBadge={
+          <OnlineBadge
+            currentStatus={currentStatus}
+            previousStatus={previousStatus}
+            isMessageRead={isRead}
+            messageSender={sender}
+            classes={{
+              onlineWrapper: styles['online-wrapper'],
+              onlineWrapperNotRead: styles['online-wrapper-not-read'],
+              online: styles.online,
+              zoomIn: styles.zoomIn,
+              zoomOut: styles.zoomOut,
+            }}
+          />
+        }
+        classes={{
+          photoWrapper: styles.photo_wrapper,
+          photoInner: styles.photo_inner,
+          photoInnerImg: styles.photo_inner_img,
+        }}
+      />
       <div className={styles.preview}>
         <div className={styles.name_preview}>
           <h3>{interlocutor.login}</h3>
@@ -122,12 +116,14 @@ const ChatsPreview = props => {
           <p>{calculateMessageDate(createdAt)}</p>
         </div>
         <div className={styles.body_wrapper}>
-          {currentStatus === 'online'?<TypingAnimation
-            classes={classNames(styles.notTyping, styles.typingPosition, {
-              [styles.fadeIn]: previousTypingStatus && isTyping,
-              [styles.fadeOut]: previousTypingStatus && !isTyping,
-            })}
-          />:null}
+          {currentStatus === 'online' ? (
+            <TypingAnimation
+              classes={classNames(styles.notTyping, styles.typingPosition, {
+                [styles.fadeIn]: previousTypingStatus && isTyping,
+                [styles.fadeOut]: previousTypingStatus && !isTyping,
+              })}
+            />
+          ) : null}
           <p
             className={classNames(styles.typing, {
               [styles.fadeIn]: previousTypingStatus && !isTyping,
@@ -146,5 +142,7 @@ const ChatsPreview = props => {
     </li>
   );
 };
+
+ChatsPreview.propTypes = ChatsPreviewPropTypes;
 
 export default ChatsPreview;
