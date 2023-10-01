@@ -1,20 +1,33 @@
 import React, { memo, useEffect, useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { CSSTransition } from 'react-transition-group';
 import { ConversationMessagesListPropTypes } from '../../propTypes';
+import { useContextMenu } from '../../hooks';
+import ContextMenu from '../ContextMenu';
 import ConversationMessagesListItem from '../ConversationMessagesListItem';
 import * as ActionChat from '../../actions/chatsCreator';
 import styles from './ConversationMessagesList.module.scss';
 
 const ConversationMessagesList = memo(props => {
   const { currentDialog } = props;
-  const { messages, messagesPreview, limit, offset, haveMore } = useSelector(
-    ({ chats }) => chats
-  );
-  const { getMessagesRequest, setSeenMessageRequest } = bindActionCreators(
-    ActionChat,
-    useDispatch()
-  );
+  const {
+    messages,
+    messagesPreview,
+    limit,
+    offset,
+    haveMore,
+  } = useSelector(({ chats }) => chats);
+  const { getMessagesRequest, setSeenMessageRequest, setEditMessageMode } =
+    bindActionCreators(ActionChat, useDispatch());
+  const {
+    contextMenuRef,
+    contextMenuPosition,
+    contextMenuVisible,
+    hideContextMenu,
+    showContextMenu,
+    propsMenu,
+  } = useContextMenu();
   const chatContainerRef = useRef(null);
   const previousScrollHeightRef = useRef(0);
   const observer = useMemo(
@@ -69,8 +82,30 @@ const ConversationMessagesList = memo(props => {
         ref={chatContainerRef}
         onScroll={handleScroll}
       >
+        <CSSTransition
+          in={contextMenuVisible}
+          nodeRef={contextMenuRef}
+          timeout={300}
+          classNames={{
+            enter: styles['fade-enter'],
+            enterActive: styles['fade-enter-active'],
+            exit: styles['fade-exit'],
+            exitActive: styles['fade-exit-active'],
+          }}
+          unmountOnExit
+        >
+          <ContextMenu
+            contextMenuRef={contextMenuRef}
+            contextMenuPosition={contextMenuPosition}
+            hideContextMenu={hideContextMenu}
+            propsMenu={propsMenu}
+          />
+        </CSSTransition>
         {messages.map(
-          ({ _id, body, sender, createdAt, isRead, conversation }, i) => (
+          (
+            { _id, body, sender, createdAt, isRead, isEdited, conversation },
+            i
+          ) => (
             <ConversationMessagesListItem
               key={_id}
               body={body}
@@ -78,9 +113,12 @@ const ConversationMessagesList = memo(props => {
               createdAt={createdAt}
               typingStatus={typingStatus}
               isRead={isRead}
+              isEdited={isEdited}
               i={i}
               observer={observer}
               id={_id}
+              conversationId={conversation}
+              showContextMenu={showContextMenu}
             />
           )
         )}

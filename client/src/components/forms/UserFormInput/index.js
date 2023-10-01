@@ -20,7 +20,7 @@ const UserFormInput = props => {
         <input
           type={type}
           placeholder={name}
-          className={classNames([styles.input], {
+          className={classNames(styles.input, {
             [styles.input_invalid]: meta.touched && meta.error,
             [styles.input_valid]: !meta.error && dirty,
           })}

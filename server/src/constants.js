@@ -21,6 +21,7 @@ module.exports = {
     DISCONNECT: 'disconnect',
     SET_SEEN_MESSAGE: 'SET_SEEN_MESSAGE',
     SEEN_MESSAGE: 'SEEN_MESSAGE',
+    EDITED_MESSAGE: 'EDITED_MESSAGE',
   },
   STATUS: {
     ONLINE: 'online',

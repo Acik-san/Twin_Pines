@@ -119,6 +119,15 @@
   }
 }
 
+.message_edited {
+  position: absolute;
+  &::after {
+    content: 'edited';
+    position: absolute;
+    right: 4px;
+  }
+}
+
 .notTyping {
   opacity: 0;
 }

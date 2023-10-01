@@ -1,0 +1,56 @@
+@import '../../common/styles/breakpoints';
+@import '../../common/styles/templates';
+@import '../../common/styles/colors';
+
+.container {
+  display: flex;
+  align-items: center;
+  color: #fff;
+}
+
+.edit_img {
+  position: relative;
+  & > img {
+    width: 25px;
+    height: 25px;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -10px;
+    width: 2px;
+    height: 25px;
+    background-color: #fff;
+  }
+}
+
+.edit_message {
+  display: flex;
+  flex-direction: column;
+  margin-left: 22px;
+  align-items: flex-start;
+  & > h4 {
+    font-size: 15px;
+  }
+  & > p {
+    max-width: 180px;
+    height: 17px;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.stop_editing {
+  display: inline-block;
+  padding: 5px 10px;
+  margin-left: auto;
+  cursor: pointer;
+  &::after {
+    display: block;
+    content: url('../../../public/static/images/svg/close.svg');
+    width: 25px;
+    height: 25px;
+  }
+}

@@ -37,9 +37,9 @@ export const getChatsRequest = () => ({
   type: ACTION_TYPES.GET_CHATS_REQUEST,
   payload: {},
 });
-export const getChatsSuccess = ({conversations,unreadMessages}) => ({
+export const getChatsSuccess = ({ conversations, unreadMessages }) => ({
   type: ACTION_TYPES.GET_CHATS_SUCCESS,
-  payload: { conversations,unreadMessages },
+  payload: { conversations, unreadMessages },
 });
 export const getChatsError = error => ({
   type: ACTION_TYPES.GET_CHATS_ERROR,
@@ -55,6 +55,34 @@ export const chooseCurrentChat = ({
 }) => ({
   type: ACTION_TYPES.CHOOSE_CURRENT_CHAT,
   payload: { conversationId, interlocutorId, login, avatar },
+});
+//---------------------------------------
+//---------------------------------------
+export const startDialogRequest = ({
+  userId,
+  interlocutorId,
+  login,
+  avatar,
+}) => ({
+  type: ACTION_TYPES.START_DIALOG_REQUEST,
+  payload: { userId, interlocutorId, login, avatar },
+});
+//---------------------------------------
+//---------------------------------------
+export const startDialogSuccess = ({
+  conversationId,
+  interlocutorId,
+  login,
+  avatar,
+}) => ({
+  type: ACTION_TYPES.START_DIALOG_SUCCESS,
+  payload: { conversationId, interlocutorId, login, avatar },
+});
+//---------------------------------------
+//---------------------------------------
+export const startDialogError = error => ({
+  type: ACTION_TYPES.START_DIALOG_ERROR,
+  payload: { error },
 });
 //---------------------------------------
 //---------------------------------------
@@ -114,4 +142,31 @@ export const setSeenMessageError = error => ({
 });
 //---------------------------------------
 //---------------------------------------
-
+export const setContextMenuTarget = data => ({
+  type: ACTION_TYPES.SET_CONTEXT_MENU_TARGET,
+  payload: { data },
+});
+export const setContextMenuTargetError = error => ({
+  type: ACTION_TYPES.SET_CONTEXT_MENU_TARGET_ERROR,
+  payload: { error },
+});
+//---------------------------------------
+//---------------------------------------
+export const setEditMessageMode = data => ({
+  type: ACTION_TYPES.SET_EDIT_MESSAGE_MODE,
+  payload: { data },
+});
+//---------------------------------------
+//---------------------------------------
+export const editMessageRequest = data => ({
+  type: ACTION_TYPES.EDIT_MESSAGE_REQUEST,
+  payload: { data },
+});
+export const editMessageSuccess = data => ({
+  type: ACTION_TYPES.EDIT_MESSAGE_SUCCESS,
+  payload: { data },
+});
+export const editMessageError = error => ({
+  type: ACTION_TYPES.EDIT_MESSAGE_ERROR,
+  payload: { error },
+});

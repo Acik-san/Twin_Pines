@@ -10,7 +10,8 @@ const {
   startTyping,
   stopTyping,
   sendMessage,
-  setSeenMessage
+  setSeenMessage,
+  editMessage,
 } = require('./controllers/sockets/chatController');
 const {
   SOCKET_EVENTS: { CONNECT },
@@ -35,6 +36,7 @@ module.exports.createConnection = httpServer => {
     stopTyping(socket);
     sendMessage(socket);
     disconnect(socket, users);
-    setSeenMessage(socket,users)
+    setSeenMessage(socket);
+    editMessage(socket);
   });
 };

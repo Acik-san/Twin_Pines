@@ -29,10 +29,10 @@ export function* getChatsSaga (action) {
   try {
     const {
       data: {
-        data: { conversations,unreadMessages },
+        data: { conversations, unreadMessages },
       },
     } = yield API.getChats();
-    yield put(ActionsChats.getChatsSuccess({conversations,unreadMessages}));
+    yield put(ActionsChats.getChatsSuccess({ conversations, unreadMessages }));
   } catch (error) {
     yield put(ActionsChats.getChatsError(error));
   }
@@ -67,5 +67,34 @@ export function* setSeenMessageSaga (action) {
     yield WsApi.setSeenMessage(action.payload.messageId);
   } catch (error) {
     yield put(ActionsChats.setSeenMessageError(error));
+  }
+}
+
+export function* startDialogSaga (action) {
+  const { userId, interlocutorId, login, avatar } = action.payload;
+  try {
+    const {
+      data: {
+        data: { conversation },
+      },
+    } = yield API.startDialog(userId, interlocutorId);
+    yield put(
+      ActionsChats.startDialogSuccess({
+        conversationId: conversation,
+        interlocutorId,
+        login,
+        avatar,
+      })
+    );
+  } catch (error) {
+    yield put(ActionsChats.startDialogError(error));
+  }
+}
+
+export function* editMessageSaga (action) {
+  try {
+    yield WsApi.editMessage(action.payload.data);
+  } catch (error) {
+    yield put(ActionsChats.editMessageError(error));
   }
 }

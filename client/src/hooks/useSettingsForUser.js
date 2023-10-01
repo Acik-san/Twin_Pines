@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
+import { useClickOutside } from './index';
 
 const useSettingsForUser = () => {
   const [isEdit, setIsEdit] = useState(false);
@@ -7,20 +8,7 @@ const useSettingsForUser = () => {
   const [type, setType] = useState('');
   const containerRef = useRef(null);
 
-  useEffect(() => {
-    const handleClickOutside = event => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target)
-      ) {
-        setIsEdit(false);
-      }
-    };
-    document.addEventListener('click', handleClickOutside);
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, []);
+  useClickOutside(containerRef, () => setIsEdit(false));
 
   const editProfile = () => {
     setIsEdit(!isEdit);

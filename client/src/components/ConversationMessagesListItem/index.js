@@ -1,16 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { format, isSameDay, parseISO } from 'date-fns';
 import classNames from 'classnames';
 import { ConversationMessagesListItemPropTypes } from '../../propTypes';
 import TypingAnimation from '../TypingAnimation';
+import * as ActionChat from '../../actions/chatsCreator';
 import styles from './ConversationMessagesListItem.module.scss';
 
 const ConversationMessagesListItem = props => {
-  const { body, sender, createdAt, typingStatus, isRead, i, id, observer } =
-    props;
+  const {
+    body,
+    sender,
+    createdAt,
+    typingStatus,
+    isRead,
+    isEdited,
+    i,
+    id,
+    conversationId,
+    observer,
+    showContextMenu,
+  } = props;
   const { user } = useSelector(({ users }) => users);
   const { messages } = useSelector(({ chats }) => chats);
+  const { setContextMenuTarget } = bindActionCreators(
+    ActionChat,
+    useDispatch()
+  );
   const [previousTypingStatus, setPreviousTypingStatus] = useState(false);
   useEffect(() => {
     setPreviousTypingStatus(prevStatus => {
@@ -52,9 +69,21 @@ const ConversationMessagesListItem = props => {
           [styles['my_message_body']]: user.id === sender,
           [styles['message_body']]: user.id !== sender,
         })}
+        style={{ minWidth: isEdited ? '122px' : '70px' }}
+        onContextMenu={e => {
+          setContextMenuTarget({
+            messageId: id,
+            sender,
+            body,
+            conversationId,
+            isRead,
+          });
+          showContextMenu(e);
+        }}
       >
         <p>{body}</p>
         <span>
+          {isEdited ? <div className={styles.message_edited}></div> : null}
           {format(parseISO(createdAt), 'HH:mm')}
           {user.id === sender ? (
             <div

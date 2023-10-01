@@ -16,8 +16,13 @@ const ChatsPage = () => {
     ActionUser,
     useDispatch()
   );
-  const { getChatsRequest, clearCurrentChat, subscribeChatsRequest } =
-    bindActionCreators(ActionChat, useDispatch());
+  const {
+    getChatsRequest,
+    clearCurrentChat,
+    subscribeChatsRequest,
+    setEditMessageMode,
+    setContextMenuTarget,
+  } = bindActionCreators(ActionChat, useDispatch());
   useEffect(() => {
     if (users.length === 0) {
       getUsersRequest();
@@ -27,6 +32,8 @@ const ChatsPage = () => {
     }
     return () => {
       clearCurrentChat();
+      setContextMenuTarget(null);
+      setEditMessageMode({ isEdit: false, message: {} });
     };
   }, []);
   useEffect(() => {

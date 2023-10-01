@@ -7,7 +7,11 @@ import Avatar from '../Avatar';
 
 const UsersSearchInput = () => {
   const { user, users } = useSelector(({ users }) => users);
-  const { chooseCurrentChat } = bindActionCreators(ActionsChats, useDispatch());
+  const { editMessageMode } = useSelector(({ chats }) => chats);
+  const { startDialogRequest, setEditMessageMode } = bindActionCreators(
+    ActionsChats,
+    useDispatch()
+  );
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
@@ -58,7 +62,17 @@ const UsersSearchInput = () => {
               key={id}
               onClick={() => {
                 setShowResults(false);
-                chooseCurrentChat({
+                if (
+                  editMessageMode.isEdit &&
+                  editMessageMode.message.interlocutorId !== id
+                ) {
+                  setEditMessageMode({
+                    isEdit: false,
+                    messgae: {},
+                  });
+                }
+                startDialogRequest({
+                  userId: user.id,
                   interlocutorId: id,
                   login,
                   avatar,
@@ -66,8 +80,8 @@ const UsersSearchInput = () => {
               }}
             >
               <Avatar
-                login={user.login}
-                avatar={user.avatar}
+                login={login}
+                avatar={avatar}
                 classes={{
                   photoWrapper: styles.photo_wrapper,
                   photoInner: styles.photo_inner,

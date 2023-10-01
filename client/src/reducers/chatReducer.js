@@ -12,6 +12,8 @@ const initialState = {
   messagesPreview: [],
   unreadMessages: [],
   currentDialog: null,
+  contextMenuTarget: null,
+  editMessageMode: { isEdit: false, message: {} },
 };
 const handleRequests = produce(draftState => {
   draftState.isFetching = true;
@@ -24,11 +26,35 @@ const handleError = produce((draftState, action) => {
   draftState.error = error;
 });
 
+const handleCurrentChat = produce((draftState, action) => {
+  const {
+    payload: { conversationId, interlocutorId, login, avatar },
+  } = action;
+  draftState.isFetching = false;
+  if (
+    // draftState.currentDialog?.conversationId !== conversationId &&
+    draftState.currentDialog?.interlocutorId !== interlocutorId &&
+    draftState.currentDialog?.login !== login
+  ) {
+    draftState.messages = [];
+    draftState.offset = 0;
+    draftState.haveMore = true;
+    draftState.currentDialog = {
+      conversationId,
+      interlocutorId,
+      login,
+      avatar,
+    };
+  }
+});
+
 const handlers = {
   [ACTION_TYPES.CREATE_MESSAGE_REQUEST]: handleRequests,
   [ACTION_TYPES.GET_MESSAGES_REQUEST]: handleRequests,
   [ACTION_TYPES.GET_CHATS_REQUEST]: handleRequests,
   [ACTION_TYPES.SET_SEEN_MESSAGE_REQUEST]: handleRequests,
+  [ACTION_TYPES.START_DIALOG_REQUEST]: handleRequests,
+  [ACTION_TYPES.EDIT_MESSAGE_REQUEST]: handleRequests,
   [ACTION_TYPES.CREATE_MESSAGE_SUCCESS]: produce((draftState, action) => {
     const {
       payload: { message, preview },
@@ -83,27 +109,7 @@ const handlers = {
     draftState.messagesPreview.push(...conversations);
     draftState.unreadMessages.push(...unreadMessages);
   }),
-  [ACTION_TYPES.CHOOSE_CURRENT_CHAT]: produce((draftState, action) => {
-    const {
-      payload: { conversationId, interlocutorId, login, avatar },
-    } = action;
-    draftState.isFetching = false;
-    if (
-      // draftState.currentDialog?.conversationId !== conversationId &&
-      draftState.currentDialog?.interlocutorId !== interlocutorId &&
-      draftState.currentDialog?.login !== login
-    ) {
-      draftState.messages = [];
-      draftState.offset = 0;
-      draftState.haveMore = true;
-      draftState.currentDialog = {
-        conversationId,
-        interlocutorId,
-        login,
-        avatar,
-      };
-    }
-  }),
+  [ACTION_TYPES.CHOOSE_CURRENT_CHAT]: handleCurrentChat,
   [ACTION_TYPES.CLEAR_CHATS_SUCCESS]: produce(draftState => {
     draftState.isFetching = false;
     draftState.offset = 0;
@@ -161,9 +167,40 @@ const handlers = {
     );
     // }
   }),
+  [ACTION_TYPES.START_DIALOG_SUCCESS]: handleCurrentChat,
+  [ACTION_TYPES.SET_CONTEXT_MENU_TARGET]: produce((draftState, action) => {
+    const { data } = action.payload;
+    draftState.contextMenuTarget = data;
+  }),
+  [ACTION_TYPES.SET_EDIT_MESSAGE_MODE]: produce((draftState, action) => {
+    const { data } = action.payload;
+    draftState.editMessageMode = data;
+  }),
+  [ACTION_TYPES.EDIT_MESSAGE_SUCCESS]: produce((draftState, action) => {
+    const {
+      payload: {
+        data: { id, conversationId, isEdited, body },
+      },
+    } = action;
+    if (draftState.currentDialog?.conversationId === conversationId) {
+      draftState.messages.forEach(message =>
+        message._id === id
+          ? ((message.isEdited = isEdited), (message.body = body))
+          : null
+      );
+    }
+    draftState.messagesPreview.forEach(preview =>
+      preview._id === conversationId && preview.messageId === id
+        ? (preview.body = body)
+        : null
+    );
+  }),
   [ACTION_TYPES.CREATE_MESSAGE_ERROR]: handleError,
   [ACTION_TYPES.GET_MESSAGES_ERROR]: handleError,
   [ACTION_TYPES.GET_CHATS_ERROR]: handleError,
+  [ACTION_TYPES.START_DIALOG_ERROR]: handleError,
+  [ACTION_TYPES.SET_CONTEXT_MENU_TARGET_ERROR]: handleError,
+  [ACTION_TYPES.EDIT_MESSAGE_ERROR]: handleError,
 };
 
 const chatReducer = (state = initialState, action) => {

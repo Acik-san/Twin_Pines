@@ -3,6 +3,41 @@ const _ = require('lodash');
 const { User } = require('../models');
 const { Message, Conversation } = require('../models/mongo');
 
+module.exports.createConversation = async (req, res, next) => {
+  const {
+    query: { userId, interlocutorId },
+  } = req;
+  const participants = [userId, interlocutorId];
+  participants.sort(
+    (participant1, participant2) => participant1 - participant2
+  );
+  try {
+    const newConversation = await Conversation.findOneAndUpdate(
+      {
+        participants,
+      },
+      {
+        participants,
+        blackList: [false, false],
+        favoriteList: [false, false],
+      },
+      {
+        upsert: true,
+        new: true,
+        setDefaultsOnInsert: true,
+        useFindAndModify: false,
+      }
+    );
+    res.status(200).send({
+      data: {
+        conversation: newConversation._id,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports.getChat = async (req, res, next) => {
   const {
     params: { id },
@@ -37,6 +72,7 @@ module.exports.getChat = async (req, res, next) => {
           body: 1,
           conversation: 1,
           isRead: 1,
+          isEdited: 1,
           createdAt: 1,
           updatedAt: 1,
         },

@@ -10,6 +10,7 @@ const {
     TYPING_STATUS,
     SET_SEEN_MESSAGE,
     SEEN_MESSAGE,
+    EDITED_MESSAGE,
   },
 } = require('../../constants');
 
@@ -74,6 +75,7 @@ module.exports.sendMessage = socket =>
         body: message.body,
         participants,
         isRead: message.isRead,
+        isEdited: message.isEdited,
         createdAt: message.createdAt,
         updatedAt: message.updatedAt,
       };
@@ -141,4 +143,35 @@ module.exports.setSeenMessage = socket => {
       status: true,
     });
   });
+};
+
+module.exports.editMessage = socket => {
+  socket.on(
+    EDITED_MESSAGE,
+    async ({ messageId, conversationId, editedBody }) => {
+      console.log(conversationId)
+      const message = await Message.findOneAndUpdate(
+        { _id: messageId },
+        { isEdited: true, body: editedBody },
+        {
+          upsert: true,
+          new: true,
+          setDefaultsOnInsert: true,
+          useFindAndModify: false,
+        }
+      );
+      socket.to(conversationId).emit(EDITED_MESSAGE, {
+        id: messageId,
+        conversationId,
+        isEdited: true,
+        body: editedBody,
+      });
+      socket.emit(EDITED_MESSAGE, {
+        id: messageId,
+        conversationId,
+        isEdited: true,
+        body: editedBody,
+      });
+    }
+  );
 };

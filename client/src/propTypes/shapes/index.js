@@ -13,3 +13,7 @@ export const currentDialog = PropTypes.shape({
   interlocutorId: PropTypes.number.isRequired,
   login: PropTypes.string.isRequired,
 }).isRequired;
+
+export const textAreaRef = PropTypes.shape({
+  current: PropTypes.instanceOf(HTMLTextAreaElement),
+}).isRequired;

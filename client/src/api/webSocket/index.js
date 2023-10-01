@@ -60,4 +60,8 @@ socket.on(CONSTANTS.SOCKET_EVENTS.SEEN_MESSAGE, data => {
   store.dispatch(ChatCreator.setSeenMessageSuccess(data));
 });
 
+socket.on(CONSTANTS.SOCKET_EVENTS.EDITED_MESSAGE, data => {
+  store.dispatch(ChatCreator.editMessageSuccess(data));
+});
+
 export default socket;

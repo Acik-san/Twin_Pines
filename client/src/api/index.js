@@ -21,6 +21,8 @@ export const updateUser = data => {
 };
 
 export const getChats = () => httpClient.get('chats');
+export const startDialog = ( userId, interlocutorId ) =>
+  httpClient.get(`chats/chat?${qs.stringify({ userId, interlocutorId })}`);
 export const getUsers = () => httpClient.get('chats/users');
 export const getMessages = ({ id, limit, offset }) =>
   httpClient.get(`chats/chat/${id}?${qs.stringify({ limit, offset })}`);

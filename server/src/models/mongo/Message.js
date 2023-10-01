@@ -19,6 +19,11 @@ const Schema = new mongoose.Schema(
       required: true,
       default: false,
     },
+    isEdited: {
+      type: 'Boolean',
+      required: true,
+      default: false,
+    },
   },
   {
     timestamps: true,

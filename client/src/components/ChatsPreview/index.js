@@ -21,10 +21,12 @@ const ChatsPreview = props => {
     isRead,
   } = props;
   const { user, users } = useSelector(({ users }) => users);
-  const { messagesPreview, unreadMessages, currentDialog } = useSelector(
-    ({ chats }) => chats
+  const { messagesPreview, unreadMessages, currentDialog, editMessageMode } =
+    useSelector(({ chats }) => chats);
+  const { chooseCurrentChat, setEditMessageMode } = bindActionCreators(
+    ActionsChats,
+    useDispatch()
   );
-  const { chooseCurrentChat } = bindActionCreators(ActionsChats, useDispatch());
   const [previousStatus, setPreviousStatus] = useState('offline');
   const [previousTypingStatus, setPreviousTypingStatus] = useState(false);
 
@@ -70,6 +72,15 @@ const ChatsPreview = props => {
         [styles.not_read]: sender !== user.id && unreadMessagesCount,
       })}
       onClick={() => {
+        if (
+          editMessageMode.isEdit &&
+          editMessageMode.message.interlocutorId !== interlocutor.id
+        ) {
+          setEditMessageMode({
+            isEdit: false,
+            message: {},
+          });
+        }
         chooseCurrentChat({
           conversationId,
           interlocutorId: interlocutor.id,

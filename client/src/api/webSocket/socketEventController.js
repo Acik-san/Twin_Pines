@@ -1,18 +1,8 @@
 import socket from '.';
 import CONSTANTS from '../../constants';
 
-export const createMessage = ({
-  userId,
-  interlocutor,
-  conversations,
-  messageBody,
-}) =>
-  socket.emit(CONSTANTS.SOCKET_EVENTS.NEW_MESSAGE, {
-    userId,
-    interlocutor,
-    conversations,
-    messageBody,
-  });
+export const createMessage = data =>
+  socket.emit(CONSTANTS.SOCKET_EVENTS.NEW_MESSAGE, data);
 
 export const setOnlineStatus = data => {
   socket.emit(CONSTANTS.SOCKET_EVENTS.SET_ONLINE_STATUS, data);
@@ -21,17 +11,11 @@ export const getOnlineUsers = () => {
   socket.emit(CONSTANTS.SOCKET_EVENTS.GET_ONLINE_USERS);
 };
 
-export const subscribeChats = ({ userId, conversations }) => {
-  socket.emit(CONSTANTS.SOCKET_EVENTS.SUBSCRIBE_CHATS, {
-    userId,
-    conversations,
-  });
+export const subscribeChats = data => {
+  socket.emit(CONSTANTS.SOCKET_EVENTS.SUBSCRIBE_CHATS, data);
 };
-export const unSubscribeChats = ({ userId, conversations }) =>
-  socket.emit(CONSTANTS.SOCKET_EVENTS.UNSUBSCRIBE_CHATS, {
-    userId,
-    conversations,
-  });
+export const unSubscribeChats = data =>
+  socket.emit(CONSTANTS.SOCKET_EVENTS.UNSUBSCRIBE_CHATS, data);
 export const startTyping = conversationId => {
   if (conversationId !== undefined) {
     socket.emit(CONSTANTS.SOCKET_EVENTS.START_TYPING, conversationId);
@@ -45,4 +29,8 @@ export const stopTyping = conversationId => {
 
 export const setSeenMessage = messageId => {
   socket.emit(CONSTANTS.SOCKET_EVENTS.SET_SEEN_MESSAGE, messageId);
+};
+
+export const editMessage = data => {
+  socket.emit(CONSTANTS.SOCKET_EVENTS.EDITED_MESSAGE, data);
 };

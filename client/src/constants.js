@@ -37,6 +37,7 @@ const CONSTANTS = {
     ONLINE_USERS: 'ONLINE_USERS',
     SET_SEEN_MESSAGE: 'SET_SEEN_MESSAGE',
     SEEN_MESSAGE: 'SEEN_MESSAGE',
+    EDITED_MESSAGE: 'EDITED_MESSAGE',
   },
   ACCESS_TOKEN: 'accessToken',
   REFRESH_TOKEN: 'refreshToken',
@@ -102,6 +103,20 @@ const CONSTANTS = {
       propertyName: 'Change password',
       name: 'password',
       type: 'password',
+    },
+  ],
+  CONTEXT_MENU_SETTINGS: [
+    {
+      id: 1,
+      propName: 'edit',
+      propIcon: '/static/images/svg/edit.svg',
+      onlyForUser: true,
+    },
+    {
+      id: 2,
+      propName: 'copy text',
+      propIcon: '/static/images/svg/copy.svg',
+      onlyForUser: false,
     },
   ],
 };
