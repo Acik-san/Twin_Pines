@@ -4,6 +4,7 @@ const createPropsMenu = (
   contextMenuTarget,
   currentDialog,
   setEditMessageMode,
+  setDeleteMessageMode,
   hideContextMenu
 ) => {
   const contextMenuMap = new Map();
@@ -34,6 +35,25 @@ const createPropsMenu = (
         textArea.select();
         document.execCommand('copy');
         document.body.removeChild(textArea);
+        hideContextMenu();
+      },
+    },
+    {
+      id: 3,
+      handleClick: () => {
+        setDeleteMessageMode({
+          isDelete: true,
+          message: {
+            messageId: contextMenuTarget.messageId,
+            prevMessage: contextMenuTarget.prevMessage,
+            numberOfMessages: contextMenuTarget.numberOfMessages,
+            sender: contextMenuTarget.sender,
+            interlocutorId: currentDialog.interlocutorId,
+            conversationId: currentDialog.conversationId,
+            body: contextMenuTarget.body,
+            isRead: contextMenuTarget.isRead,
+          },
+        });
         hideContextMenu();
       },
     },

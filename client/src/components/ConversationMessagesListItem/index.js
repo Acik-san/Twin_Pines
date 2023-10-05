@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { bindActionCreators } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { format, isSameDay, parseISO } from 'date-fns';
+import { CSSTransition } from 'react-transition-group';
 import classNames from 'classnames';
 import { ConversationMessagesListItemPropTypes } from '../../propTypes';
 import TypingAnimation from '../TypingAnimation';
@@ -28,15 +29,6 @@ const ConversationMessagesListItem = props => {
     ActionChat,
     useDispatch()
   );
-  const [previousTypingStatus, setPreviousTypingStatus] = useState(false);
-  useEffect(() => {
-    setPreviousTypingStatus(prevStatus => {
-      if (typingStatus && !prevStatus) {
-        return typingStatus;
-      }
-      return prevStatus;
-    });
-  }, [typingStatus]);
 
   useEffect(() => {
     let messageItem;
@@ -73,6 +65,8 @@ const ConversationMessagesListItem = props => {
         onContextMenu={e => {
           setContextMenuTarget({
             messageId: id,
+            prevMessage: messages[i - 1],
+            numberOfMessages: messages.length,
             sender,
             body,
             conversationId,
@@ -102,12 +96,14 @@ const ConversationMessagesListItem = props => {
         </div>
       ) : null}
       {i === messages.length - 1 ? (
-        <TypingAnimation
-          classes={classNames(styles.notTyping, {
-            [styles.fadeInLeft]: previousTypingStatus && typingStatus,
-            [styles.fadeOutLeft]: previousTypingStatus && !typingStatus,
-          })}
-        />
+        <CSSTransition in={typingStatus} timeout={300} unmountOnExit>
+          <TypingAnimation
+            classes={classNames(styles.notTyping, {
+              [styles.fadeInLeft]: typingStatus,
+              [styles.fadeOutLeft]: !typingStatus,
+            })}
+          />
+        </CSSTransition>
       ) : null}
     </li>
   );

@@ -98,3 +98,11 @@ export function* editMessageSaga (action) {
     yield put(ActionsChats.editMessageError(error));
   }
 }
+
+export function* deleteMessageSaga (action) {
+  try {
+    yield WsApi.deleteMessage(action.payload.data);
+  } catch (error) {
+    yield put(ActionsChats.deleteMessageError(error));
+  }
+}

@@ -18,7 +18,14 @@ const ContextMenu = props => {
       onContextMenu={e => e.preventDefault()}
     >
       {propsMenu.map(({ id, propName, propIcon, handleClick }) => (
-        <li key={id} className={styles.menu_list_item} onClick={handleClick}>
+        <li
+          key={id}
+          className={styles.menu_list_item}
+          onClick={e => {
+            e.stopPropagation();
+            handleClick();
+          }}
+        >
           <img src={propIcon} />
           <p>{propName.charAt(0).toUpperCase() + propName.slice(1)}</p>
         </li>

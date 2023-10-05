@@ -17,3 +17,8 @@ export const currentDialog = PropTypes.shape({
 export const textAreaRef = PropTypes.shape({
   current: PropTypes.instanceOf(HTMLTextAreaElement),
 }).isRequired;
+
+export const checkSpecialComponentPropTypes = Component =>
+  PropTypes.shape({
+    type: PropTypes.oneOf([Component]),
+  });

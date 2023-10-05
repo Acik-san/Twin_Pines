@@ -32,5 +32,9 @@ export const setSeenMessage = messageId => {
 };
 
 export const editMessage = data => {
-  socket.emit(CONSTANTS.SOCKET_EVENTS.EDITED_MESSAGE, data);
+  socket.emit(CONSTANTS.SOCKET_EVENTS.EDIT_MESSAGE, data);
+};
+
+export const deleteMessage = data => {
+  socket.emit(CONSTANTS.SOCKET_EVENTS.DELETE_MESSAGE, data);
 };

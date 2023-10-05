@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFormikContext } from 'formik';
 import { ConversationEditMessagePropTypes } from '../../propTypes';
 import CONSTANTS from '../../constants';
 import styles from './ConversationEditMessage.module.scss';
 
 const ConversationEditMessage = props => {
-  const { editMessageMode, setEditMessageMode } = props;
+  const { editMessageMode, setEditMessageMode, deleteMessageMode } = props;
   const { handleReset } = useFormikContext();
   const handleClick = () => {
     setEditMessageMode({
@@ -14,6 +14,11 @@ const ConversationEditMessage = props => {
     });
     handleReset();
   };
+  useEffect(() => {
+    if (deleteMessageMode.isDelete) {
+      handleClick();
+    }
+  }, [deleteMessageMode.isDelete]);
   return (
     <div className={styles.container}>
       <div className={styles.edit_img}>

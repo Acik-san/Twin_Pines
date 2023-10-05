@@ -11,16 +11,29 @@ const useContextMenu = () => {
 
   const showContextMenu = e => {
     e.preventDefault();
-    const x = e.clientX;
-    const y = e.clientY;
-    const windowWidth = window.innerWidth;
-
-    setContextMenuPosition({ x, y });
-    if (x + 250 > windowWidth && x >= 250) {
-      setContextMenuPosition({ x: x - 250, y });
-    }
-    if (x - 250 < 0 && x > 70 && x < 250) {
-      setContextMenuPosition({ x: 30, y });
+    const x = e.pageX;
+    const y = e.pageY;
+    const menuWidth = 250;
+    const menuHeight = 160;
+    const documentWidth = document.body.clientWidth;
+    const documentHeight = document.body.clientHeight;
+    if (x + menuWidth > documentWidth && x >= menuWidth) {
+      setContextMenuPosition({
+        x: x - menuWidth,
+        y: y + menuHeight > documentHeight ? documentHeight - menuHeight : y,
+      });
+    } else if (x - menuWidth < 0 && x > 50 && x < menuWidth) {
+      setContextMenuPosition({
+        x: 30,
+        y: y + menuHeight > documentHeight ? documentHeight - menuHeight : y,
+      });
+    } else if (y + menuHeight > documentHeight) {
+      setContextMenuPosition({
+        x: x + menuWidth > documentWidth ? documentWidth - menuWidth : x,
+        y: documentHeight - menuHeight,
+      });
+    } else {
+      setContextMenuPosition({ x, y });
     }
     setContextMenuVisible(true);
   };
@@ -28,7 +41,7 @@ const useContextMenu = () => {
   const hideContextMenu = () => {
     setContextMenuVisible(false);
   };
-  
+
   const propsMenu = useDataForContextMenu(hideContextMenu);
 
   return {

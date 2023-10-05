@@ -127,6 +127,7 @@
   min-width: 22px;
   line-height: 22px;
   padding: 0 7px;
+  margin-left: auto;
 }
 .name_preview {
   justify-content: space-between;
@@ -161,7 +162,6 @@
 }
 .typingPosition {
   position: absolute;
-  bottom: 0;
 }
 
 .fadeIn {

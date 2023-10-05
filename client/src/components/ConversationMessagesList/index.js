@@ -5,6 +5,8 @@ import { CSSTransition } from 'react-transition-group';
 import { ConversationMessagesListPropTypes } from '../../propTypes';
 import { useContextMenu } from '../../hooks';
 import ContextMenu from '../ContextMenu';
+import Confirm from '../Confirm';
+import ConfirmButton from '../ConfirmButton';
 import ConversationMessagesListItem from '../ConversationMessagesListItem';
 import * as ActionChat from '../../actions/chatsCreator';
 import styles from './ConversationMessagesList.module.scss';
@@ -17,9 +19,14 @@ const ConversationMessagesList = memo(props => {
     limit,
     offset,
     haveMore,
+    deleteMessageMode,
   } = useSelector(({ chats }) => chats);
-  const { getMessagesRequest, setSeenMessageRequest, setEditMessageMode } =
-    bindActionCreators(ActionChat, useDispatch());
+  const {
+    getMessagesRequest,
+    setSeenMessageRequest,
+    setDeleteMessageMode,
+    deleteMessageRequest,
+  } = bindActionCreators(ActionChat, useDispatch());
   const {
     contextMenuRef,
     contextMenuPosition,
@@ -30,6 +37,20 @@ const ConversationMessagesList = memo(props => {
   } = useContextMenu();
   const chatContainerRef = useRef(null);
   const previousScrollHeightRef = useRef(0);
+
+  const handleDeleteMessageMod = () =>
+    setDeleteMessageMode({ isDelete: false, message: {} });
+  const handleDeleteClick = () => {
+    deleteMessageRequest({
+      messageId: deleteMessageMode.message.messageId,
+      conversationId: deleteMessageMode.message.conversationId,
+      prevMessage: deleteMessageMode.message.prevMessage,
+      numberOfMessages: deleteMessageMode.message.numberOfMessages,
+      isRead: deleteMessageMode.message.isRead,
+    });
+    handleDeleteMessageMod();
+  };
+
   const observer = useMemo(
     () =>
       new IntersectionObserver(
@@ -84,7 +105,6 @@ const ConversationMessagesList = memo(props => {
       >
         <CSSTransition
           in={contextMenuVisible}
-          nodeRef={contextMenuRef}
           timeout={300}
           classNames={{
             enter: styles['fade-enter'],
@@ -100,6 +120,31 @@ const ConversationMessagesList = memo(props => {
             hideContextMenu={hideContextMenu}
             propsMenu={propsMenu}
           />
+        </CSSTransition>
+        <CSSTransition
+          in={deleteMessageMode.isDelete}
+          timeout={300}
+          classNames={{
+            enter: styles['fade-enter'],
+            enterActive: styles['fade-enter-active'],
+            exit: styles['fade-exit'],
+            exitActive: styles['fade-exit-active'],
+          }}
+          unmountOnExit
+        >
+          <Confirm
+            messageText='Do you want to delete this message ?'
+            handleClick={handleDeleteMessageMod}
+          >
+            <ConfirmButton
+              buttonText='Cancel'
+              handleClick={handleDeleteMessageMod}
+            />
+            <ConfirmButton
+              buttonText='Delete'
+              handleClick={handleDeleteClick}
+            />
+          </Confirm>
         </CSSTransition>
         {messages.map(
           (

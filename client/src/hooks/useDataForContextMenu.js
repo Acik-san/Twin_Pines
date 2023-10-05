@@ -8,18 +8,22 @@ const useDataForContextMenu = hideContextMenu => {
   const { contextMenuTarget, currentDialog } = useSelector(
     ({ chats }) => chats
   );
-  const { setEditMessageMode } = bindActionCreators(ActionChat, useDispatch());
+  const { setEditMessageMode, setDeleteMessageMode } = bindActionCreators(
+    ActionChat,
+    useDispatch()
+  );
   const { userPropsMenu, interlocutorPropsMenu } = createPropsMenu(
     contextMenuTarget,
     currentDialog,
     setEditMessageMode,
+    setDeleteMessageMode,
     hideContextMenu
   );
   const propsMenu =
     user.id === contextMenuTarget?.sender
       ? userPropsMenu
       : interlocutorPropsMenu;
-      
+
   return propsMenu;
 };
 

@@ -1,0 +1,33 @@
+@import '../../common/styles/breakpoints';
+@import '../../common/styles/templates';
+@import '../../common/styles/colors';
+
+.over {
+  position: absolute;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.2392156863);
+}
+
+.wrapper {
+  @include user_card;
+}
+
+.text {
+  margin-bottom: 10px;
+}
+
+.button_wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  & > :first-child {
+    margin-right: 5px;
+  }
+}

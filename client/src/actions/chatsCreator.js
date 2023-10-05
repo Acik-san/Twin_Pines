@@ -170,3 +170,23 @@ export const editMessageError = error => ({
   type: ACTION_TYPES.EDIT_MESSAGE_ERROR,
   payload: { error },
 });
+//---------------------------------------
+//---------------------------------------
+export const setDeleteMessageMode = data => ({
+  type: ACTION_TYPES.SET_DELETE_MESSAGE_MODE,
+  payload: { data },
+});
+//---------------------------------------
+//---------------------------------------
+export const deleteMessageRequest = data => ({
+  type: ACTION_TYPES.DELETE_MESSAGE_REQUEST,
+  payload: { data },
+});
+export const deleteMessageSuccess = data => ({
+  type: ACTION_TYPES.DELETE_MESSAGE_SUCCESS,
+  payload: { data },
+});
+export const deleteMessageError = error => ({
+  type: ACTION_TYPES.DELETE_MESSAGE_ERROR,
+  payload: { error },
+});

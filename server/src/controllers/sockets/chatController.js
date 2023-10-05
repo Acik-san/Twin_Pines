@@ -10,7 +10,10 @@ const {
     TYPING_STATUS,
     SET_SEEN_MESSAGE,
     SEEN_MESSAGE,
+    EDIT_MESSAGE,
     EDITED_MESSAGE,
+    DELETE_MESSAGE,
+    DELETED_MESSAGE,
   },
 } = require('../../constants');
 
@@ -70,7 +73,7 @@ module.exports.sendMessage = socket =>
       }).save();
       const newMessage = {
         _id: message._id,
-        conversationId: message.conversation,
+        conversation: message.conversation,
         sender: message.sender,
         body: message.body,
         participants,
@@ -146,31 +149,56 @@ module.exports.setSeenMessage = socket => {
 };
 
 module.exports.editMessage = socket => {
+  socket.on(EDIT_MESSAGE, async ({ messageId, conversationId, editedBody }) => {
+    await Message.findOneAndUpdate(
+      { _id: messageId },
+      { isEdited: true, body: editedBody },
+      {
+        upsert: true,
+        new: true,
+        setDefaultsOnInsert: true,
+        useFindAndModify: false,
+      }
+    );
+    socket.to(conversationId).emit(EDITED_MESSAGE, {
+      id: messageId,
+      conversationId,
+      isEdited: true,
+      body: editedBody,
+    });
+    socket.emit(EDITED_MESSAGE, {
+      id: messageId,
+      conversationId,
+      isEdited: true,
+      body: editedBody,
+    });
+  });
+};
+
+module.exports.deleteMessage = socket => {
   socket.on(
-    EDITED_MESSAGE,
-    async ({ messageId, conversationId, editedBody }) => {
-      console.log(conversationId)
-      const message = await Message.findOneAndUpdate(
-        { _id: messageId },
-        { isEdited: true, body: editedBody },
-        {
-          upsert: true,
-          new: true,
-          setDefaultsOnInsert: true,
-          useFindAndModify: false,
-        }
-      );
-      socket.to(conversationId).emit(EDITED_MESSAGE, {
+    DELETE_MESSAGE,
+    async ({
+      messageId,
+      conversationId,
+      prevMessage,
+      numberOfMessages,
+      isRead,
+    }) => {
+      await Message.findOneAndDelete({ _id: messageId });
+      socket.to(conversationId).emit(DELETED_MESSAGE, {
         id: messageId,
         conversationId,
-        isEdited: true,
-        body: editedBody,
+        prevMessage,
+        numberOfMessages,
+        isRead,
       });
-      socket.emit(EDITED_MESSAGE, {
+      socket.emit(DELETED_MESSAGE, {
         id: messageId,
         conversationId,
-        isEdited: true,
-        body: editedBody,
+        prevMessage,
+        numberOfMessages,
+        isRead,
       });
     }
   );

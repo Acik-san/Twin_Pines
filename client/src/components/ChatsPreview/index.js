@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { CSSTransition } from 'react-transition-group';
 import classNames from 'classnames';
 import { ChatsPreviewPropTypes } from '../../propTypes';
 import Avatar from '../Avatar';
@@ -21,14 +22,13 @@ const ChatsPreview = props => {
     isRead,
   } = props;
   const { user, users } = useSelector(({ users }) => users);
-  const { messagesPreview, unreadMessages, currentDialog, editMessageMode } =
-    useSelector(({ chats }) => chats);
+  const { unreadMessages, currentDialog, editMessageMode } = useSelector(
+    ({ chats }) => chats
+  );
   const { chooseCurrentChat, setEditMessageMode } = bindActionCreators(
     ActionsChats,
     useDispatch()
   );
-  const [previousStatus, setPreviousStatus] = useState('offline');
-  const [previousTypingStatus, setPreviousTypingStatus] = useState(false);
 
   const unreadMessagesCount = useMemo(
     () => unreadMessages.find(message => message._id === conversationId)?.count,
@@ -39,30 +39,6 @@ const ChatsPreview = props => {
     () => users.find(({ id }) => id === interlocutor.id)?.status,
     [users, interlocutor.id]
   );
-  const currentTypingStatus = useMemo(
-    () =>
-      messagesPreview.find(({ interlocutor: { id } }) => id === interlocutor.id)
-        .isTyping,
-    [messagesPreview, interlocutor.id]
-  );
-
-  useEffect(() => {
-    setPreviousStatus(prevStatus => {
-      if (currentStatus === 'online' && prevStatus === 'offline') {
-        return currentStatus;
-      }
-      return prevStatus;
-    });
-  }, [currentStatus]);
-
-  useEffect(() => {
-    setPreviousTypingStatus(prevStatus => {
-      if (currentTypingStatus && !prevStatus) {
-        return currentTypingStatus;
-      }
-      return prevStatus;
-    });
-  }, [currentTypingStatus]);
 
   return (
     <li
@@ -95,7 +71,6 @@ const ChatsPreview = props => {
         onlineBadge={
           <OnlineBadge
             currentStatus={currentStatus}
-            previousStatus={previousStatus}
             isMessageRead={isRead}
             messageSender={sender}
             classes={{
@@ -128,21 +103,25 @@ const ChatsPreview = props => {
         </div>
         <div className={styles.body_wrapper}>
           {currentStatus === 'online' ? (
-            <TypingAnimation
-              classes={classNames(styles.notTyping, styles.typingPosition, {
-                [styles.fadeIn]: previousTypingStatus && isTyping,
-                [styles.fadeOut]: previousTypingStatus && !isTyping,
-              })}
-            />
+            <CSSTransition in={isTyping} timeout={300} unmountOnExit>
+              <TypingAnimation
+                classes={classNames(styles.notTyping, styles.typingPosition, {
+                  [styles.fadeIn]: isTyping,
+                  [styles.fadeOut]: !isTyping,
+                })}
+              />
+            </CSSTransition>
           ) : null}
-          <p
-            className={classNames(styles.typing, {
-              [styles.fadeIn]: previousTypingStatus && !isTyping,
-              [styles.fadeOut]: previousTypingStatus && isTyping,
-            })}
-          >
-            {body}
-          </p>
+          <CSSTransition in={!isTyping} timeout={300} unmountOnExit>
+            <p
+              className={classNames(styles.typing, {
+                [styles.fadeIn]: !isTyping,
+                [styles.fadeOut]: isTyping,
+              })}
+            >
+              {body}
+            </p>
+          </CSSTransition>
           {unreadMessagesCount ? (
             <div className={styles.badge}>
               {unreadMessagesCount > 9999 ? '9999+' : unreadMessagesCount}

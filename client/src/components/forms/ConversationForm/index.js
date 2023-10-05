@@ -12,7 +12,7 @@ import styles from './ConversationForm.module.scss';
 const ConversationForm = memo(props => {
   const { currentDialog, textArea, setIsTyping, setIsTouched } = props;
   const { user } = useSelector(({ users }) => users);
-  const { messagesPreview, editMessageMode } = useSelector(
+  const { messagesPreview, editMessageMode, deleteMessageMode } = useSelector(
     ({ chats }) => chats
   );
   const { createMessageRequest, setEditMessageMode, editMessageRequest } =
@@ -52,6 +52,7 @@ const ConversationForm = memo(props => {
           <ConversationEditMessage
             editMessageMode={editMessageMode}
             setEditMessageMode={setEditMessageMode}
+            deleteMessageMode={deleteMessageMode}
           />
         ) : null}
         <ConversationFormInput

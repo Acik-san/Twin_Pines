@@ -14,6 +14,7 @@ const initialState = {
   currentDialog: null,
   contextMenuTarget: null,
   editMessageMode: { isEdit: false, message: {} },
+  deleteMessageMode: { isDelete: false, message: {} },
 };
 const handleRequests = produce(draftState => {
   draftState.isFetching = true;
@@ -55,6 +56,7 @@ const handlers = {
   [ACTION_TYPES.SET_SEEN_MESSAGE_REQUEST]: handleRequests,
   [ACTION_TYPES.START_DIALOG_REQUEST]: handleRequests,
   [ACTION_TYPES.EDIT_MESSAGE_REQUEST]: handleRequests,
+  [ACTION_TYPES.DELETE_MESSAGE_REQUEST]: handleRequests,
   [ACTION_TYPES.CREATE_MESSAGE_SUCCESS]: produce((draftState, action) => {
     const {
       payload: { message, preview },
@@ -159,12 +161,14 @@ const handlers = {
         ? (preview.isRead = status)
         : null
     );
-    draftState.unreadMessages.forEach(conversation =>
-      conversation._id === conversationId ? (conversation.count -= 1) : null
-    );
-    draftState.unreadMessages = draftState.unreadMessages.filter(
-      ({ count }) => count !== 0
-    );
+    draftState.unreadMessages = draftState.unreadMessages
+      .map(conversation => {
+        if (conversation._id === conversationId) {
+          conversation.count -= 1;
+        }
+        return conversation;
+      })
+      .filter(({ count }) => count !== 0);
     // }
   }),
   [ACTION_TYPES.START_DIALOG_SUCCESS]: handleCurrentChat,
@@ -195,12 +199,63 @@ const handlers = {
         : null
     );
   }),
+  [ACTION_TYPES.SET_DELETE_MESSAGE_MODE]: produce((draftState, action) => {
+    const { data } = action.payload;
+    draftState.deleteMessageMode = data;
+  }),
+  [ACTION_TYPES.DELETE_MESSAGE_SUCCESS]: produce((draftState, action) => {
+    const {
+      payload: {
+        data: { id, conversationId, prevMessage, numberOfMessages, isRead },
+      },
+    } = action;
+    const { currentDialog, messages, messagesPreview, unreadMessages } =
+      draftState;
+    const messageIndex = messages.findIndex(message => message._id === id);
+  
+    if (!isRead) {
+      draftState.unreadMessages = unreadMessages
+        .map(conversation => {
+          if (conversation._id === conversationId) {
+            conversation.count -= 1;
+          }
+          return conversation;
+        })
+        .filter(({ count }) => count !== 0);
+    }
+
+    if (prevMessage) {
+      messagesPreview.forEach(preview => {
+        if (preview._id === conversationId && preview.messageId === id) {
+          preview.messageId = prevMessage.messageId;
+          preview.sender = prevMessage.sender;
+          preview.body = prevMessage.body;
+          preview.createdAt = prevMessage.createdAt;
+          preview.isRead = prevMessage.isRead;
+        }
+      });
+    }
+
+    if (
+      (prevMessage === undefined || prevMessage === null) &&
+      numberOfMessages === 1
+    ) {
+      draftState.messagesPreview = messagesPreview.filter(
+        preview => preview._id !== conversationId && preview.messageId !== id
+      );
+    }
+
+    if (currentDialog?.conversationId === conversationId) {
+      messages.splice(messageIndex, 1);
+    }
+  }),
   [ACTION_TYPES.CREATE_MESSAGE_ERROR]: handleError,
   [ACTION_TYPES.GET_MESSAGES_ERROR]: handleError,
   [ACTION_TYPES.GET_CHATS_ERROR]: handleError,
   [ACTION_TYPES.START_DIALOG_ERROR]: handleError,
   [ACTION_TYPES.SET_CONTEXT_MENU_TARGET_ERROR]: handleError,
   [ACTION_TYPES.EDIT_MESSAGE_ERROR]: handleError,
+  [ACTION_TYPES.DELETE_MESSAGE_ERROR]: handleError,
 };
 
 const chatReducer = (state = initialState, action) => {

@@ -18,6 +18,7 @@ import {
   setSeenMessageSaga,
   startDialogSaga,
   editMessageSaga,
+  deleteMessageSaga,
 } from './chatSagas';
 
 function* rootSaga () {
@@ -37,6 +38,7 @@ function* rootSaga () {
   yield takeLatest(ACTION_TYPES.SET_SEEN_MESSAGE_REQUEST, setSeenMessageSaga);
   yield takeLatest(ACTION_TYPES.START_DIALOG_REQUEST, startDialogSaga);
   yield takeLatest(ACTION_TYPES.EDIT_MESSAGE_REQUEST, editMessageSaga);
+  yield takeLatest(ACTION_TYPES.DELETE_MESSAGE_REQUEST, deleteMessageSaga);
 }
 
 export default rootSaga;

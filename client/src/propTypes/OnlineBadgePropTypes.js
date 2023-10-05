@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 
 const OnlineBadgePropTypes = {
   currentStatus: PropTypes.string.isRequired,
-  previousStatus: PropTypes.string.isRequired,
   isMessageRead: PropTypes.bool.isRequired,
   messageSender: PropTypes.number.isRequired,
   classes: PropTypes.exact({

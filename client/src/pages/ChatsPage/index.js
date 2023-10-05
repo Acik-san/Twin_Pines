@@ -21,6 +21,7 @@ const ChatsPage = () => {
     clearCurrentChat,
     subscribeChatsRequest,
     setEditMessageMode,
+    setDeleteMessageMode,
     setContextMenuTarget,
   } = bindActionCreators(ActionChat, useDispatch());
   useEffect(() => {
@@ -34,6 +35,7 @@ const ChatsPage = () => {
       clearCurrentChat();
       setContextMenuTarget(null);
       setEditMessageMode({ isEdit: false, message: {} });
+      setDeleteMessageMode({ isDelete: false, message: {} });
     };
   }, []);
   useEffect(() => {

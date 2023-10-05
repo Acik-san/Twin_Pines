@@ -37,7 +37,10 @@ const CONSTANTS = {
     ONLINE_USERS: 'ONLINE_USERS',
     SET_SEEN_MESSAGE: 'SET_SEEN_MESSAGE',
     SEEN_MESSAGE: 'SEEN_MESSAGE',
+    EDIT_MESSAGE: 'EDIT_MESSAGE',
     EDITED_MESSAGE: 'EDITED_MESSAGE',
+    DELETE_MESSAGE: 'DELETE_MESSAGE',
+    DELETED_MESSAGE: 'DELETED_MESSAGE',
   },
   ACCESS_TOKEN: 'accessToken',
   REFRESH_TOKEN: 'refreshToken',
@@ -117,6 +120,12 @@ const CONSTANTS = {
       propName: 'copy text',
       propIcon: '/static/images/svg/copy.svg',
       onlyForUser: false,
+    },
+    {
+      id: 3,
+      propName: 'delete',
+      propIcon: '/static/images/svg/delete.svg',
+      onlyForUser: true,
     },
   ],
 };
