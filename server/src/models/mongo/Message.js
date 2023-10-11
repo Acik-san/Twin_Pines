@@ -24,6 +24,10 @@ const Schema = new mongoose.Schema(
       required: true,
       default: false,
     },
+    repliedMessage: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Message',
+    },
   },
   {
     timestamps: true,

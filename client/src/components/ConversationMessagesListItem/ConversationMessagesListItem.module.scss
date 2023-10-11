@@ -3,7 +3,7 @@
 @import '../../common/styles/colors';
 
 .date {
-  align-self: center;
+  display: inline-block;
   border-radius: 16px;
   padding: 8px 12px;
   margin: 10px 0;
@@ -32,6 +32,7 @@
 .message_body,
 .my_message_body {
   display: flex;
+  flex-direction: column;
   align-items: center;
   min-width: 70px;
   white-space: pre-wrap;
@@ -51,9 +52,6 @@
     min-height: 25px;
     width: 100%;
     margin-bottom: 6px;
-  }
-  & > div {
-    width: 52px;
   }
   & > span {
     position: absolute;
@@ -117,6 +115,67 @@
   &::after {
     content: url('../../../public/static/images/svg/message_read.svg');
   }
+}
+
+.background-color-exit {
+  background-color: $choosed_grey;
+}
+.background-color-exit-active {
+  background-color: transparent;
+  transition: background-color 2000ms;
+}
+
+.body_wrapper {
+  margin-bottom: 10px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.reply_border {
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 0;
+    width: 2px;
+    height: 32px;
+    background-color: $dark_purple;
+  }
+}
+
+.reply_content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 46px;
+  white-space: nowrap;
+  word-wrap: normal;
+  height: 40px;
+  margin-left: 10px;
+  font-size: 14px;
+}
+
+.sender_name,
+.replied_message_body,
+.deleted_message {
+  position: absolute;
+  max-width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.sender_name {
+  font-weight: 500;
+  color: $dark_purple;
+}
+
+.replied_message_body {
+  bottom: 0;
+}
+
+.deleted_message {
+  bottom: 10px;
 }
 
 .message_edited {

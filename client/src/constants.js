@@ -41,6 +41,8 @@ const CONSTANTS = {
     EDITED_MESSAGE: 'EDITED_MESSAGE',
     DELETE_MESSAGE: 'DELETE_MESSAGE',
     DELETED_MESSAGE: 'DELETED_MESSAGE',
+    REPLY_MESSAGE: 'REPLY_MESSAGE',
+    REPLIED_MESSAGE: 'REPLIED_MESSAGE',
   },
   ACCESS_TOKEN: 'accessToken',
   REFRESH_TOKEN: 'refreshToken',
@@ -111,18 +113,24 @@ const CONSTANTS = {
   CONTEXT_MENU_SETTINGS: [
     {
       id: 1,
+      propName: 'reply',
+      propIcon: '/static/images/svg/reply.svg',
+      onlyForUser: false,
+    },
+    {
+      id: 2,
       propName: 'edit',
       propIcon: '/static/images/svg/edit.svg',
       onlyForUser: true,
     },
     {
-      id: 2,
+      id: 3,
       propName: 'copy text',
       propIcon: '/static/images/svg/copy.svg',
       onlyForUser: false,
     },
     {
-      id: 3,
+      id: 4,
       propName: 'delete',
       propIcon: '/static/images/svg/delete.svg',
       onlyForUser: true,

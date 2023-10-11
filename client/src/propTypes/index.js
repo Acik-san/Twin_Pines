@@ -6,7 +6,6 @@ export { default as ChatsPreviewPropTypes } from './ChatsPreviewPropTypes';
 export { default as ConfirmButtonPropTypes } from './ConfirmButtonPropTypes';
 export { default as ConfirmPropTypes } from './ConfirmPropTypes';
 export { default as ContextMenuPropTypes } from './ContextMenuPropTypes';
-export { default as ConversationEditMessagePropTypes } from './ConversationEditMessagePropTypes';
 export { default as ConversationFormInputPropTypes } from './ConversationFormInputPropTypes';
 export { default as ConversationFormPropTypes } from './ConversationFormPropTypes';
 export { default as ConversationInfoPropTypes } from './ConversationInfoPropTypes';

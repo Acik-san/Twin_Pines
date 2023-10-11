@@ -66,6 +66,14 @@ module.exports.getChat = async (req, res, next) => {
         $limit: parseInt(limit),
       },
       {
+        $lookup: {
+          from: 'messages',
+          localField: 'repliedMessage',
+          foreignField: '_id',
+          as: 'repliedMessageData',
+        },
+      },
+      {
         $project: {
           _id: 1,
           sender: 1,
@@ -73,11 +81,25 @@ module.exports.getChat = async (req, res, next) => {
           conversation: 1,
           isRead: 1,
           isEdited: 1,
+          repliedMessage: {
+            $cond: {
+              if: { $eq: ['$repliedMessageData', []] },
+              then: {
+                $cond: {
+                  if: '$repliedMessage',
+                  then: { _id: '$repliedMessage' },
+                  else: '$$REMOVE',
+                },
+              },
+              else: { $arrayElemAt: ['$repliedMessageData', 0] },
+            },
+          },
           createdAt: 1,
           updatedAt: 1,
         },
       },
     ]);
+
     const haveMore = messages.length > 0 ? true : false;
     res.status(200).send({
       data: {

@@ -14,6 +14,8 @@ const {
     EDITED_MESSAGE,
     DELETE_MESSAGE,
     DELETED_MESSAGE,
+    REPLY_MESSAGE,
+    REPLIED_MESSAGE,
   },
 } = require('../../constants');
 
@@ -76,7 +78,6 @@ module.exports.sendMessage = socket =>
         conversation: message.conversation,
         sender: message.sender,
         body: message.body,
-        participants,
         isRead: message.isRead,
         isEdited: message.isEdited,
         createdAt: message.createdAt,
@@ -94,7 +95,6 @@ module.exports.sendMessage = socket =>
         sender: userId,
         body: messageBody,
         createdAt: message.createdAt,
-        participants,
         blackList: newConversation.blackList,
         favoriteList: newConversation.favoriteList,
         isTyping: false,
@@ -199,6 +199,42 @@ module.exports.deleteMessage = socket => {
         prevMessage,
         numberOfMessages,
         isRead,
+      });
+    }
+  );
+};
+
+module.exports.replyMessage = socket => {
+  socket.on(
+    REPLY_MESSAGE,
+    async ({ userId, interlocutorId, messageId, conversationId, body }) => {
+      const message = await new Message({
+        sender: userId,
+        body,
+        conversation: conversationId,
+        repliedMessage: messageId,
+      }).save();
+      await message.populate('repliedMessage');
+      const newMessage = {
+        _id: message._id,
+        conversation: message.conversation,
+        sender: message.sender,
+        body: message.body,
+        isRead: message.isRead,
+        isEdited: message.isEdited,
+        repliedMessage: message.repliedMessage,
+        createdAt: message.createdAt,
+        updatedAt: message.updatedAt,
+      };
+      socket.to(conversationId).emit(REPLIED_MESSAGE, {
+        interlocutorId: userId,
+        conversationId,
+        message: newMessage,
+      });
+      socket.emit(REPLIED_MESSAGE, {
+        interlocutorId,
+        conversationId,
+        message: newMessage,
       });
     }
   );

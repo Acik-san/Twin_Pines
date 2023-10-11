@@ -106,3 +106,11 @@ export function* deleteMessageSaga (action) {
     yield put(ActionsChats.deleteMessageError(error));
   }
 }
+
+export function* replyMessageSaga (action) {
+  try {
+    yield WsApi.replyMessage(action.payload.data);
+  } catch (error) {
+    yield put(ActionsChats.replyMessageError(error));
+  }
+}

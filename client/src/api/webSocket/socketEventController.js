@@ -38,3 +38,7 @@ export const editMessage = data => {
 export const deleteMessage = data => {
   socket.emit(CONSTANTS.SOCKET_EVENTS.DELETE_MESSAGE, data);
 };
+
+export const replyMessage = data => {
+  socket.emit(CONSTANTS.SOCKET_EVENTS.REPLY_MESSAGE, data);
+};

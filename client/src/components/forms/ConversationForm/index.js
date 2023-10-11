@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Formik, Form } from 'formik';
 import { ConversationFormPropTypes } from '../../../propTypes';
-import ConversationEditMessage from '../../ConversationEditMessage';
+import ConversationMessageMode from '../../ConversationMessageMode';
 import ConversationFormInput from '../ConversationFormInput';
 import * as ActionChat from '../../../actions/chatsCreator';
 import Schems from '../../../utils/validateSchemas';
@@ -12,22 +12,36 @@ import styles from './ConversationForm.module.scss';
 const ConversationForm = memo(props => {
   const { currentDialog, textArea, setIsTyping, setIsTouched } = props;
   const { user } = useSelector(({ users }) => users);
-  const { messagesPreview, editMessageMode, deleteMessageMode } = useSelector(
+  const { messagesPreview, editMessageMode, replyMessageMode } = useSelector(
     ({ chats }) => chats
   );
-  const { createMessageRequest, setEditMessageMode, editMessageRequest } =
-    bindActionCreators(ActionChat, useDispatch());
+  const {
+    createMessageRequest,
+    setEditMessageMode,
+    editMessageRequest,
+    setReplyMessageMode,
+    replyMessageRequest,
+  } = bindActionCreators(ActionChat, useDispatch());
   const onSubmit = (values, formikBag) => {
     values.interlocutor = currentDialog.interlocutorId;
-    if (!editMessageMode.isEdit) {
-      createMessageRequest(values);
-    } else {
+    if (editMessageMode.isEdit) {
       editMessageRequest({
         messageId: editMessageMode.message.messageId,
         conversationId: editMessageMode.message.conversationId,
         editedBody: values.messageBody,
       });
       setEditMessageMode({ isEdit: false, message: {} });
+    } else if (replyMessageMode.isReply) {
+      replyMessageRequest({
+        userId: user.id,
+        interlocutorId: replyMessageMode.message.interlocutorId,
+        messageId: replyMessageMode.message.messageId,
+        conversationId: replyMessageMode.message.conversationId,
+        body: values.messageBody,
+      });
+      setReplyMessageMode({ isReply: false, message: {} });
+    } else {
+      createMessageRequest(values);
     }
     setIsTyping(false);
     formikBag.resetForm();
@@ -48,12 +62,8 @@ const ConversationForm = memo(props => {
       onSubmit={onSubmit}
     >
       <Form className={styles['message_form']}>
-        {editMessageMode.isEdit ? (
-          <ConversationEditMessage
-            editMessageMode={editMessageMode}
-            setEditMessageMode={setEditMessageMode}
-            deleteMessageMode={deleteMessageMode}
-          />
+        {editMessageMode.isEdit || replyMessageMode.isReply ? (
+          <ConversationMessageMode />
         ) : null}
         <ConversationFormInput
           name='messageBody'

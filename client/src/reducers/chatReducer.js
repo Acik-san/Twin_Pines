@@ -15,6 +15,7 @@ const initialState = {
   contextMenuTarget: null,
   editMessageMode: { isEdit: false, message: {} },
   deleteMessageMode: { isDelete: false, message: {} },
+  replyMessageMode: { isReply: false, message: {} },
 };
 const handleRequests = produce(draftState => {
   draftState.isFetching = true;
@@ -57,6 +58,7 @@ const handlers = {
   [ACTION_TYPES.START_DIALOG_REQUEST]: handleRequests,
   [ACTION_TYPES.EDIT_MESSAGE_REQUEST]: handleRequests,
   [ACTION_TYPES.DELETE_MESSAGE_REQUEST]: handleRequests,
+  [ACTION_TYPES.REPLY_MESSAGE_REQUEST]: handleRequests,
   [ACTION_TYPES.CREATE_MESSAGE_SUCCESS]: produce((draftState, action) => {
     const {
       payload: { message, preview },
@@ -76,21 +78,16 @@ const handlers = {
         conversation._id === preview._id ? (conversation.count += 1) : null
       );
     }
-    let isNew = true;
     draftState.messagesPreview.forEach(conversation => {
-      if (isEqual(conversation.participants, message.participants)) {
-        conversation.messageId = message._id;
-        conversation.body = message.body;
-        conversation.sender = message.sender;
-        conversation.createdAt = message.createdAt;
-        conversation.interlocutor.status = preview.interlocutor.status;
-        conversation.isRead = false;
-        isNew = false;
+      if (conversation._id === preview._id) {
+        conversation.messageId = preview.messageId;
+        conversation.body = preview.body;
+        conversation.sender = preview.sender;
+        conversation.createdAt = preview.createdAt;
+        conversation.isRead = preview.isRead;
+        conversation.isTyping = preview.isTyping;
       }
     });
-    if (isNew) {
-      draftState.messagesPreview.push(preview);
-    }
   }),
   [ACTION_TYPES.GET_MESSAGES_SUCCESS]: produce((draftState, action) => {
     const {
@@ -152,6 +149,7 @@ const handlers = {
     const {
       payload: { id, conversationId, status },
     } = action;
+    draftState.isFetching = false;
     draftState.messages.forEach(message =>
       message._id === id ? (message.isRead = status) : null
     );
@@ -186,6 +184,7 @@ const handlers = {
         data: { id, conversationId, isEdited, body },
       },
     } = action;
+    draftState.isFetching = false;
     if (draftState.currentDialog?.conversationId === conversationId) {
       draftState.messages.forEach(message =>
         message._id === id
@@ -209,10 +208,11 @@ const handlers = {
         data: { id, conversationId, prevMessage, numberOfMessages, isRead },
       },
     } = action;
+    draftState.isFetching = false;
     const { currentDialog, messages, messagesPreview, unreadMessages } =
       draftState;
     const messageIndex = messages.findIndex(message => message._id === id);
-  
+
     if (!isRead) {
       draftState.unreadMessages = unreadMessages
         .map(conversation => {
@@ -249,6 +249,40 @@ const handlers = {
       messages.splice(messageIndex, 1);
     }
   }),
+  [ACTION_TYPES.SET_REPLY_MESSAGE_MODE]: produce((draftState, action) => {
+    const { data } = action.payload;
+    draftState.replyMessageMode = data;
+  }),
+  [ACTION_TYPES.REPLY_MESSAGE_SUCCESS]: produce((draftState, action) => {
+    const {
+      data: { interlocutorId, conversationId, message },
+    } = action.payload;
+    draftState.isFetching = false;
+    draftState.offset += 1;
+    if (draftState.currentDialog?.conversationId === conversationId) {
+      draftState.messages.push(message);
+    }
+    if (
+      message.sender === interlocutorId &&
+      draftState.unreadMessages.length === 0
+    ) {
+      draftState.unreadMessages.push({ _id: conversationId, count: 1 });
+    } else {
+      draftState.unreadMessages.forEach(conversation =>
+        conversation._id === conversationId ? (conversation.count += 1) : null
+      );
+    }
+    draftState.messagesPreview.forEach(conversation => {
+      if (conversation._id === conversationId) {
+        conversation.messageId = message._id;
+        conversation.body = message.body;
+        conversation.sender = message.sender;
+        conversation.createdAt = message.createdAt;
+        conversation.isRead = message.isRead;
+        conversation.isTyping = false;
+      }
+    });
+  }),
   [ACTION_TYPES.CREATE_MESSAGE_ERROR]: handleError,
   [ACTION_TYPES.GET_MESSAGES_ERROR]: handleError,
   [ACTION_TYPES.GET_CHATS_ERROR]: handleError,
@@ -256,6 +290,7 @@ const handlers = {
   [ACTION_TYPES.SET_CONTEXT_MENU_TARGET_ERROR]: handleError,
   [ACTION_TYPES.EDIT_MESSAGE_ERROR]: handleError,
   [ACTION_TYPES.DELETE_MESSAGE_ERROR]: handleError,
+  [ACTION_TYPES.REPLY_MESSAGE_ERROR]: handleError,
 };
 
 const chatReducer = (state = initialState, action) => {

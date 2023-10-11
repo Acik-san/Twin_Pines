@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useMemo, useRef } from 'react';
+import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { CSSTransition } from 'react-transition-group';
@@ -40,6 +40,7 @@ const ConversationMessagesList = memo(props => {
 
   const handleDeleteMessageMod = () =>
     setDeleteMessageMode({ isDelete: false, message: {} });
+
   const handleDeleteClick = () => {
     deleteMessageRequest({
       messageId: deleteMessageMode.message.messageId,
@@ -50,6 +51,22 @@ const ConversationMessagesList = memo(props => {
     });
     handleDeleteMessageMod();
   };
+  const [replyOn, setReplyOn] = useState(null);
+
+  const replyObserver = useMemo(
+    () =>
+      new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              setReplyOn(null);
+            }
+          });
+        },
+        { threshold: 1 }
+      ),
+    []
+  );
 
   const observer = useMemo(
     () =>
@@ -148,7 +165,16 @@ const ConversationMessagesList = memo(props => {
         </CSSTransition>
         {messages.map(
           (
-            { _id, body, sender, createdAt, isRead, isEdited, conversation },
+            {
+              _id,
+              body,
+              sender,
+              createdAt,
+              isRead,
+              isEdited,
+              conversation,
+              repliedMessage,
+            },
             i
           ) => (
             <ConversationMessagesListItem
@@ -164,6 +190,10 @@ const ConversationMessagesList = memo(props => {
               id={_id}
               conversationId={conversation}
               showContextMenu={showContextMenu}
+              repliedMessage={repliedMessage}
+              replyOn={replyOn}
+              setReplyOn={setReplyOn}
+              replyObserver={replyObserver}
             />
           )
         )}

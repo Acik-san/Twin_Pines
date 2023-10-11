@@ -68,4 +68,8 @@ socket.on(CONSTANTS.SOCKET_EVENTS.DELETED_MESSAGE, data => {
   store.dispatch(ChatCreator.deleteMessageSuccess(data));
 });
 
+socket.on(CONSTANTS.SOCKET_EVENTS.REPLIED_MESSAGE, data => {
+  store.dispatch(ChatCreator.replyMessageSuccess(data));
+});
+
 export default socket;

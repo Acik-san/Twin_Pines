@@ -8,7 +8,7 @@
   color: #fff;
 }
 
-.edit_img {
+.icon{
   position: relative;
   & > img {
     width: 25px;
@@ -25,7 +25,7 @@
   }
 }
 
-.edit_message {
+.message {
   display: flex;
   flex-direction: column;
   margin-left: 22px;
@@ -42,7 +42,7 @@
   }
 }
 
-.stop_editing {
+.cancel {
   display: inline-block;
   padding: 5px 10px;
   margin-left: auto;

@@ -5,12 +5,30 @@ const createPropsMenu = (
   currentDialog,
   setEditMessageMode,
   setDeleteMessageMode,
+  setReplyMessageMode,
   hideContextMenu
 ) => {
   const contextMenuMap = new Map();
   [
     {
       id: 1,
+      handleClick: () => {
+        setReplyMessageMode({
+          isReply: true,
+          message: {
+            messageId: contextMenuTarget.messageId,
+            sender: contextMenuTarget.sender,
+            interlocutorId: currentDialog.interlocutorId,
+            conversationId: currentDialog.conversationId,
+            body: contextMenuTarget.body,
+            isRead: contextMenuTarget.isRead,
+          },
+        });
+        hideContextMenu();
+      },
+    },
+    {
+      id: 2,
       handleClick: () => {
         setEditMessageMode({
           isEdit: true,
@@ -27,7 +45,7 @@ const createPropsMenu = (
       },
     },
     {
-      id: 2,
+      id: 3,
       handleClick: () => {
         const textArea = document.createElement('textarea');
         textArea.value = contextMenuTarget.body;
@@ -39,7 +57,7 @@ const createPropsMenu = (
       },
     },
     {
-      id: 3,
+      id: 4,
       handleClick: () => {
         setDeleteMessageMode({
           isDelete: true,
