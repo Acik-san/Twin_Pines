@@ -22,13 +22,10 @@ const ChatsPreview = props => {
     isRead,
   } = props;
   const { user, users } = useSelector(({ users }) => users);
-  const { unreadMessages, currentDialog, editMessageMode } = useSelector(
-    ({ chats }) => chats
-  );
-  const { chooseCurrentChat, setEditMessageMode } = bindActionCreators(
-    ActionsChats,
-    useDispatch()
-  );
+  const { unreadMessages, currentDialog, editMessageMode, replyMessageMode } =
+    useSelector(({ chats }) => chats);
+  const { chooseCurrentChat, setEditMessageMode, setReplyMessageMode } =
+    bindActionCreators(ActionsChats, useDispatch());
 
   const unreadMessagesCount = useMemo(
     () => unreadMessages.find(message => message._id === conversationId)?.count,
@@ -54,6 +51,15 @@ const ChatsPreview = props => {
         ) {
           setEditMessageMode({
             isEdit: false,
+            message: {},
+          });
+        }
+        if (
+          replyMessageMode.isReply &&
+          replyMessageMode.message.interlocutorId !== interlocutor.id
+        ) {
+          setReplyMessageMode({
+            isReply: false,
             message: {},
           });
         }

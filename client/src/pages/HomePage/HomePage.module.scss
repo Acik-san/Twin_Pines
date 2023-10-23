@@ -16,7 +16,7 @@
   width: 100%;
   max-width: 400px;
   max-height: 630px;
-  overflow-Y: scroll;
+  overflow-y: scroll;
   padding-left: 5px;
   padding-right: 5px;
   @include scrollbar;
@@ -34,7 +34,7 @@
 
 .user_card {
   @include user_card;
-  max-width: 400px;
+  width: 100%;
   margin: 0px;
   // background-color: $dark_purple;
   & > h3 {

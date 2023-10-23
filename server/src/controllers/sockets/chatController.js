@@ -222,7 +222,8 @@ module.exports.replyMessage = socket => {
         body: message.body,
         isRead: message.isRead,
         isEdited: message.isEdited,
-        repliedMessage: message.repliedMessage,
+        repliedMessage:
+          message.repliedMessage === null ? messageId : message.repliedMessage,
         createdAt: message.createdAt,
         updatedAt: message.updatedAt,
       };

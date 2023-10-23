@@ -213,6 +213,77 @@ module.exports.getPreview = async (req, res, next) => {
   }
 };
 
+module.exports.getChatOnReconnect = async (req, res, next) => {
+  const {
+    params: { id },
+    query: { lastMessageDate },
+  } = req;
+  const participants = [req.tokenData.userId, Number(id)];
+  participants.sort(
+    (participant1, participant2) => participant1 - participant2
+  );
+  try {
+    const messages = await Message.aggregate([
+      {
+        $lookup: {
+          from: 'conversations',
+          localField: 'conversation',
+          foreignField: '_id',
+          as: 'conversationData',
+        },
+      },
+      { $match: { 'conversationData.participants': participants } },
+      { $sort: { createdAt: -1 } },
+      {
+        $lookup: {
+          from: 'messages',
+          localField: 'repliedMessage',
+          foreignField: '_id',
+          as: 'repliedMessageData',
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          sender: 1,
+          body: 1,
+          conversation: 1,
+          isRead: 1,
+          isEdited: 1,
+          repliedMessage: {
+            $cond: {
+              if: { $eq: ['$repliedMessageData', []] },
+              then: {
+                $cond: {
+                  if: '$repliedMessage',
+                  then: { _id: '$repliedMessage' },
+                  else: '$$REMOVE',
+                },
+              },
+              else: { $arrayElemAt: ['$repliedMessageData', 0] },
+            },
+          },
+          createdAt: 1,
+          updatedAt: 1,
+        },
+      },
+      {
+        $match: {
+          createdAt: { $gt: new Date(lastMessageDate) },
+          sender: Number(id),
+        },
+      },
+    ]);
+    res.status(200).send({
+      data: {
+        messages,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // module.exports.blackList = async (req, res, next) => {
 //   const predicate =
 //     'blackList.' + req.body.participants.indexOf(req.tokenData.userId);

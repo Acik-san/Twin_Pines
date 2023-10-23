@@ -114,3 +114,25 @@ export function* replyMessageSaga (action) {
     yield put(ActionsChats.replyMessageError(error));
   }
 }
+
+export function* getChatsOnReconnectSaga (action) {
+  try {
+    const {
+      data: { data },
+    } = yield API.getChats();
+    yield put(ActionsChats.getChatsOnReconnectSuccess(data));
+  } catch (error) {
+    yield put(ActionsChats.getChatsOnReconnectError(error));
+  }
+}
+
+export function* getMessagesOnReconnectSaga (action) {
+  try {
+    const {
+      data: { data },
+    } = yield API.getMessagesOnReconnect(action.payload);
+    yield put(ActionsChats.getMessagesOnReconnectSuccess(data));
+  } catch (error) {
+    yield put(ActionsChats.getMessagesOnReconnectError(error));
+  }
+}

@@ -7,11 +7,11 @@ import Avatar from '../Avatar';
 
 const UsersSearchInput = () => {
   const { user, users } = useSelector(({ users }) => users);
-  const { editMessageMode } = useSelector(({ chats }) => chats);
-  const { startDialogRequest, setEditMessageMode } = bindActionCreators(
-    ActionsChats,
-    useDispatch()
+  const { editMessageMode, replyMessageMode } = useSelector(
+    ({ chats }) => chats
   );
+  const { startDialogRequest, setEditMessageMode, setReplyMessageMode } =
+    bindActionCreators(ActionsChats, useDispatch());
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
@@ -68,6 +68,15 @@ const UsersSearchInput = () => {
                 ) {
                   setEditMessageMode({
                     isEdit: false,
+                    messgae: {},
+                  });
+                }
+                if (
+                  replyMessageMode.isReply &&
+                  replyMessageMode.message.interlocutorId !== id
+                ) {
+                  setReplyMessageMode({
+                    isReply: false,
                     messgae: {},
                   });
                 }

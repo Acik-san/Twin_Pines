@@ -22,6 +22,7 @@ const ChatsPage = () => {
     subscribeChatsRequest,
     setEditMessageMode,
     setDeleteMessageMode,
+    setReplyMessageMode,
     setContextMenuTarget,
   } = bindActionCreators(ActionChat, useDispatch());
   useEffect(() => {
@@ -36,6 +37,7 @@ const ChatsPage = () => {
       setContextMenuTarget(null);
       setEditMessageMode({ isEdit: false, message: {} });
       setDeleteMessageMode({ isDelete: false, message: {} });
+      setReplyMessageMode({ isReply: false, message: {} });
     };
   }, []);
   useEffect(() => {

@@ -11,7 +11,7 @@ const socket = io(CONSTANTS.WS_BASE_URL, {
 socket.io.on('reconnect', () => {
   const {
     users: { user },
-    chats: { messagesPreview },
+    chats: { messagesPreview, currentDialog, messages, limit, offset },
   } = store.getState();
   if (user) {
     store.dispatch(
@@ -27,6 +27,25 @@ socket.io.on('reconnect', () => {
       })
     );
     store.dispatch(UserCreator.getOnlineUsersRequest());
+    store.dispatch(ChatCreator.getChatsOnReconnectRequest());
+    if (currentDialog) {
+      if (messages.length === 0) {
+        store.dispatch(
+          ChatCreator.getMessagesRequest({
+            id: currentDialog.interlocutorId,
+            limit,
+            offset,
+          })
+        );
+      } else {
+        store.dispatch(
+          ChatCreator.getMessagesOnReconnectRequest({
+            id: currentDialog.interlocutorId,
+            lastMessageDate: messages[messages.length - 1].createdAt,
+          })
+        );
+      }
+    }
   }
 });
 

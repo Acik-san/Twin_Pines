@@ -2,6 +2,7 @@ import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { CSSTransition } from 'react-transition-group';
+import { Skeleton } from '@mui/material';
 import { ConversationMessagesListPropTypes } from '../../propTypes';
 import { useContextMenu } from '../../hooks';
 import ContextMenu from '../ContextMenu';
@@ -14,6 +15,7 @@ import styles from './ConversationMessagesList.module.scss';
 const ConversationMessagesList = memo(props => {
   const { currentDialog } = props;
   const {
+    isMessagesFetching,
     messages,
     messagesPreview,
     limit,
@@ -163,38 +165,47 @@ const ConversationMessagesList = memo(props => {
             />
           </Confirm>
         </CSSTransition>
-        {messages.map(
-          (
-            {
-              _id,
-              body,
-              sender,
-              createdAt,
-              isRead,
-              isEdited,
-              conversation,
-              repliedMessage,
-            },
-            i
-          ) => (
-            <ConversationMessagesListItem
-              key={_id}
-              body={body}
-              sender={sender}
-              createdAt={createdAt}
-              typingStatus={typingStatus}
-              isRead={isRead}
-              isEdited={isEdited}
-              i={i}
-              observer={observer}
-              id={_id}
-              conversationId={conversation}
-              showContextMenu={showContextMenu}
-              repliedMessage={repliedMessage}
-              replyOn={replyOn}
-              setReplyOn={setReplyOn}
-              replyObserver={replyObserver}
-            />
+        {isMessagesFetching && messages.length === 0 ? (
+          <>
+            <Skeleton className={styles.message_body} />
+            <Skeleton className={styles.my_message_body} />
+            <Skeleton className={styles.message_body} />
+            <Skeleton className={styles.my_message_body} />
+          </>
+        ) : (
+          messages.map(
+            (
+              {
+                _id,
+                body,
+                sender,
+                createdAt,
+                isRead,
+                isEdited,
+                conversation,
+                repliedMessage,
+              },
+              i
+            ) => (
+              <ConversationMessagesListItem
+                key={_id}
+                body={body}
+                sender={sender}
+                createdAt={createdAt}
+                typingStatus={typingStatus}
+                isRead={isRead}
+                isEdited={isEdited}
+                i={i}
+                observer={observer}
+                id={_id}
+                conversationId={conversation}
+                showContextMenu={showContextMenu}
+                repliedMessage={repliedMessage}
+                replyOn={replyOn}
+                setReplyOn={setReplyOn}
+                replyObserver={replyObserver}
+              />
+            )
           )
         )}
       </ul>

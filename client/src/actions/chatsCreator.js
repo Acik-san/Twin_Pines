@@ -210,3 +210,31 @@ export const replyMessageError = error => ({
   type: ACTION_TYPES.REPLY_MESSAGE_ERROR,
   payload: { error },
 });
+//---------------------------------------
+//---------------------------------------
+export const getChatsOnReconnectRequest = () => ({
+  type: ACTION_TYPES.GET_CHATS_ON_RECONNECT_REQUEST,
+  payload: {},
+});
+export const getChatsOnReconnectSuccess = data => ({
+  type: ACTION_TYPES.GET_CHATS_ON_RECONNECT_SUCCESS,
+  payload: { data },
+});
+export const getChatsOnReconnectError = error => ({
+  type: ACTION_TYPES.GET_CHATS_ON_RECONNECT_ERROR,
+  payload: { error },
+});
+//---------------------------------------
+//---------------------------------------
+export const getMessagesOnReconnectRequest = data => ({
+  type: ACTION_TYPES.GET_MESSAGES_ON_RECONNECT_REQUEST,
+  payload: { data },
+});
+export const getMessagesOnReconnectSuccess = data => ({
+  type: ACTION_TYPES.GET_MESSAGES_ON_RECONNECT_SUCCESS,
+  payload: { data },
+});
+export const getMessagesOnReconnectError = error => ({
+  type: ACTION_TYPES.GET_MESSAGES_ON_RECONNECT_ERROR,
+  payload: { error },
+});
