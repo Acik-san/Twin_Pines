@@ -65,7 +65,6 @@ const ConversationMessagesList = memo(props => {
             }
           });
         },
-        { threshold: 1 }
       ),
     []
   );

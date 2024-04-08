@@ -7,7 +7,7 @@ import { ChatsPreviewPropTypes } from '../../propTypes';
 import Avatar from '../Avatar';
 import OnlineBadge from '../OnlineBadge';
 import TypingAnimation from '../TypingAnimation';
-import { calculateMessageDate } from '../../utils/usefulFunctions';
+import { calculateDate } from '../../utils/usefulFunctions';
 import * as ActionsChats from '../../actions/chatsCreator';
 import styles from './ChatsPreview.module.scss';
 
@@ -66,13 +66,13 @@ const ChatsPreview = props => {
         chooseCurrentChat({
           conversationId,
           interlocutorId: interlocutor.id,
-          login: interlocutor.login,
+          userName: interlocutor.userName,
           avatar: interlocutor.avatar,
         });
       }}
     >
       <Avatar
-        login={interlocutor.login}
+        userName={interlocutor.userName}
         avatar={interlocutor.avatar}
         onlineBadge={
           <OnlineBadge
@@ -96,7 +96,7 @@ const ChatsPreview = props => {
       />
       <div className={styles.preview}>
         <div className={styles.name_preview}>
-          <h3>{interlocutor.login}</h3>
+          <h3>{interlocutor.userName}</h3>
           {sender === user.id ? (
             <div
               className={classNames({
@@ -105,7 +105,7 @@ const ChatsPreview = props => {
               })}
             ></div>
           ) : null}
-          <p>{calculateMessageDate(createdAt)}</p>
+          <p>{calculateDate(createdAt, 'HH:mm', 'EEE', 'dd.MM.yy')}</p>
         </div>
         <div className={styles.body_wrapper}>
           {currentStatus === 'online' ? (

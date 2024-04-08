@@ -8,6 +8,7 @@ import { ConversationMessagesListItemPropTypes } from '../../propTypes';
 import TypingAnimation from '../TypingAnimation';
 import { getMessages } from '../../api';
 import * as ActionChat from '../../actions/chatsCreator';
+import * as ActionCreators from '../../actions/creators';
 import styles from './ConversationMessagesListItem.module.scss';
 
 const ConversationMessagesListItem = props => {
@@ -32,35 +33,39 @@ const ConversationMessagesListItem = props => {
   const { messages, currentDialog, limit, offset } = useSelector(
     ({ chats }) => chats
   );
-  const { setContextMenuTarget, getMessagesSuccess } = bindActionCreators(
-    ActionChat,
-    useDispatch()
-  );
+  const { setContextMenuTarget, getMessagesSuccess, getMessagesError } =
+    bindActionCreators(ActionChat, useDispatch());
+  const { cleanError } = bindActionCreators(ActionCreators, useDispatch());
 
   const handleRepliedMessageClick = async offset => {
-    let currentOffset = offset;
-    const repliedMessageElement = document.getElementById(repliedMessage._id);
-    if (repliedMessageElement) {
-      repliedMessageElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      });
-      setReplyOn(repliedMessage._id);
-    } else {
-      const {
-        data: {
-          data: { messages, haveMore },
-        },
-      } = await getMessages({
-        id: currentDialog.interlocutorId,
-        limit,
-        offset: currentOffset,
-      });
-      await getMessagesSuccess({ messages, haveMore });
-      if (haveMore) {
-        currentOffset += messages.length;
-        handleRepliedMessageClick(currentOffset);
+    try {
+      let currentOffset = offset;
+      const repliedMessageElement = document.getElementById(repliedMessage._id);
+      if (repliedMessageElement) {
+        repliedMessageElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+        setReplyOn(repliedMessage._id);
+      } else {
+        const {
+          data: {
+            data: { messages, haveMore },
+          },
+        } = await getMessages({
+          id: currentDialog.interlocutorId,
+          limit,
+          offset: currentOffset,
+        });
+        await getMessagesSuccess({ messages, haveMore });
+        if (haveMore) {
+          currentOffset += messages.length;
+          handleRepliedMessageClick(currentOffset);
+        }
       }
+    } catch (err) {
+      console.log(err);
+      await getMessagesError(err);
     }
   };
 
@@ -143,8 +148,8 @@ const ConversationMessagesListItem = props => {
                   {repliedMessage.sender && (
                     <h3 className={styles.sender_name}>
                       {repliedMessage.sender === user.id
-                        ? user.login
-                        : currentDialog.login}
+                        ? user.userName
+                        : currentDialog.userName}
                     </h3>
                   )}
                   {repliedMessage.body ? (

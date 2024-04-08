@@ -12,6 +12,35 @@ export const refresh = refreshToken =>
   httpClient.post('auth/refresh', { refreshToken });
 export const getAuthUser = () => httpClient.get('auth');
 
+export const getUserProfile = ({ userName }) =>
+  httpClient.get(`profile/${userName}`);
+export const getUserFollowers = ({
+  userName,
+  subscriptionsLimit,
+  subscriptionsOffset,
+}) =>
+  httpClient.get(
+    `profile/${userName}/followers?${qs.stringify({
+      subscriptionsLimit,
+      subscriptionsOffset,
+    })}`
+  );
+export const getUserFollowing = ({
+  userName,
+  subscriptionsLimit,
+  subscriptionsOffset,
+}) =>
+  httpClient.get(
+    `profile/${userName}/following?${qs.stringify({
+      subscriptionsLimit,
+      subscriptionsOffset,
+    })}`
+  );
+export const subscribeUser = ({ targetId }) =>
+  httpClient.post(`profile/${targetId}/subscribe`);
+export const unsubscribeUser = ({ targetId }) =>
+  httpClient.delete(`profile/${targetId}/subscribe`);
+
 export const updateUser = data => {
   const form = new FormData();
   form.append(Object.keys(data.values)[0], Object.values(data.values)[0]);
@@ -27,4 +56,6 @@ export const getUsers = () => httpClient.get('chats/users');
 export const getMessages = ({ id, limit, offset }) =>
   httpClient.get(`chats/chat/${id}?${qs.stringify({ limit, offset })}`);
 export const getMessagesOnReconnect = ({ data: { id, lastMessageDate } }) =>
-  httpClient.get(`chats/chat/${id}/reconnect?${qs.stringify({ lastMessageDate })}`);
+  httpClient.get(
+    `chats/chat/${id}/reconnect?${qs.stringify({ lastMessageDate })}`
+  );

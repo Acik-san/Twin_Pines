@@ -1,6 +1,9 @@
+const { User, Subscription } = require('../../models');
 const {
   SOCKET_EVENTS: {
     SET_ONLINE_STATUS,
+    SUBSCRIBE_USER_PROFILE,
+    UNSUBSCRIBE_USER_PROFILE,
     ONLINE_STATUS,
     GET_ONLINE_USERS,
     ONLINE_USERS,
@@ -11,14 +14,28 @@ const {
 } = require('../../constants');
 
 module.exports.setOnlineStatus = (socket, users) =>
-  socket.on(SET_ONLINE_STATUS, ({ userId, status }) => {
+  socket.on(SET_ONLINE_STATUS, async ({ userId, status }) => {
     if (!users.has(socket.id) && status === ONLINE) {
       users.set(socket.id, userId);
+      await User.update({ onlineStatus: status }, { where: { id: userId } });
     }
     if (users.has(socket.id) && status === OFFLINE) {
       users.delete(socket.id);
+      await User.update(
+        { onlineStatus: status, lastSeen: new Date() },
+        { where: { id: userId } }
+      );
     }
-    socket.broadcast.emit(ONLINE_STATUS, { userId, status });
+    socket.to(userId).emit(ONLINE_STATUS, { userId, status });
+  });
+
+module.exports.subscribeUserProfile = socket =>
+  socket.on(SUBSCRIBE_USER_PROFILE, ({ userId }) => {
+    socket.join(userId);
+  });
+module.exports.unsubscribeUserProfile = socket =>
+  socket.on(UNSUBSCRIBE_USER_PROFILE, ({ userId }) => {
+    socket.leave(userId);
   });
 
 module.exports.getOnlineUsers = (socket, users) =>
@@ -31,16 +48,20 @@ module.exports.getOnlineUsers = (socket, users) =>
   });
 
 module.exports.disconnect = (socket, users) =>
-  socket.on(DISCONNECT, reason => {
+  socket.on(DISCONNECT, async reason => {
     if (users.has(socket.id)) {
       socket.broadcast.emit(TYPING_STATUS, {
         status: false,
         userId: users.get(socket.id),
       });
-      socket.broadcast.emit(ONLINE_STATUS, {
+      socket.to(users.get(socket.id)).emit(ONLINE_STATUS, {
         userId: users.get(socket.id),
         status: OFFLINE,
       });
+      await User.update(
+        { onlineStatus: OFFLINE, lastSeen: new Date() },
+        { where: { id: users.get(socket.id) } }
+      );
       users.delete(socket.id);
     }
     console.log(reason);

@@ -5,7 +5,7 @@ import CONSTANTS from '../../constants';
 
 const Avatar = props => {
   const {
-    login,
+    userName,
     avatar,
     onlineBadge,
     classes: { photoWrapper, photoInner, photoInnerImg },
@@ -14,10 +14,10 @@ const Avatar = props => {
     <div className={photoWrapper}>
       <div
         className={photoInner}
-        style={{ backgroundColor: stringToColour(`${login}`) }}
+        style={{ backgroundColor: stringToColour(`${userName}`) }}
       >
         {onlineBadge}
-        {getInitials([login])}
+        {getInitials([userName])}
       </div>
       <img
         alt='avatar'

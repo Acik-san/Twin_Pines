@@ -24,9 +24,12 @@ const Header = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    API.unSubscribeChats({
+    API.unsubscribeChats({
       userId: user.id,
-      conversations: messagesPreview.map(({ _id }) => _id),
+      conversations: messagesPreview.map(({ _id, interlocutor: { id } }) => ({
+        conversationId: _id,
+        interlocutorId: id,
+      })),
     });
     setOnlineStatusRequest({ userId: user.id, status: 'offline' });
     logoutSuccess(window.localStorage.getItem(CONSTANTS.REFRESH_TOKEN));
@@ -78,7 +81,7 @@ const Header = () => {
                 return type === 'link' ? (
                   <NavLink
                     key={id}
-                    to={path}
+                    to={name === 'profile' ? `${path}/${user.userName}` : path}
                     className={classNames(
                       styles['menu-item'],
                       styles.list_item_link,

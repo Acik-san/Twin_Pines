@@ -41,7 +41,6 @@ export function* getChatsSaga (action) {
 export function* subscribeChatsSaga (action) {
   try {
     yield WsApi.subscribeChats(action.payload);
-    // yield put(ActionsChats.createMessageSuccess(message));
   } catch (error) {
     yield put(ActionsChats.subscribeChatsError(error));
   }
@@ -71,7 +70,7 @@ export function* setSeenMessageSaga (action) {
 }
 
 export function* startDialogSaga (action) {
-  const { userId, interlocutorId, login, avatar } = action.payload;
+  const { userId, interlocutorId, userName, avatar } = action.payload;
   try {
     const {
       data: {
@@ -82,7 +81,7 @@ export function* startDialogSaga (action) {
       ActionsChats.startDialogSuccess({
         conversationId: conversation,
         interlocutorId,
-        login,
+        userName,
         avatar,
       })
     );

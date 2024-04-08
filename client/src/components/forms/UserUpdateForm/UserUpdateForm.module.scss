@@ -17,6 +17,7 @@
 .cropper,
 .form {
   @include user_card;
+  width: 85%;
   display: block;
   position: absolute;
 }

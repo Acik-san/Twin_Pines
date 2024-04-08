@@ -1,43 +1,80 @@
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useParams, useNavigate } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 import { useSettingsForUser, useIsFirstRender } from '../../hooks';
-import classNames from 'classnames';
-import Avatar from '../Avatar';
-import UserProfileSettings from '../UserProfileSettings';
+import SkeletonProfile from '../SkeletonProfile';
+import Profile from '../Profile';
+import * as ActionUser from '../../actions/userCreators';
+import * as Action from '../../actions/creators';
 import 'react-toastify/dist/ReactToastify.css';
 import styles from './UserProfile.module.scss';
 
 const UserProfile = () => {
-  const {
-    isEdit,
-    name,
-    value,
-    type,
-    containerRef,
-    editProfile,
-    handleSetting,
-  } = useSettingsForUser();
+  const { isEdit, name, value, type, editProfile, handleSetting } =
+    useSettingsForUser();
   const isFirstRender = useIsFirstRender();
+  const navigate = useNavigate();
 
-  const { user, error } = useSelector(({ users }) => users);
+  const { userName } = useParams();
+
+  const { user, isFetchingProfile, userProfile, error } = useSelector(
+    ({ users }) => users
+  );
+  const {
+    getUserRequest,
+    cleanUserProfile,
+    subscribeUserProfileRequest,
+    unsubscribeUserProfileRequest,
+  } = bindActionCreators(ActionUser, useDispatch());
+  const { cleanUserError } = bindActionCreators(Action, useDispatch());
 
   useEffect(() => {
-    if (!isFirstRender && error?.status === 409) {
-      toast.error(error?.message);
+    if (userName !== user.userName) {
+      getUserRequest(userName);
     }
+    return () => {
+      if (userName !== user.userName) {
+        cleanUserProfile();
+      }
+    };
+  }, [userName]);
+
+  useEffect(() => {
+    if (error?.status === 404) {
+      navigate(`/profile/${user.userName}` /*{ replace: true }*/);
+    }
+    return () => {
+      if (error?.status === 404) {
+        cleanUserError();
+      }
+    };
   }, [error]);
+
   useEffect(() => {
-    if (!isFirstRender) {
-      toast.success(`Your ${name} has changed successfully`);
+    if (userProfile) {
+      subscribeUserProfileRequest(userProfile.id);
     }
-  }, [user]);
+    return () => {
+      if (userProfile) {
+        unsubscribeUserProfileRequest(userProfile.id);
+      }
+    };
+  }, [userProfile?.id]);
+
+  // useEffect(() => {
+  //   if (!isFirstRender && error?.status === 409) {
+  //     toast.error(error?.message);
+  //   }
+  // }, [error]);
+  // useEffect(() => {
+  //   if (!isFirstRender) {
+  //     toast.success(`Your ${name} has changed successfully`);
+  //   }
+  // }, [user]);
   return (
-    <section
-      className={classNames(styles.section, {
-        [styles.section_background_dark]: isEdit,
-      })}
-    >
+    <section className={styles.section}>
       <ToastContainer
         position='top-center'
         autoClose={5000}
@@ -50,22 +87,21 @@ const UserProfile = () => {
         pauseOnHover
         theme='light'
       />
-      <article className={styles.user_card} ref={containerRef}>
-        <Avatar
-          login={user.login}
-          avatar={user.avatar}
-          classes={{
-            photoWrapper: styles.photo_wrapper,
-            photoInner: styles.photo_inner,
-            photoInnerImg: styles.photo_inner_img,
+      {isFetchingProfile ? (
+        <SkeletonProfile />
+      ) : (
+        <Profile
+          userData={userProfile ? userProfile : user}
+          profileSettings={{
+            isEdit,
+            name,
+            value,
+            type,
+            editProfile,
+            handleSetting,
           }}
         />
-        <h3 className={styles.login}>{user.login}</h3>
-        <UserProfileSettings
-          user={user}
-          settings={{ isEdit, name, value, type, editProfile, handleSetting }}
-        />
-      </article>
+      )}
     </section>
   );
 };

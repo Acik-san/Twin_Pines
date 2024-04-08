@@ -9,10 +9,14 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      login: {
+      userName: {
         type: Sequelize.STRING,
+        field: 'user_name',
         allowNull: false,
         unique: true,
+      },
+      name: {
+        type: Sequelize.STRING,
       },
       email: {
         type: Sequelize.STRING,
@@ -29,6 +33,19 @@ module.exports = {
         allowNull: false,
         defaultValue: 'anon.png',
       },
+      onlineStatus: {
+        field: 'online_status',
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'offline',
+      },
+      lastSeen: {
+        field: 'last_seen',
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: new Date(),
+      },
+      bio: { type: Sequelize.STRING },
       createdAt: {
         field: 'created_at',
         allowNull: false,

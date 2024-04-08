@@ -11,7 +11,7 @@ const useDataForAuthForm = formType => {
           password: '',
         }
       : {
-          login: '',
+          userName: '',
           email: '',
           password: '',
           confirmPassword: '',

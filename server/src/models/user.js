@@ -17,6 +17,19 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.RefreshToken, {
         foreignKey: 'userId',
       });
+      User.belongsToMany(models.User, {
+        as: 'Subscriber',
+        through: 'subscriptions',
+        foreignKey: 'subscriberId',
+        otherKey: 'targetId',
+      });
+
+      User.belongsToMany(models.User, {
+        as: 'Target',
+        through: 'subscriptions',
+        foreignKey: 'targetId',
+        otherKey: 'subscriberId',
+      });
     }
     async comparePassword (password) {
       return bcrypt.compare(password, this.getDataValue('password'));
@@ -24,12 +37,14 @@ module.exports = (sequelize, DataTypes) => {
   }
   User.init(
     {
-      login: {
+      userName: {
         type: DataTypes.STRING,
+        field: 'user_name',
         allowNull: false,
         unique: true,
         validate: { notEmpty: true, notNull: true },
       },
+      name: { type: DataTypes.STRING },
       email: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -47,6 +62,19 @@ module.exports = (sequelize, DataTypes) => {
         validate: { notEmpty: true, notNull: true },
         defaultValue: 'anon.png',
       },
+      onlineStatus: {
+        field: 'online_status',
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'offline',
+      },
+      lastSeen: {
+        field: 'last_seen',
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: new Date(),
+      },
+      bio: { type: DataTypes.STRING },
     },
     {
       sequelize,

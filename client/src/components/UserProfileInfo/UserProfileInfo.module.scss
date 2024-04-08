@@ -1,0 +1,144 @@
+@import '../../common/styles/breakpoints';
+@import '../../common/styles/templates';
+@import '../../common/styles/colors';
+
+// @media screen and (min-width: 300px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 0;
+  }
+  .photo_wrapper {
+    @include photo_wrapper;
+    margin: 0;
+    width: 80px;
+    height: 80px;
+  }
+  .photo_inner {
+    @include photo_inner;
+    border-radius: 4px/6.7px;
+    width: 80px;
+    height: 80px;
+  }
+  .photo_inner_img {
+    @include photo_inner_img;
+    border-radius: 4px/6.7px;
+    width: 80px;
+    height: 80px;
+  }
+  .user_info_wrapper {
+    width: 100%;
+    margin-left: 0px;
+  }
+  .userName {
+    @include userName;
+    max-width: 468px;
+    font-size: 17px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+  }
+  .name {
+    max-width: 468px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    font-size: 13px;
+  }
+  .bio {
+    margin-top: 5px;
+    max-width: 468px;
+    max-height: 100px;
+    height: 100%;
+    overflow: hidden;
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+    text-align: left;
+    font-size: 11px;
+  }
+// }
+
+@media screen and (min-width: 375px) {
+  .container {
+    align-items: flex-start;
+  }
+  .userName {
+    text-align: initial;
+  }
+  .name {
+    text-align: initial;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .photo_wrapper {
+    width: 100px;
+    height: 100px;
+  }
+  .photo_inner {
+    width: 100px;
+    height: 100px;
+  }
+  .photo_inner_img {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .container {
+    flex-direction: row;
+    // height: 234px;
+  }
+  .photo_wrapper {
+    width: 145px;
+    height: 145px;
+  }
+  .photo_inner {
+    width: 145px;
+    height: 145px;
+  }
+  .photo_inner_img {
+    width: 145px;
+    height: 145px;
+  }
+  .user_info_wrapper {
+    width: auto;
+    margin-left: 20px;
+  }
+  .userName {
+    font-size: 17px;
+  }
+  .name {
+    font-size: 15px;
+  }
+  .bio {
+    font-size: 13px;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .photo_wrapper {
+    width: 164px;
+    height: 164px;
+  }
+  .photo_inner {
+    width: 164px;
+    height: 164px;
+  }
+  .photo_inner_img {
+    width: 164px;
+    height: 164px;
+  }
+  .userName {
+    font-size: 18px;
+  }
+  .name {
+    font-size: 16px;
+  }
+  .bio {
+    font-size: 14px;
+  }
+}

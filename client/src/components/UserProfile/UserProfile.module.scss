@@ -7,45 +7,9 @@
   margin-top: 0;
   height: 100vh;
 }
-.section_background_dark {
-  background-color: #0000003d;
-  position: relative;
-  z-index: 100;
-}
-
-.user_card {
-  @include user_card;
-  width: 350px;
-  margin-top: 110px;
-  position: relative;
-}
-
-.photo_wrapper {
-  @include photo_wrapper;
-}
-.photo_inner {
-  @include photo_inner;
-}
-.photo_inner_img {
-  @include photo_inner_img;
-}
-.login {
-  @include login;
-}
 
 @media screen and (max-width: 767px) {
   .section {
     min-height: 463px;
-  }
-}
-@media screen and (max-width: 320px) {
-  .user_card {
-    width: 300px;
-  }
-  .photo_wrapper,
-  .photo_inner,
-  .photo_inner_img {
-    width: 90px;
-    height: 90px;
   }
 }

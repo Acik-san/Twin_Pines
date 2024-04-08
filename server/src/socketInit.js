@@ -1,12 +1,14 @@
 const socketServer = require('socket.io');
 const {
   setOnlineStatus,
+  subscribeUserProfile,
+  unsubscribeUserProfile,
   getOnlineUsers,
   disconnect,
 } = require('./controllers/sockets/userController');
 const {
   subscribeChats,
-  unSubscribeChats,
+  unsubscribeChats,
   startTyping,
   stopTyping,
   sendMessage,
@@ -31,9 +33,11 @@ module.exports.createConnection = httpServer => {
 
   io.on(CONNECT, socket => {
     setOnlineStatus(socket, users);
+    subscribeUserProfile(socket);
+    unsubscribeUserProfile(socket);
     getOnlineUsers(socket, users);
     subscribeChats(socket);
-    unSubscribeChats(socket);
+    unsubscribeChats(socket);
     startTyping(socket);
     stopTyping(socket);
     sendMessage(socket);

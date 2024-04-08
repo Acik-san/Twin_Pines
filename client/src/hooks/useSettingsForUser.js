@@ -1,14 +1,10 @@
-import { useRef, useState } from 'react';
-import { useClickOutside } from './index';
+import { useState } from 'react';
 
 const useSettingsForUser = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [name, setName] = useState('');
   const [value, setValue] = useState('');
   const [type, setType] = useState('');
-  const containerRef = useRef(null);
-
-  useClickOutside(containerRef, () => setIsEdit(false));
 
   const editProfile = () => {
     setIsEdit(!isEdit);
@@ -24,7 +20,6 @@ const useSettingsForUser = () => {
     name,
     value,
     type,
-    containerRef,
     editProfile,
     handleSetting,
   };

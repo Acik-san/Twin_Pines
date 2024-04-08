@@ -41,8 +41,8 @@ httpClient.interceptors.response.use(
   async err => {
     const refreshToken = window.localStorage.getItem(CONSTANTS.REFRESH_TOKEN);
     if (
-      (err.response.status === 408 && refreshToken) ||
-      (err.response.status === 401 && refreshToken)
+      (err.response?.status === 408 && refreshToken) ||
+      (err.response?.status === 401 && refreshToken)
     ) {
       const {
         data: {

@@ -24,6 +24,7 @@
 }
 .avatar_icon,
 .user_icon,
+.name_icon,
 .email_icon,
 .password_icon {
   // position: relative;
@@ -43,6 +44,11 @@
 .user_icon {
   &::after {
     content: url('../../../public/static/images/svg/user-icon.svg');
+  }
+}
+.name_icon {
+  &::after {
+    content: url('../../../public/static/images/svg/name-icon.svg');
   }
 }
 .email_icon {

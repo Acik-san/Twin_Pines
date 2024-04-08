@@ -2,7 +2,7 @@ import { isValidElement } from 'react';
 import PropTypes from 'prop-types';
 
 const AvatarPropTypes = {
-  login: PropTypes.string.isRequired,
+  userName: PropTypes.string.isRequired,
   avatar: PropTypes.string.isRequired,
   onlineBadge: (props, propName, componentName) => {
     if (props[propName] === undefined || props[propName] === null) {

@@ -50,33 +50,33 @@ export const getChatsError = error => ({
 export const chooseCurrentChat = ({
   conversationId,
   interlocutorId,
-  login,
+  userName,
   avatar,
 }) => ({
   type: ACTION_TYPES.CHOOSE_CURRENT_CHAT,
-  payload: { conversationId, interlocutorId, login, avatar },
+  payload: { conversationId, interlocutorId, userName, avatar },
 });
 //---------------------------------------
 //---------------------------------------
 export const startDialogRequest = ({
   userId,
   interlocutorId,
-  login,
+  userName,
   avatar,
 }) => ({
   type: ACTION_TYPES.START_DIALOG_REQUEST,
-  payload: { userId, interlocutorId, login, avatar },
+  payload: { userId, interlocutorId, userName, avatar },
 });
 //---------------------------------------
 //---------------------------------------
 export const startDialogSuccess = ({
   conversationId,
   interlocutorId,
-  login,
+  userName,
   avatar,
 }) => ({
   type: ACTION_TYPES.START_DIALOG_SUCCESS,
-  payload: { conversationId, interlocutorId, login, avatar },
+  payload: { conversationId, interlocutorId, userName, avatar },
 });
 //---------------------------------------
 //---------------------------------------

@@ -32,8 +32,8 @@ const UsersSearchInput = () => {
     };
   }, []);
   const filteredUsers = users.filter(
-    ({ id, login }) =>
-      id !== user.id && login.toLowerCase().includes(searchTerm.toLowerCase())
+    ({ id, userName }) =>
+      id !== user.id && userName.toLowerCase().includes(searchTerm.toLowerCase())
   );
   const handleFocus = () => {
     setSearchResults(filteredUsers);
@@ -57,7 +57,7 @@ const UsersSearchInput = () => {
       />
       {showResults && (
         <ul className={styles.search_results}>
-          {searchResults.map(({ id, login, avatar, status }) => (
+          {searchResults.map(({ id, userName, avatar, status }) => (
             <li
               key={id}
               onClick={() => {
@@ -83,13 +83,13 @@ const UsersSearchInput = () => {
                 startDialogRequest({
                   userId: user.id,
                   interlocutorId: id,
-                  login,
+                  userName,
                   avatar,
                 });
               }}
             >
               <Avatar
-                login={login}
+                userName={userName}
                 avatar={avatar}
                 classes={{
                   photoWrapper: styles.photo_wrapper,
@@ -98,7 +98,7 @@ const UsersSearchInput = () => {
                 }}
               />
               <div className={styles['text-container']}>
-                <h3>{login}</h3>
+                <h3>{userName}</h3>
                 <p>{status}</p>
               </div>
             </li>

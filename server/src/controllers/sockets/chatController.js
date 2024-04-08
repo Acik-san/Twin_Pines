@@ -22,14 +22,18 @@ const {
 module.exports.subscribeChats = socket =>
   socket.on(SUBSCRIBE_CHATS, ({ userId, conversations }) => {
     socket.join(userId);
-    conversations.forEach(conversation => {
-      socket.join(conversation);
+    conversations.forEach(({ conversationId, interlocutorId }) => {
+      socket.join(conversationId);
+      socket.join(interlocutorId);
     });
   });
-module.exports.unSubscribeChats = socket =>
+module.exports.unsubscribeChats = socket =>
   socket.on(UNSUBSCRIBE_CHATS, ({ userId, conversations }) => {
     socket.leave(userId);
-    conversations.forEach(conversation => socket.leave(conversation));
+    conversations.forEach(({ conversationId, interlocutorId }) => {
+      socket.leave(conversationId);
+      socket.leave(interlocutorId);
+    });
   });
 module.exports.startTyping = socket =>
   socket.on(START_TYPING, conversationId => {
@@ -87,7 +91,7 @@ module.exports.sendMessage = socket =>
         where: {
           id: participants,
         },
-        attributes: ['id', 'login', 'email', 'avatar'],
+        attributes: ['id', 'userName', 'email', 'avatar'],
       });
       const preview = {
         _id: newConversation._id,
