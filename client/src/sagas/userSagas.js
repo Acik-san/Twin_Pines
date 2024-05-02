@@ -124,6 +124,14 @@ export function* setOnlineStatusSaga (action) {
   }
 }
 
+export function* getOnlineStatusSaga (action) {
+  try {
+    yield WsApi.getOnlineStatus(action.payload);
+  } catch (error) {
+    yield put(ActionsUser.getOnlineStatusError(error));
+  }
+}
+
 export function* subscribeUserProfileSaga (action) {
   try {
     yield WsApi.subscribeUserProfile(action.payload);

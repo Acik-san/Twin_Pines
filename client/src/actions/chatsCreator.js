@@ -52,9 +52,18 @@ export const chooseCurrentChat = ({
   interlocutorId,
   userName,
   avatar,
+  onlineStatus,
+  lastSeen,
 }) => ({
   type: ACTION_TYPES.CHOOSE_CURRENT_CHAT,
-  payload: { conversationId, interlocutorId, userName, avatar },
+  payload: {
+    conversationId,
+    interlocutorId,
+    userName,
+    avatar,
+    onlineStatus,
+    lastSeen,
+  },
 });
 //---------------------------------------
 //---------------------------------------
@@ -237,4 +246,10 @@ export const getMessagesOnReconnectSuccess = data => ({
 export const getMessagesOnReconnectError = error => ({
   type: ACTION_TYPES.GET_MESSAGES_ON_RECONNECT_ERROR,
   payload: { error },
+});
+//---------------------------------------
+//---------------------------------------
+export const setChatInfoOpen = isChatInfoOpen => ({
+  type: ACTION_TYPES.SET_CHAT_INFO_OPEN,
+  payload: { isChatInfoOpen },
 });

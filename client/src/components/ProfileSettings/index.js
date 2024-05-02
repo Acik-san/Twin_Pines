@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useClickOutside } from '../../hooks';
+import { ProfileSettingsPropTypes } from '../../propTypes';
 import Avatar from '../Avatar';
 import UserProfileSettings from '../UserProfileSettings';
 import styles from './ProfileSettings.module.scss';
@@ -28,5 +29,7 @@ const ProfileSettings = props => {
     </div>
   );
 };
+
+ProfileSettings.propTypes = ProfileSettingsPropTypes;
 
 export default ProfileSettings;

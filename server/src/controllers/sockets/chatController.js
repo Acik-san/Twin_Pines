@@ -23,6 +23,7 @@ module.exports.subscribeChats = socket =>
   socket.on(SUBSCRIBE_CHATS, ({ userId, conversations }) => {
     socket.join(userId);
     conversations.forEach(({ conversationId, interlocutorId }) => {
+      console.log(userId,conversationId, interlocutorId);
       socket.join(conversationId);
       socket.join(interlocutorId);
     });
@@ -37,6 +38,7 @@ module.exports.unsubscribeChats = socket =>
   });
 module.exports.startTyping = socket =>
   socket.on(START_TYPING, conversationId => {
+    console.log(conversationId)
     socket
       .to(conversationId)
       .emit(TYPING_STATUS, { status: true, conversationId });
@@ -91,7 +93,7 @@ module.exports.sendMessage = socket =>
         where: {
           id: participants,
         },
-        attributes: ['id', 'userName', 'email', 'avatar'],
+        attributes: ['id', 'userName', 'avatar', 'onlineStatus', 'lastSeen'],
       });
       const preview = {
         _id: newConversation._id,
@@ -104,7 +106,6 @@ module.exports.sendMessage = socket =>
         isTyping: false,
         isRead: message.isRead,
       };
-
       if (!conversations.includes(newConversation._id.toString())) {
         socket.join(newConversation._id.toString());
       }

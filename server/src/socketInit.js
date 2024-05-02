@@ -1,6 +1,7 @@
 const socketServer = require('socket.io');
 const {
   setOnlineStatus,
+  getOnlineStatus,
   subscribeUserProfile,
   unsubscribeUserProfile,
   getOnlineUsers,
@@ -33,6 +34,7 @@ module.exports.createConnection = httpServer => {
 
   io.on(CONNECT, socket => {
     setOnlineStatus(socket, users);
+    getOnlineStatus(socket);
     subscribeUserProfile(socket);
     unsubscribeUserProfile(socket);
     getOnlineUsers(socket, users);

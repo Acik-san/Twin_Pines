@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { UserSubscriptionInfoPropTypes } from '../../propTypes';
 import Button from '../Button';
 import * as ActionUser from '../../actions/userCreators';
 import styles from './UserSubscriptionInfo.module.scss';
@@ -74,6 +75,7 @@ const UserSubscriptionInfo = props => {
             )}
             <Button
               buttonName='...'
+              onClick={() => {}}
               className={styles.options_button}
             />
           </>
@@ -82,5 +84,7 @@ const UserSubscriptionInfo = props => {
     </div>
   );
 };
+
+UserSubscriptionInfo.propTypes = UserSubscriptionInfoPropTypes;
 
 export default UserSubscriptionInfo;

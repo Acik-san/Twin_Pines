@@ -2,9 +2,11 @@ const { User, Subscription } = require('../../models');
 const {
   SOCKET_EVENTS: {
     SET_ONLINE_STATUS,
+    GET_ONLINE_STATUS,
     SUBSCRIBE_USER_PROFILE,
     UNSUBSCRIBE_USER_PROFILE,
     ONLINE_STATUS,
+    GET_ONLINE_STATUS_INFO,
     GET_ONLINE_USERS,
     ONLINE_USERS,
     TYPING_STATUS,
@@ -27,6 +29,25 @@ module.exports.setOnlineStatus = (socket, users) =>
       );
     }
     socket.to(userId).emit(ONLINE_STATUS, { userId, status });
+  });
+module.exports.getOnlineStatus = socket =>
+  socket.on(GET_ONLINE_STATUS, async ({ userId }) => {
+    const onlineStatusInfo = await User.findByPk(userId, {
+      attributes: {
+        exclude: [
+          'id',
+          'userName',
+          'name',
+          'email',
+          'password',
+          'avatar',
+          'bio',
+          'createdAt',
+          'updatedAt',
+        ],
+      },
+    });
+    socket.emit(GET_ONLINE_STATUS_INFO, onlineStatusInfo.dataValues);
   });
 
 module.exports.subscribeUserProfile = socket =>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { UserProfileInfoPropTypes } from '../../propTypes';
 import Avatar from '../Avatar';
 import styles from './UserProfileInfo.module.scss';
 
@@ -23,5 +24,7 @@ const UserProfileInfo = props => {
     </div>
   );
 };
+
+UserProfileInfo.propTypes = UserProfileInfoPropTypes
 
 export default UserProfileInfo;

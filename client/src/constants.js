@@ -34,7 +34,9 @@ const CONSTANTS = {
     STOP_TYPING: 'STOP_TYPING',
     TYPING_STATUS: 'TYPING_STATUS',
     SET_ONLINE_STATUS: 'SET_ONLINE_STATUS',
+    GET_ONLINE_STATUS: 'GET_ONLINE_STATUS',
     ONLINE_STATUS: 'ONLINE_STATUS',
+    GET_ONLINE_STATUS_INFO: 'GET_ONLINE_STATUS_INFO',
     GET_ONLINE_USERS: 'GET_ONLINE_USERS',
     ONLINE_USERS: 'ONLINE_USERS',
     SET_SEEN_MESSAGE: 'SET_SEEN_MESSAGE',
@@ -143,6 +145,13 @@ const CONSTANTS = {
       propName: 'delete',
       propIcon: '/static/images/svg/delete.svg',
       onlyForUser: true,
+    },
+  ],
+  CHAT_INFO: [
+    {
+      id: 1,
+      iconName: 'profile_icon',
+      propertyName: 'Go to profile',
     },
   ],
 };

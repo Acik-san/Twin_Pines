@@ -5,17 +5,15 @@ import FixedBackground from '../../components/FixedBackground';
 import Header from '../../components/Header';
 import Chats from '../../components/Chats';
 import Conversation from '../../components/Conversation';
+import ChatInfo from '../../components/ChatInfo';
 import * as ActionUser from '../../actions/userCreators';
 import * as ActionChat from '../../actions/chatsCreator';
 import styles from './ChatsPage.module.scss';
 
 const ChatsPage = () => {
   const { user, users } = useSelector(({ users }) => users);
-  const { messagesPreview } = useSelector(({ chats }) => chats);
-  const { getUsersRequest, getOnlineUsersRequest } = bindActionCreators(
-    ActionUser,
-    useDispatch()
-  );
+  const { messagesPreview, isChatInfoOpen } = useSelector(({ chats }) => chats);
+  const { getUsersRequest } = bindActionCreators(ActionUser, useDispatch());
   const {
     getChatsRequest,
     clearCurrentChat,
@@ -24,6 +22,7 @@ const ChatsPage = () => {
     setDeleteMessageMode,
     setReplyMessageMode,
     setContextMenuTarget,
+    setChatInfoOpen,
   } = bindActionCreators(ActionChat, useDispatch());
   useEffect(() => {
     if (users.length === 0) {
@@ -38,6 +37,7 @@ const ChatsPage = () => {
       setEditMessageMode({ isEdit: false, message: {} });
       setDeleteMessageMode({ isDelete: false, message: {} });
       setReplyMessageMode({ isReply: false, message: {} });
+      setChatInfoOpen(false);
     };
   }, []);
   useEffect(() => {
@@ -49,7 +49,6 @@ const ChatsPage = () => {
           interlocutorId: id,
         })),
       });
-      getOnlineUsersRequest(user.id);
     }
   }, [messagesPreview.length]);
   return (
@@ -60,6 +59,7 @@ const ChatsPage = () => {
         <Chats />
         <Conversation />
       </section>
+      {isChatInfoOpen ? <ChatInfo /> : null}
     </>
   );
 };

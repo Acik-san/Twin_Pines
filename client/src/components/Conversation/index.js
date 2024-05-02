@@ -1,26 +1,38 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { bindActionCreators } from 'redux';
+import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { useTypingStatus } from '../../hooks';
 import ConversationInfo from '../ConversationInfo';
 import ConversationMessagesList from '../ConversationMessagesList';
 import ConversationForm from '../forms/ConversationForm';
+import * as ActionUser from '../../actions/userCreators';
 import styles from './Conversation.module.scss';
 
 const Conversation = () => {
-  const { textArea, dialog, setTypingStatus, setTouchedStatus } =
-    useTypingStatus();
+  const { currentDialog } = useSelector(({ chats }) => chats);
+  const { getOnlineStatusRequest } = bindActionCreators(
+    ActionUser,
+    useDispatch()
+  );
+  const { textArea, setTypingStatus, setTouchedStatus } = useTypingStatus();
+  useEffect(() => {
+    if (currentDialog !== null && !currentDialog.onlineStatus) {
+      getOnlineStatusRequest(currentDialog.interlocutorId);
+    }
+  }, [currentDialog]);
   return (
     <div
       className={classNames(styles.container, {
-        [styles.none]: !dialog,
+        [styles.none]: !currentDialog,
       })}
     >
-      {dialog && (
+      {currentDialog && (
         <>
-          <ConversationInfo currentDialog={dialog} />
-          <ConversationMessagesList currentDialog={dialog} />
+          <ConversationInfo currentDialog={currentDialog} />
+          <ConversationMessagesList currentDialog={currentDialog} />
           <ConversationForm
-            currentDialog={dialog}
+            currentDialog={currentDialog}
             textArea={textArea}
             setIsTyping={setTypingStatus}
             setIsTouched={setTouchedStatus}

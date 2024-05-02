@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Skeleton } from '@mui/material';
+import { ProfilePropTypes } from '../../propTypes';
 import UserProfileInfo from '../UserProfileInfo';
 import UserSubscriptionInfo from '../UserSubscriptionInfo';
 import UserProfileContent from '../UserProfileContent';
@@ -51,5 +52,7 @@ const Profile = props => {
     </>
   );
 };
+
+Profile.propTypes = ProfilePropTypes;
 
 export default Profile;

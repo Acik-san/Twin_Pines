@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as ActionChat from '../actions/chatsCreator';
@@ -14,7 +14,6 @@ const useTypingStatus = () => {
   const [isTouched, setIsTouched] = useState(false);
   const textArea = useRef(null);
 
-  const dialog = useMemo(() => currentDialog, [currentDialog]);
   const setTypingStatus = useCallback(status => setIsTyping(status), []);
   const setTouchedStatus = useCallback(status => setIsTouched(status), []);
 
@@ -37,7 +36,7 @@ const useTypingStatus = () => {
     };
   }, [isTyping, currentDialog?.conversationId]);
 
-  return { textArea, dialog, setTypingStatus, setTouchedStatus };
+  return { textArea, setTypingStatus, setTouchedStatus };
 };
 
 export default useTypingStatus;

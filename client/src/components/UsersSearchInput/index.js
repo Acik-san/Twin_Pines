@@ -33,7 +33,8 @@ const UsersSearchInput = () => {
   }, []);
   const filteredUsers = users.filter(
     ({ id, userName }) =>
-      id !== user.id && userName.toLowerCase().includes(searchTerm.toLowerCase())
+      id !== user.id &&
+      userName.toLowerCase().includes(searchTerm.toLowerCase())
   );
   const handleFocus = () => {
     setSearchResults(filteredUsers);
@@ -57,7 +58,7 @@ const UsersSearchInput = () => {
       />
       {showResults && (
         <ul className={styles.search_results}>
-          {searchResults.map(({ id, userName, avatar, status }) => (
+          {searchResults.map(({ id, userName, avatar }) => (
             <li
               key={id}
               onClick={() => {
@@ -99,7 +100,7 @@ const UsersSearchInput = () => {
               />
               <div className={styles['text-container']}>
                 <h3>{userName}</h3>
-                <p>{status}</p>
+                {/* <p>{status}</p> */}
               </div>
             </li>
           ))}

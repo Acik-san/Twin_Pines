@@ -193,7 +193,13 @@ module.exports.getPreview = async (req, res, next) => {
       where: {
         id: interlocutors,
       },
-      attributes: ['id', 'userName', 'email', 'avatar'],
+      attributes: [
+        'id',
+        'userName',
+        'avatar',
+        'onlineStatus',
+        'lastSeen',
+      ],
     });
     conversations.forEach(conversation => {
       senders.forEach(sender => {
@@ -203,6 +209,8 @@ module.exports.getPreview = async (req, res, next) => {
             userName: sender.dataValues.userName,
             email: sender.dataValues.email,
             avatar: sender.dataValues.avatar,
+            onlineStatus: sender.dataValues.onlineStatus,
+            lastSeen: sender.dataValues.lastSeen,
           };
         }
       });

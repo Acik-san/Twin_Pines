@@ -6,6 +6,7 @@ const initialState = {
   isFetching: false,
   isMessagesFetching: false,
   isChatsFetching: false,
+  isChatInfoOpen: false,
   error: null,
   limit: 50,
   offset: 0,
@@ -32,7 +33,14 @@ const handleError = produce((draftState, action) => {
 
 const handleCurrentChat = produce((draftState, action) => {
   const {
-    payload: { conversationId, interlocutorId, userName, avatar },
+    payload: {
+      conversationId,
+      interlocutorId,
+      userName,
+      avatar,
+      onlineStatus,
+      lastSeen,
+    },
   } = action;
   draftState.isFetching = false;
   if (
@@ -48,6 +56,8 @@ const handleCurrentChat = produce((draftState, action) => {
       interlocutorId,
       userName,
       avatar,
+      onlineStatus,
+      lastSeen,
     };
   }
 });
@@ -136,6 +146,32 @@ const handlers = {
   }),
   [ACTION_TYPES.CLEAR_CURRENT_CHAT]: produce(draftState => {
     draftState.currentDialog = null;
+  }),
+  [ACTION_TYPES.SET_ONLINE_STATUS]: produce((draftState, action) => {
+    const {
+      payload: { userId, status },
+    } = action;
+    if (draftState.messagesPreview.length > 0) {
+      draftState.messagesPreview.forEach(preview =>
+        preview.interlocutor.id === userId
+          ? ((preview.interlocutor.onlineStatus = status),
+            (preview.interlocutor.lastSeen = new Date().toISOString()))
+          : null
+      );
+    }
+    if (draftState.currentDialog?.interlocutorId === userId) {
+      draftState.currentDialog.onlineStatus = status;
+      draftState.currentDialog.lastSeen = new Date().toISOString();
+    }
+  }),
+  [ACTION_TYPES.GET_ONLINE_STATUS]: produce((draftState, action) => {
+    const {
+      payload: { onlineStatusInfo },
+    } = action;
+    if (draftState.currentDialog) {
+      draftState.currentDialog.onlineStatus = onlineStatusInfo.onlineStatus;
+      draftState.currentDialog.lastSeen = onlineStatusInfo.lastSeen;
+    }
   }),
   [ACTION_TYPES.SET_IS_TYPING]: produce((draftState, action) => {
     const {
@@ -350,6 +386,10 @@ const handlers = {
       }
     }
   ),
+  [ACTION_TYPES.SET_CHAT_INFO_OPEN]: produce((draftState, action) => {
+    const { isChatInfoOpen } = action.payload;
+    draftState.isChatInfoOpen = isChatInfoOpen;
+  }),
   [ACTION_TYPES.CREATE_MESSAGE_ERROR]: handleError,
   [ACTION_TYPES.GET_MESSAGES_ERROR]: handleError,
   [ACTION_TYPES.GET_CHATS_ERROR]: handleError,

@@ -9,6 +9,7 @@ import {
   subscribeUserSaga,
   unsubscribeUserSaga,
   setOnlineStatusSaga,
+  getOnlineStatusSaga,
   subscribeUserProfileSaga,
   unsubscribeUserProfileSaga,
   getOnlineUsersSaga,
@@ -41,6 +42,7 @@ function* rootSaga () {
   yield takeLatest(ACTION_TYPES.GET_MESSAGES_REQUEST, getMessagesSaga);
   yield takeLatest(ACTION_TYPES.GET_CHATS_REQUEST, getChatsSaga);
   yield takeLatest(ACTION_TYPES.SET_ONLINE_STATUS_REQUEST, setOnlineStatusSaga);
+  yield takeLatest(ACTION_TYPES.GET_ONLINE_STATUS_REQUEST, getOnlineStatusSaga);
   yield takeLatest(ACTION_TYPES.SUBSCRIBE_CHATS_REQUEST, subscribeChatsSaga);
   yield takeLatest(ACTION_TYPES.GET_ONLINE_USERS_REQUEST, getOnlineUsersSaga);
   yield takeLatest(ACTION_TYPES.START_TYPING_REQUEST, startTypingSaga);

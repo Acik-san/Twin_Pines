@@ -1,4 +1,5 @@
 import React from 'react';
+import { ButtonPropTypes } from '../../propTypes';
 import styles from './Button.module.scss';
 
 const Button = props => {
@@ -11,5 +12,7 @@ const Button = props => {
     </>
   );
 };
+
+Button.propTypes = ButtonPropTypes;
 
 export default Button;
