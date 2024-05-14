@@ -14,7 +14,7 @@ const useContextMenu = () => {
     const x = e.pageX;
     const y = e.pageY;
     const menuWidth = 250;
-    const menuHeight = 208;
+    const menuHeight = 256; // +1 = +48
     const documentWidth = document.body.clientWidth;
     const documentHeight = document.body.clientHeight;
     if (x + menuWidth > documentWidth && x >= menuWidth) {

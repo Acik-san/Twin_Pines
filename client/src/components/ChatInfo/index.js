@@ -12,10 +12,15 @@ const ChatInfo = () => {
   const { setChatInfoOpen } = bindActionCreators(ActionChat, useDispatch());
   const chatInfoRef = useRef(null);
   const chatMenuProps = useMenuForChat();
-  useClickOutside(chatInfoRef, () => setChatInfoOpen(false));
+  const handleChatInfoClose = () => setChatInfoOpen(false);
+  useClickOutside(chatInfoRef, handleChatInfoClose);
   return (
     <div className={styles.chat_info_wrapper}>
       <article className={styles.chat_info} ref={chatInfoRef}>
+        <div className={styles.button_container}>
+          <h4 className={styles.info}>Information</h4>
+          <button className={styles.close_icon} onClick={handleChatInfoClose} />
+        </div>
         <div className={styles.info_container}>
           <Avatar
             userName={currentDialog.userName}

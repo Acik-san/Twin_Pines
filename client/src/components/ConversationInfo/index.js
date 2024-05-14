@@ -12,16 +12,17 @@ const ConversationInfo = props => {
     ActionChat,
     useDispatch()
   );
+  const handleChatInfoOpen = () => setChatInfoOpen(true);
   return (
-    <div className={styles['chat_info']} onClick={e => setChatInfoOpen(true)}>
+    <div className={styles['chat_info']} onClick={handleChatInfoOpen}>
       <label
         className={styles['back-button']}
         onClick={e => e.stopPropagation()}
       >
         <button
           className={styles['button-none']}
-          onClick={e => clearCurrentChat()}
-        ></button>
+          onClick={() => clearCurrentChat()}
+        />
       </label>
       <div className={styles.wrapper}>
         <h3>{currentDialog.userName}</h3>
@@ -39,6 +40,13 @@ const ConversationInfo = props => {
           />
         )}
       </div>
+      <button
+        className={styles['dots-menu-button']}
+        onClick={e => {
+          e.stopPropagation();
+          handleChatInfoOpen();
+        }}
+      />
     </div>
   );
 };

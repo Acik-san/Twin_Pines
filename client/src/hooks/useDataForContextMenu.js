@@ -8,16 +8,24 @@ const useDataForContextMenu = hideContextMenu => {
   const { contextMenuTarget, currentDialog } = useSelector(
     ({ chats }) => chats
   );
-  const { setEditMessageMode, setDeleteMessageMode, setReplyMessageMode } =
-    bindActionCreators(ActionChat, useDispatch());
+  const {
+    setEditMessageMode,
+    setDeleteMessageMode,
+    setReplyMessageMode,
+    setForwardMessageMode,
+  } = bindActionCreators(ActionChat, useDispatch());
   const { userPropsMenu, interlocutorPropsMenu } = createPropsMenu(
     contextMenuTarget,
     currentDialog,
     setEditMessageMode,
     setDeleteMessageMode,
     setReplyMessageMode,
+    setForwardMessageMode,
     hideContextMenu
   );
+  if (contextMenuTarget?.forwardedFrom) {
+    userPropsMenu.splice(1, 1);
+  }
   const propsMenu =
     user.id === contextMenuTarget?.sender
       ? userPropsMenu

@@ -2,6 +2,7 @@ const createError = require('http-errors');
 const _ = require('lodash');
 const { User } = require('../models');
 const { Message, Conversation } = require('../models/mongo');
+const { prepareForwardedFromMessages } = require('../utils/usefulFunctions');
 
 module.exports.createConversation = async (req, res, next) => {
   const {
@@ -48,7 +49,7 @@ module.exports.getChat = async (req, res, next) => {
     (participant1, participant2) => participant1 - participant2
   );
   try {
-    const messages = await Message.aggregate([
+    const matchedMessages = await Message.aggregate([
       {
         $lookup: {
           from: 'conversations',
@@ -58,6 +59,7 @@ module.exports.getChat = async (req, res, next) => {
         },
       },
       { $match: { 'conversationData.participants': participants } },
+      { $match: { isDeletedFlag: { $ne: true } } },
       { $sort: { createdAt: -1 } },
       {
         $skip: parseInt(offset),
@@ -74,6 +76,22 @@ module.exports.getChat = async (req, res, next) => {
         },
       },
       {
+        $lookup: {
+          from: 'messages',
+          localField: 'forwardedFrom',
+          foreignField: '_id',
+          as: 'forwardedFromData',
+        },
+      },
+      {
+        $lookup: {
+          from: 'messages',
+          localField: 'repliedMessageData.forwardedFrom',
+          foreignField: '_id',
+          as: 'repliedMessageForwardedFromData',
+        },
+      },
+      {
         $project: {
           _id: 1,
           sender: 1,
@@ -81,6 +99,8 @@ module.exports.getChat = async (req, res, next) => {
           conversation: 1,
           isRead: 1,
           isEdited: 1,
+          isOriginal: 1,
+          isForwarded: 1,
           repliedMessage: {
             $cond: {
               if: { $eq: ['$repliedMessageData', []] },
@@ -91,7 +111,47 @@ module.exports.getChat = async (req, res, next) => {
                   else: '$$REMOVE',
                 },
               },
-              else: { $arrayElemAt: ['$repliedMessageData', 0] },
+              else: {
+                $let: {
+                  vars: {
+                    repliedMessageObj: {
+                      $arrayElemAt: ['$repliedMessageData', 0],
+                    },
+                  },
+                  in: {
+                    $cond: [
+                      { $eq: ['$$repliedMessageObj.isDeletedFlag', true] },
+                      { _id: '$repliedMessage' },
+                      {
+                        $mergeObjects: [
+                          '$$repliedMessageObj',
+                          {
+                            forwardedFrom: {
+                              $arrayElemAt: [
+                                '$repliedMessageForwardedFromData',
+                                0,
+                              ],
+                            },
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                },
+              },
+            },
+          },
+          forwardedFrom: {
+            $cond: {
+              if: { $eq: ['$forwardedFromData', []] },
+              then: {
+                $cond: {
+                  if: '$forwardedFrom',
+                  then: { _id: '$forwardedFrom' },
+                  else: '$$REMOVE',
+                },
+              },
+              else: { $arrayElemAt: ['$forwardedFromData', 0] },
             },
           },
           createdAt: 1,
@@ -99,8 +159,26 @@ module.exports.getChat = async (req, res, next) => {
         },
       },
     ]);
-
-    const haveMore = messages.length > 0 ? true : false;
+    const forwardedFromUsersIdSet = new Set();
+    matchedMessages.forEach(message => {
+      if (message?.forwardedFrom?.sender) {
+        forwardedFromUsersIdSet.add(message.forwardedFrom.sender);
+      }
+      if (message?.repliedMessage?.forwardedFrom?.sender) {
+        forwardedFromUsersIdSet.add(
+          message.repliedMessage.forwardedFrom.sender
+        );
+      }
+    });
+    const forwardedFromUserNames = await User.findAll({
+      where: { id: [...forwardedFromUsersIdSet] },
+      attributes: ['id', 'userName'],
+    });
+    const messages = prepareForwardedFromMessages(
+      matchedMessages,
+      forwardedFromUserNames.map(user => user.dataValues)
+    );
+    const haveMore = matchedMessages.length > 0 ? true : false;
     res.status(200).send({
       data: {
         messages,
@@ -131,9 +209,18 @@ module.exports.getPreview = async (req, res, next) => {
           'conversationData.participants': req.tokenData.userId,
         },
       },
+      { $match: { isDeletedFlag: { $ne: true } } },
       {
         $sort: {
           createdAt: -1,
+        },
+      },
+      {
+        $lookup: {
+          from: 'messages',
+          localField: 'forwardedFrom',
+          foreignField: '_id',
+          as: 'forwardedFromData',
         },
       },
       {
@@ -142,10 +229,23 @@ module.exports.getPreview = async (req, res, next) => {
           messageId: { $first: '$_id' },
           sender: { $first: '$sender' },
           body: { $first: '$body' },
+          forwardedFrom: {
+            $first: {
+              $cond: {
+                if: { $eq: ['$forwardedFromData', []] },
+                then: {
+                  $cond: {
+                    if: '$forwardedFrom',
+                    then: { _id: '$forwardedFrom' },
+                    else: '$$REMOVE',
+                  },
+                },
+                else: { $arrayElemAt: ['$forwardedFromData', 0] },
+              },
+            },
+          },
           createdAt: { $first: '$createdAt' },
           participants: { $first: '$conversationData.participants' },
-          blackList: { $first: '$conversationData.blackList' },
-          favoriteList: { $first: '$conversationData.favoriteList' },
           isRead: { $first: '$isRead' },
         },
       },
@@ -155,6 +255,7 @@ module.exports.getPreview = async (req, res, next) => {
       {
         $match: {
           isRead: false,
+          isDeletedFlag:{$ne:true},
           sender: { $ne: req.tokenData.userId },
         },
       },
@@ -193,13 +294,7 @@ module.exports.getPreview = async (req, res, next) => {
       where: {
         id: interlocutors,
       },
-      attributes: [
-        'id',
-        'userName',
-        'avatar',
-        'onlineStatus',
-        'lastSeen',
-      ],
+      attributes: ['id', 'userName', 'avatar', 'onlineStatus', 'lastSeen'],
     });
     conversations.forEach(conversation => {
       senders.forEach(sender => {
@@ -231,7 +326,7 @@ module.exports.getChatOnReconnect = async (req, res, next) => {
     (participant1, participant2) => participant1 - participant2
   );
   try {
-    const messages = await Message.aggregate([
+    const matchedMessages = await Message.aggregate([
       {
         $lookup: {
           from: 'conversations',
@@ -241,6 +336,7 @@ module.exports.getChatOnReconnect = async (req, res, next) => {
         },
       },
       { $match: { 'conversationData.participants': participants } },
+      { $match: { isDeletedFlag: { $ne: true } } },
       { $sort: { createdAt: -1 } },
       {
         $lookup: {
@@ -251,6 +347,22 @@ module.exports.getChatOnReconnect = async (req, res, next) => {
         },
       },
       {
+        $lookup: {
+          from: 'messages',
+          localField: 'forwardedFrom',
+          foreignField: '_id',
+          as: 'forwardedFromData',
+        },
+      },
+      {
+        $lookup: {
+          from: 'messages',
+          localField: 'repliedMessageData.forwardedFrom',
+          foreignField: '_id',
+          as: 'repliedMessageForwardedFromData',
+        },
+      },
+      {
         $project: {
           _id: 1,
           sender: 1,
@@ -258,6 +370,8 @@ module.exports.getChatOnReconnect = async (req, res, next) => {
           conversation: 1,
           isRead: 1,
           isEdited: 1,
+          isOriginal: 1,
+          isForwarded: 1,
           repliedMessage: {
             $cond: {
               if: { $eq: ['$repliedMessageData', []] },
@@ -268,7 +382,29 @@ module.exports.getChatOnReconnect = async (req, res, next) => {
                   else: '$$REMOVE',
                 },
               },
-              else: { $arrayElemAt: ['$repliedMessageData', 0] },
+              else: {
+                $mergeObjects: [
+                  { $arrayElemAt: ['$repliedMessageData', 0] },
+                  {
+                    forwardedFrom: {
+                      $arrayElemAt: ['$repliedMessageForwardedFromData', 0],
+                    },
+                  },
+                ],
+              },
+            },
+          },
+          forwardedFrom: {
+            $cond: {
+              if: { $eq: ['$forwardedFromData', []] },
+              then: {
+                $cond: {
+                  if: '$forwardedFrom',
+                  then: { _id: '$forwardedFrom' },
+                  else: '$$REMOVE',
+                },
+              },
+              else: { $arrayElemAt: ['$forwardedFromData', 0] },
             },
           },
           createdAt: 1,
@@ -282,6 +418,25 @@ module.exports.getChatOnReconnect = async (req, res, next) => {
         },
       },
     ]);
+    const forwardedFromUsersIdSet = new Set();
+    matchedMessages.forEach(message => {
+      if (message?.forwardedFrom?.sender) {
+        forwardedFromUsersIdSet.add(message.forwardedFrom.sender);
+      }
+      if (message?.repliedMessage?.forwardedFrom?.sender) {
+        forwardedFromUsersIdSet.add(
+          message.repliedMessage.forwardedFrom.sender
+        );
+      }
+    });
+    const forwardedFromUserNames = await User.findAll({
+      where: { id: [...forwardedFromUsersIdSet] },
+      attributes: ['id', 'userName'],
+    });
+    const messages = prepareForwardedFromMessages(
+      matchedMessages,
+      forwardedFromUserNames.map(user => user.dataValues)
+    );
     res.status(200).send({
       data: {
         messages,

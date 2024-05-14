@@ -1,18 +1,22 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { CSSTransition } from 'react-transition-group';
 import FixedBackground from '../../components/FixedBackground';
 import Header from '../../components/Header';
 import Chats from '../../components/Chats';
 import Conversation from '../../components/Conversation';
 import ChatInfo from '../../components/ChatInfo';
+import ChatsList from '../../components/ChatsList';
 import * as ActionUser from '../../actions/userCreators';
 import * as ActionChat from '../../actions/chatsCreator';
 import styles from './ChatsPage.module.scss';
 
 const ChatsPage = () => {
   const { user, users } = useSelector(({ users }) => users);
-  const { messagesPreview, isChatInfoOpen } = useSelector(({ chats }) => chats);
+  const { messagesPreview, isChatInfoOpen, forwardMessageMode } = useSelector(
+    ({ chats }) => chats
+  );
   const { getUsersRequest } = bindActionCreators(ActionUser, useDispatch());
   const {
     getChatsRequest,
@@ -21,6 +25,7 @@ const ChatsPage = () => {
     setEditMessageMode,
     setDeleteMessageMode,
     setReplyMessageMode,
+    setForwardMessageMode,
     setContextMenuTarget,
     setChatInfoOpen,
   } = bindActionCreators(ActionChat, useDispatch());
@@ -37,6 +42,11 @@ const ChatsPage = () => {
       setEditMessageMode({ isEdit: false, message: {} });
       setDeleteMessageMode({ isDelete: false, message: {} });
       setReplyMessageMode({ isReply: false, message: {} });
+      setForwardMessageMode({
+        isChatListOpen: false,
+        isForward: false,
+        message: {},
+      });
       setChatInfoOpen(false);
     };
   }, []);
@@ -59,7 +69,32 @@ const ChatsPage = () => {
         <Chats />
         <Conversation />
       </section>
-      {isChatInfoOpen ? <ChatInfo /> : null}
+      <CSSTransition
+        in={isChatInfoOpen}
+        timeout={150}
+        classNames={{
+          enter: styles['fade-enter'],
+          enterActive: styles['fade-enter-active'],
+          exit: styles['fade-exit'],
+          exitActive: styles['fade-exit-active'],
+        }}
+        unmountOnExit
+      >
+        <ChatInfo />
+      </CSSTransition>
+      <CSSTransition
+        in={forwardMessageMode.isChatListOpen}
+        timeout={150}
+        classNames={{
+          enter: styles['fade-enter'],
+          enterActive: styles['fade-enter-active'],
+          exit: styles['fade-exit'],
+          exitActive: styles['fade-exit-active'],
+        }}
+        unmountOnExit
+      >
+        <ChatsList />
+      </CSSTransition>
     </>
   );
 };

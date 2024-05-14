@@ -16,6 +16,8 @@ const {
     DELETED_MESSAGE,
     REPLY_MESSAGE,
     REPLIED_MESSAGE,
+    FORWARD_MESSAGE,
+    FORWARDED_MESSAGE,
   },
 } = require('../../constants');
 
@@ -23,7 +25,6 @@ module.exports.subscribeChats = socket =>
   socket.on(SUBSCRIBE_CHATS, ({ userId, conversations }) => {
     socket.join(userId);
     conversations.forEach(({ conversationId, interlocutorId }) => {
-      console.log(userId,conversationId, interlocutorId);
       socket.join(conversationId);
       socket.join(interlocutorId);
     });
@@ -38,7 +39,6 @@ module.exports.unsubscribeChats = socket =>
   });
 module.exports.startTyping = socket =>
   socket.on(START_TYPING, conversationId => {
-    console.log(conversationId)
     socket
       .to(conversationId)
       .emit(TYPING_STATUS, { status: true, conversationId });
@@ -86,6 +86,8 @@ module.exports.sendMessage = socket =>
         body: message.body,
         isRead: message.isRead,
         isEdited: message.isEdited,
+        isOriginal: message.isOriginal,
+        isForwarded: message.isForwarded,
         createdAt: message.createdAt,
         updatedAt: message.updatedAt,
       };
@@ -189,8 +191,17 @@ module.exports.deleteMessage = socket => {
       prevMessage,
       numberOfMessages,
       isRead,
+      isOriginal,
+      isForwarded,
     }) => {
-      await Message.findOneAndDelete({ _id: messageId });
+      if (isOriginal && isForwarded) {
+        await Message.findOneAndUpdate(
+          { _id: messageId },
+          { isDeletedFlag: true }
+        );
+      } else {
+        await Message.findOneAndDelete({ _id: messageId });
+      }
       socket.to(conversationId).emit(DELETED_MESSAGE, {
         id: messageId,
         conversationId,
@@ -212,7 +223,14 @@ module.exports.deleteMessage = socket => {
 module.exports.replyMessage = socket => {
   socket.on(
     REPLY_MESSAGE,
-    async ({ userId, interlocutorId, messageId, conversationId, body }) => {
+    async ({
+      userId,
+      interlocutorId,
+      messageId,
+      forwardedFrom,
+      conversationId,
+      body,
+    }) => {
       const message = await new Message({
         sender: userId,
         body,
@@ -220,18 +238,43 @@ module.exports.replyMessage = socket => {
         repliedMessage: messageId,
       }).save();
       await message.populate('repliedMessage');
-      const newMessage = {
-        _id: message._id,
-        conversation: message.conversation,
-        sender: message.sender,
-        body: message.body,
-        isRead: message.isRead,
-        isEdited: message.isEdited,
-        repliedMessage:
-          message.repliedMessage === null ? messageId : message.repliedMessage,
-        createdAt: message.createdAt,
-        updatedAt: message.updatedAt,
-      };
+      let newMessage = message;
+      if (forwardedFrom) {
+        const forwardedFromUserName = await User.findByPk(
+          forwardedFrom.sender,
+          {
+            attributes: ['userName'],
+          }
+        );
+        newMessage = {
+          _id: message._id,
+          conversation: message.conversation,
+          sender: message.sender,
+          body: message.body,
+          isRead: message.isRead,
+          isEdited: message.isEdited,
+          isOriginal: message.isOriginal,
+          isForwarded: message.isForwarded,
+          repliedMessage:
+            message.repliedMessage === null
+              ? messageId
+              : {
+                  _id: message.repliedMessage._id,
+                  sender: message.repliedMessage.sender,
+                  userName: forwardedFromUserName.dataValues.userName,
+                  body: message.repliedMessage.body,
+                  conversation: message.repliedMessage.conversation,
+                  isRead: message.repliedMessage.isRead,
+                  isEdited: message.repliedMessage.isEdited,
+                  isOriginal: message.repliedMessage.isOriginal,
+                  isForwarded: message.repliedMessage.isForwarded,
+                  forwardedFrom: forwardedFrom,
+                },
+          createdAt: message.createdAt,
+          updatedAt: message.updatedAt,
+        };
+      }
+
       socket.to(conversationId).emit(REPLIED_MESSAGE, {
         interlocutorId: userId,
         conversationId,
@@ -241,6 +284,109 @@ module.exports.replyMessage = socket => {
         interlocutorId,
         conversationId,
         message: newMessage,
+      });
+    }
+  );
+};
+
+module.exports.forwardMessage = socket => {
+  socket.on(
+    FORWARD_MESSAGE,
+    async ({
+      userId,
+      interlocutorId,
+      messageId,
+      forwardedFrom,
+      conversationId,
+      body,
+      forwardedBody,
+      isForwarded,
+    }) => {
+      let extraMessage;
+      if (body) {
+        const message = await new Message({
+          sender: userId,
+          body,
+          conversation: conversationId,
+        }).save();
+        extraMessage = {
+          _id: message._id,
+          conversation: message.conversation,
+          sender: message.sender,
+          body: message.body,
+          isRead: message.isRead,
+          isEdited: message.isEdited,
+          isOriginal: message.isOriginal,
+          isForwarded: message.isForwarded,
+          createdAt: message.createdAt,
+          updatedAt: message.updatedAt,
+        };
+      }
+      const message = await new Message({
+        sender: userId,
+        body: forwardedBody,
+        conversation: conversationId,
+        isOriginal: false,
+        forwardedFrom: forwardedFrom ? forwardedFrom : messageId,
+      }).save();
+
+      await message.populate('forwardedFrom');
+
+      let forwardedMessage;
+      if (!isForwarded) {
+        forwardedMessage = await Message.findOneAndUpdate(
+          { _id: messageId },
+          { isForwarded: true }
+        );
+      }
+      const forwardedFromUserName = await User.findByPk(
+        message.forwardedFrom.sender,
+        {
+          attributes: ['userName'],
+        }
+      );
+
+      const newMessage = {
+        _id: message._id,
+        conversation: message.conversation,
+        sender: message.sender,
+        body: message.body,
+        isRead: message.isRead,
+        isEdited: message.isEdited,
+        isOriginal: message.isOriginal,
+        isForwarded: message.isForwarded,
+        forwardedFrom:
+          message.forwardedFrom === null
+            ? messageId
+            : {
+                _id: message.forwardedFrom._id,
+                sender: message.forwardedFrom.sender,
+                userName: forwardedFromUserName.dataValues.userName,
+                body: message.forwardedFrom.body,
+                conversation: message.forwardedFrom.conversation,
+                isRead: message.forwardedFrom.isRead,
+                isEdited: message.forwardedFrom.isEdited,
+                isOriginal: message.forwardedFrom.isOriginal,
+                isForwarded: true,
+                createdAt: message.forwardedFrom.createdAt,
+                updatedAt: message.forwardedFrom.updatedAt,
+              },
+        createdAt: message.createdAt,
+        updatedAt: message.updatedAt,
+      };
+      socket.to(conversationId).emit(FORWARDED_MESSAGE, {
+        interlocutorId: userId,
+        conversationId,
+        message: newMessage,
+        extraMessage,
+        forwardedMessageId: forwardedMessage?._id,
+      });
+      socket.emit(FORWARDED_MESSAGE, {
+        interlocutorId,
+        conversationId,
+        message: newMessage,
+        extraMessage,
+        forwardedMessageId: forwardedMessage?._id,
       });
     }
   );

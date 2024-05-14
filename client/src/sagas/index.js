@@ -28,6 +28,7 @@ import {
   editMessageSaga,
   deleteMessageSaga,
   replyMessageSaga,
+  forwardMessageSaga,
   getChatsOnReconnectSaga,
   getMessagesOnReconnectSaga,
 } from './chatSagas';
@@ -52,6 +53,7 @@ function* rootSaga () {
   yield takeLatest(ACTION_TYPES.EDIT_MESSAGE_REQUEST, editMessageSaga);
   yield takeLatest(ACTION_TYPES.DELETE_MESSAGE_REQUEST, deleteMessageSaga);
   yield takeLatest(ACTION_TYPES.REPLY_MESSAGE_REQUEST, replyMessageSaga);
+  yield takeLatest(ACTION_TYPES.FORWARD_MESSAGE_REQUEST, forwardMessageSaga);
   yield takeLatest(
     ACTION_TYPES.GET_CHATS_ON_RECONNECT_REQUEST,
     getChatsOnReconnectSaga

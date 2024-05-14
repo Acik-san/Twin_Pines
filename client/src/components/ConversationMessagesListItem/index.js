@@ -19,6 +19,8 @@ const ConversationMessagesListItem = props => {
     typingStatus,
     isRead,
     isEdited,
+    isOriginal,
+    isForwarded,
     i,
     id,
     conversationId,
@@ -28,6 +30,7 @@ const ConversationMessagesListItem = props => {
     replyOn,
     setReplyOn,
     replyObserver,
+    forwardedFrom,
   } = props;
   const { user } = useSelector(({ users }) => users);
   const { messages, currentDialog, limit, offset } = useSelector(
@@ -80,7 +83,7 @@ const ConversationMessagesListItem = props => {
         observer.unobserve(messageItem);
       }
     };
-  }, []);
+  }, [isRead]);
 
   useEffect(() => {
     let messageItem;
@@ -130,8 +133,11 @@ const ConversationMessagesListItem = props => {
                 numberOfMessages: messages.length,
                 sender,
                 body,
+                forwardedFrom: forwardedFrom,
                 conversationId,
                 isRead,
+                isOriginal,
+                isForwarded,
               });
               showContextMenu(e);
             }}
@@ -139,18 +145,29 @@ const ConversationMessagesListItem = props => {
             {repliedMessage ? (
               <div
                 className={styles.body_wrapper}
-                onClick={() =>
-                  repliedMessage.body && handleRepliedMessageClick(offset)
-                }
+                onClick={() => {
+                  if (
+                    repliedMessage.body ||
+                    repliedMessage.forwardedFrom?.body
+                  ) {
+                    handleRepliedMessageClick(offset);
+                  }
+                }}
               >
                 <div className={styles.reply_border} />
                 <div className={styles.reply_content}>
-                  {repliedMessage.sender && (
+                  {repliedMessage.forwardedFrom?.sender ? (
                     <h3 className={styles.sender_name}>
-                      {repliedMessage.sender === user.id
-                        ? user.userName
-                        : currentDialog.userName}
+                      Forwarded from {repliedMessage.forwardedFrom?.userName}
                     </h3>
+                  ) : (
+                    repliedMessage.sender && (
+                      <h3 className={styles.sender_name}>
+                        {repliedMessage.sender === user.id
+                          ? user.userName
+                          : currentDialog.userName}
+                      </h3>
+                    )
                   )}
                   {repliedMessage.body ? (
                     <p className={styles.replied_message_body}>
@@ -160,6 +177,15 @@ const ConversationMessagesListItem = props => {
                     <p className={styles.deleted_message}>Deleted message</p>
                   )}
                 </div>
+              </div>
+            ) : null}
+            {forwardedFrom ? (
+              <div className={styles.forwardFrom_container}>
+                {forwardedFrom.sender && (
+                  <h3 className={styles.forwardFrom_title}>
+                    Forwarded from {forwardedFrom.userName}
+                  </h3>
+                )}
               </div>
             ) : null}
             <p>{body}</p>
@@ -172,7 +198,7 @@ const ConversationMessagesListItem = props => {
                     [styles.message_delivered]: !isRead,
                     [styles.message_read]: isRead,
                   })}
-                ></div>
+                />
               ) : null}
             </span>
           </div>

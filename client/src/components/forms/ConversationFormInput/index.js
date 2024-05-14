@@ -7,7 +7,9 @@ import styles from './ConversationFormInput.module.scss';
 
 const ConversationFormInput = props => {
   const { name, textArea, setIsTyping, setIsTouched } = props;
-  const { currentDialog, editMessageMode } = useSelector(({ chats }) => chats);
+  const { currentDialog, editMessageMode } = useSelector(
+    ({ chats }) => chats
+  );
   const { setFieldValue, handleReset, handleSubmit } = useFormikContext();
   const [field] = useField(name);
   useEffect(() => {

@@ -106,4 +106,8 @@ socket.on(CONSTANTS.SOCKET_EVENTS.REPLIED_MESSAGE, data => {
   store.dispatch(ChatCreator.replyMessageSuccess(data));
 });
 
+socket.on(CONSTANTS.SOCKET_EVENTS.FORWARDED_MESSAGE, data => {
+  store.dispatch(ChatCreator.forwardMessageSuccess(data));
+});
+
 export default socket;

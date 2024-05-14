@@ -114,6 +114,14 @@ export function* replyMessageSaga (action) {
   }
 }
 
+export function* forwardMessageSaga (action) {
+  try {
+    yield WsApi.forwardMessage(action.payload.data);
+  } catch (error) {
+    yield put(ActionsChats.forwardMessageError(error));
+  }
+}
+
 export function* getChatsOnReconnectSaga (action) {
   try {
     const {

@@ -22,10 +22,19 @@ const ChatsPreview = props => {
     isRead,
   } = props;
   const { user } = useSelector(({ users }) => users);
-  const { unreadMessages, currentDialog, editMessageMode, replyMessageMode } =
-    useSelector(({ chats }) => chats);
-  const { chooseCurrentChat, setEditMessageMode, setReplyMessageMode } =
-    bindActionCreators(ActionsChats, useDispatch());
+  const {
+    unreadMessages,
+    currentDialog,
+    editMessageMode,
+    replyMessageMode,
+    forwardMessageMode,
+  } = useSelector(({ chats }) => chats);
+  const {
+    chooseCurrentChat,
+    setEditMessageMode,
+    setReplyMessageMode,
+    setForwardMessageMode,
+  } = bindActionCreators(ActionsChats, useDispatch());
 
   const unreadMessagesCount = useMemo(
     () => unreadMessages.find(message => message._id === conversationId)?.count,
@@ -54,6 +63,16 @@ const ChatsPreview = props => {
         ) {
           setReplyMessageMode({
             isReply: false,
+            message: {},
+          });
+        }
+        if (
+          forwardMessageMode.isForward &&
+          forwardMessageMode.message.interlocutorId !== interlocutor.id
+        ) {
+          setForwardMessageMode({
+            isChatListOpen: false,
+            isForward: false,
             message: {},
           });
         }

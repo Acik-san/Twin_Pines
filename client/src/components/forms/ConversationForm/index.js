@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Formik, Form } from 'formik';
@@ -12,15 +12,20 @@ import styles from './ConversationForm.module.scss';
 const ConversationForm = memo(props => {
   const { currentDialog, textArea, setIsTyping, setIsTouched } = props;
   const { user } = useSelector(({ users }) => users);
-  const { messagesPreview, editMessageMode, replyMessageMode } = useSelector(
-    ({ chats }) => chats
-  );
+  const {
+    messagesPreview,
+    editMessageMode,
+    replyMessageMode,
+    forwardMessageMode,
+  } = useSelector(({ chats }) => chats);
   const {
     createMessageRequest,
     setEditMessageMode,
     editMessageRequest,
     setReplyMessageMode,
     replyMessageRequest,
+    setForwardMessageMode,
+    forwardMessageRequest,
   } = bindActionCreators(ActionChat, useDispatch());
   const onSubmit = (values, formikBag) => {
     values.interlocutor = currentDialog.interlocutorId;
@@ -36,16 +41,41 @@ const ConversationForm = memo(props => {
         userId: user.id,
         interlocutorId: replyMessageMode.message.interlocutorId,
         messageId: replyMessageMode.message.messageId,
+        forwardedFrom: replyMessageMode.message.forwardedFrom,
         conversationId: replyMessageMode.message.conversationId,
         body: values.messageBody,
       });
       setReplyMessageMode({ isReply: false, message: {} });
+    } else if (forwardMessageMode.isForward) {
+      forwardMessageRequest({
+        userId: user.id,
+        interlocutorId: currentDialog.interlocutorId,
+        messageId: forwardMessageMode.message.messageId,
+        forwardedFrom: forwardMessageMode.message?.forwardedFrom,
+        conversationId: currentDialog.conversationId,
+        body: values.messageBody,
+        forwardedBody: forwardMessageMode.message.body,
+        isForwarded: forwardMessageMode.message.isForwarded,
+      });
+      setForwardMessageMode({
+        isChatListOpen: false,
+        isForward: false,
+        message: {},
+      });
     } else {
       createMessageRequest(values);
     }
     setIsTyping(false);
     formikBag.resetForm();
   };
+  useEffect(() => {
+    textArea?.current.focus();
+  }, [
+    currentDialog,
+    editMessageMode.isEdit,
+    replyMessageMode.isReply,
+    forwardMessageMode.isForward,
+  ]);
 
   return (
     <Formik
@@ -58,19 +88,28 @@ const ConversationForm = memo(props => {
             : [],
         messageBody: '',
       }}
-      validationSchema={Schems.ChatSchem}
+      validationSchema={
+        forwardMessageMode.isForward
+          ? Schems.ForwardMessageSchem
+          : Schems.ChatSchem
+      }
       onSubmit={onSubmit}
     >
       <Form className={styles['message_form']}>
-        {editMessageMode.isEdit || replyMessageMode.isReply ? (
+        {editMessageMode.isEdit ||
+        replyMessageMode.isReply ||
+        forwardMessageMode.isForward ? (
           <ConversationMessageMode />
         ) : null}
-        <ConversationFormInput
-          name='messageBody'
-          textArea={textArea}
-          setIsTyping={setIsTyping}
-          setIsTouched={setIsTouched}
-        />
+        <div className={styles.input_container}>
+          <ConversationFormInput
+            name='messageBody'
+            textArea={textArea}
+            setIsTyping={setIsTyping}
+            setIsTouched={setIsTouched}
+          />
+          <button type='submit' className={styles.send_message} />
+        </div>
       </Form>
     </Formik>
   );

@@ -221,6 +221,26 @@ export const replyMessageError = error => ({
 });
 //---------------------------------------
 //---------------------------------------
+export const setForwardMessageMode = data => ({
+  type: ACTION_TYPES.SET_FORWARD_MESSAGE_MODE,
+  payload: { data },
+});
+//---------------------------------------
+//---------------------------------------
+export const forwardMessageRequest = data => ({
+  type: ACTION_TYPES.FORWARD_MESSAGE_REQUEST,
+  payload: { data },
+});
+export const forwardMessageSuccess = data => ({
+  type: ACTION_TYPES.FORWARD_MESSAGE_SUCCESS,
+  payload: { data },
+});
+export const forwardMessageError = error => ({
+  type: ACTION_TYPES.FORWARD_MESSAGE_ERROR,
+  payload: { error },
+});
+//---------------------------------------
+//---------------------------------------
 export const getChatsOnReconnectRequest = () => ({
   type: ACTION_TYPES.GET_CHATS_ON_RECONNECT_REQUEST,
   payload: {},

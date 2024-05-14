@@ -19,6 +19,7 @@ const initialState = {
   editMessageMode: { isEdit: false, message: {} },
   deleteMessageMode: { isDelete: false, message: {} },
   replyMessageMode: { isReply: false, message: {} },
+  forwardMessageMode: { isChatListOpen: false, isForward: false, message: {} },
 };
 const handleRequests = produce(draftState => {
   draftState.isFetching = true;
@@ -75,6 +76,7 @@ const handlers = {
   [ACTION_TYPES.EDIT_MESSAGE_REQUEST]: handleRequests,
   [ACTION_TYPES.DELETE_MESSAGE_REQUEST]: handleRequests,
   [ACTION_TYPES.REPLY_MESSAGE_REQUEST]: handleRequests,
+  [ACTION_TYPES.FORWARD_MESSAGE_REQUEST]: handleRequests,
   [ACTION_TYPES.GET_CHATS_ON_RECONNECT_REQUEST]: handleRequests,
   [ACTION_TYPES.GET_MESSAGES_ON_RECONNECT_REQUEST]: handleRequests,
   [ACTION_TYPES.CREATE_MESSAGE_SUCCESS]: produce((draftState, action) => {
@@ -256,17 +258,29 @@ const handlers = {
       draftState.messages.length > 0
     ) {
       draftState.messages.forEach(message => {
-        if (message.repliedMessage && message.repliedMessage._id === id) {
+        if (message?.repliedMessage?._id === id) {
           message.repliedMessage.body = body;
           message.repliedMessage.isEdited = isEdited;
         }
+        if (message?.repliedMessage?.forwardedFrom?._id === id) {
+          message.repliedMessage.forwardedFrom.body = body;
+          message.repliedMessage.forwardedFrom.isEdited = isEdited;
+        }
+        if (message?.forwardedFrom?._id === id) {
+          message.forwardedFrom.body = body;
+          message.forwardedFrom.isEdited = isEdited;
+        }
       });
     }
-    draftState.messagesPreview.forEach(preview =>
-      preview._id === conversationId && preview.messageId === id
-        ? (preview.body = body)
-        : null
-    );
+    draftState.messagesPreview.forEach(preview => {
+      if (preview._id === conversationId && preview.messageId === id) {
+        preview.body = body;
+      }
+      if (preview?.forwardedFrom?._id === id) {
+        preview.forwardedFrom.body = body;
+        preview.forwardedFrom.isEdited = isEdited;
+      }
+    });
   }),
   [ACTION_TYPES.SET_DELETE_MESSAGE_MODE]: produce((draftState, action) => {
     const { data } = action.payload;
@@ -301,6 +315,7 @@ const handlers = {
           preview.messageId = prevMessage._id;
           preview.sender = prevMessage.sender;
           preview.body = prevMessage.body;
+          preview.forwardedFrom = prevMessage.forwardedFrom;
           preview.createdAt = prevMessage.createdAt;
           preview.isRead = prevMessage.isRead;
         }
@@ -357,6 +372,7 @@ const handlers = {
       if (conversation._id === conversationId) {
         conversation.messageId = message._id;
         conversation.body = message.body;
+        conversation.forwardedFrom = null;
         conversation.sender = message.sender;
         conversation.createdAt = message.createdAt;
         conversation.isRead = message.isRead;
@@ -390,6 +406,63 @@ const handlers = {
     const { isChatInfoOpen } = action.payload;
     draftState.isChatInfoOpen = isChatInfoOpen;
   }),
+  [ACTION_TYPES.SET_FORWARD_MESSAGE_MODE]: produce((draftState, action) => {
+    const { data } = action.payload;
+    draftState.forwardMessageMode = data;
+  }),
+  [ACTION_TYPES.FORWARD_MESSAGE_SUCCESS]: produce((draftState, action) => {
+    const {
+      data: {
+        interlocutorId,
+        conversationId,
+        message,
+        extraMessage,
+        forwardedMessageId,
+      },
+    } = action.payload;
+    draftState.isFetching = false;
+    draftState.offset += 1;
+    if (forwardedMessageId) {
+      draftState.messages.forEach(message =>
+        message._id === forwardedMessageId ? (message.isForwarded = true) : null
+      );
+    }
+    if (
+      draftState.currentDialog?.conversationId === conversationId &&
+      extraMessage
+    ) {
+      draftState.messages.push(extraMessage);
+    }
+    if (draftState.currentDialog?.conversationId === conversationId) {
+      draftState.messages.push(message);
+    }
+    if (
+      message.sender === interlocutorId &&
+      draftState.unreadMessages.length === 0
+    ) {
+      draftState.unreadMessages.push({
+        _id: conversationId,
+        count: extraMessage ? 2 : 1,
+      });
+    } else {
+      draftState.unreadMessages.forEach(conversation =>
+        conversation._id === conversationId
+          ? (conversation.count += extraMessage ? 2 : 1)
+          : null
+      );
+    }
+    draftState.messagesPreview.forEach(conversation => {
+      if (conversation._id === conversationId) {
+        conversation.messageId = message._id;
+        conversation.body = message.body;
+        conversation.forwardedFrom = message.forwardedFrom;
+        conversation.sender = message.sender;
+        conversation.createdAt = message.createdAt;
+        conversation.isRead = message.isRead;
+        conversation.isTyping = false;
+      }
+    });
+  }),
   [ACTION_TYPES.CREATE_MESSAGE_ERROR]: handleError,
   [ACTION_TYPES.GET_MESSAGES_ERROR]: handleError,
   [ACTION_TYPES.GET_CHATS_ERROR]: handleError,
@@ -398,6 +471,7 @@ const handlers = {
   [ACTION_TYPES.EDIT_MESSAGE_ERROR]: handleError,
   [ACTION_TYPES.DELETE_MESSAGE_ERROR]: handleError,
   [ACTION_TYPES.REPLY_MESSAGE_ERROR]: handleError,
+  [ACTION_TYPES.FORWARD_MESSAGE_ERROR]: handleError,
   [ACTION_TYPES.GET_CHATS_ON_RECONNECT_ERROR]: handleError,
   [ACTION_TYPES.GET_MESSAGES_ON_RECONNECT_ERROR]: handleError,
 };

@@ -50,3 +50,7 @@ export const deleteMessage = data => {
 export const replyMessage = data => {
   socket.emit(CONSTANTS.SOCKET_EVENTS.REPLY_MESSAGE, data);
 };
+
+export const forwardMessage = data => {
+  socket.emit(CONSTANTS.SOCKET_EVENTS.FORWARD_MESSAGE, data);
+};

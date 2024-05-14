@@ -17,6 +17,7 @@ const {
   editMessage,
   deleteMessage,
   replyMessage,
+  forwardMessage,
 } = require('./controllers/sockets/chatController');
 const {
   SOCKET_EVENTS: { CONNECT },
@@ -48,5 +49,6 @@ module.exports.createConnection = httpServer => {
     editMessage(socket);
     deleteMessage(socket);
     replyMessage(socket);
+    forwardMessage(socket);
   });
 };

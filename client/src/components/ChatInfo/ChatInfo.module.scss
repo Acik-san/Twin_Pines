@@ -13,10 +13,44 @@
     @include user_card;
     position: absolute;
     margin: 0;
-    width: 350px;
+    width: 93%;
+    max-width: 350px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    .button_container {
+      display: flex;
+      margin-bottom: 20px;
+      .info {
+        font-size: 18px;
+        font-weight: 500;
+      }
+      .close_icon {
+        width: 25px;
+        height: 25px;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        padding: 0;
+        border: none;
+        background-color: transparent;
+        &::after {
+          content: url('../../../public/static/images/svg/close.svg');
+          display: inline-block;
+          width: 25px;
+          height: 25px;
+          filter: invert(88%) sepia(32%) saturate(3504%) hue-rotate(251deg)
+            brightness(88%) contrast(105%);
+        }
+        &:hover {
+          &::after {
+            filter: invert(70%) sepia(32%) saturate(3504%) hue-rotate(251deg)
+              brightness(88%) contrast(105%);
+          }
+        }
+      }
+    }
+
     .info_container {
       display: flex;
       .photo_wrapper {
@@ -57,12 +91,6 @@
           max-width: 220px;
         }
       }
-      // .chat_info_status {
-      //   overflow: hidden;
-      //   text-overflow: ellipsis;
-      //   max-width: 220px;
-      //   margin-left: 10px;
-      // }
     }
     .menu_list {
       margin-top: 20px;
@@ -81,7 +109,7 @@
             border-radius: 5px;
             width: 35px;
             height: 35px;
-            filter: invert(85%) sepia(32%) saturate(3504%) hue-rotate(251deg)
+            filter: invert(88%) sepia(32%) saturate(3504%) hue-rotate(251deg)
               brightness(88%) contrast(105%);
           }
         }
@@ -98,3 +126,4 @@
     }
   }
 }
+

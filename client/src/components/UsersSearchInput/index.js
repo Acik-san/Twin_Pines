@@ -7,11 +7,15 @@ import Avatar from '../Avatar';
 
 const UsersSearchInput = () => {
   const { user, users } = useSelector(({ users }) => users);
-  const { editMessageMode, replyMessageMode } = useSelector(
+  const { editMessageMode, replyMessageMode, forwardMessageMode } = useSelector(
     ({ chats }) => chats
   );
-  const { startDialogRequest, setEditMessageMode, setReplyMessageMode } =
-    bindActionCreators(ActionsChats, useDispatch());
+  const {
+    startDialogRequest,
+    setEditMessageMode,
+    setReplyMessageMode,
+    setForwardMessageMode,
+  } = bindActionCreators(ActionsChats, useDispatch());
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
@@ -78,6 +82,16 @@ const UsersSearchInput = () => {
                 ) {
                   setReplyMessageMode({
                     isReply: false,
+                    messgae: {},
+                  });
+                }
+                if (
+                  forwardMessageMode.isForward &&
+                  forwardMessageMode.message.interlocutorId !== id
+                ) {
+                  setForwardMessageMode({
+                    isChatListOpen: false,
+                    isForward: false,
                     messgae: {},
                   });
                 }
