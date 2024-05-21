@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
+import { UserSubscriptionsListPropTypes } from '../../propTypes';
 import * as ActionUser from '../../actions/userCreators';
 import styles from './UserSubscriptionsList.module.scss';
 import Avatar from '../Avatar';
@@ -81,5 +82,7 @@ const UserSubscriptionsList = props => {
     </div>
   );
 };
+
+UserSubscriptionsList.propTypes = UserSubscriptionsListPropTypes
 
 export default UserSubscriptionsList;

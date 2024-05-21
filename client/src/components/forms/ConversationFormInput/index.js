@@ -7,7 +7,12 @@ import styles from './ConversationFormInput.module.scss';
 
 const ConversationFormInput = props => {
   const { name, textArea, setIsTyping, setIsTouched } = props;
-  const { currentDialog, editMessageMode } = useSelector(({ chats }) => chats);
+  const {
+    currentDialog,
+    editMessageMode,
+    replyMessageMode,
+    forwardMessageMode,
+  } = useSelector(({ chats }) => chats);
   const { setFieldValue, handleReset, handleSubmit } = useFormikContext();
   const [field] = useField(name);
   useEffect(() => {
@@ -17,7 +22,9 @@ const ConversationFormInput = props => {
   }, [editMessageMode.message]);
   useEffect(() => {
     handleReset();
-  }, [currentDialog]);
+    setIsTyping(false);
+    setIsTouched(false);
+  }, [currentDialog.conversationId]);
   const handleKeyDown = event => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
@@ -25,7 +32,11 @@ const ConversationFormInput = props => {
     }
   };
   const onInput = event => {
-    if (!editMessageMode.isEdit) {
+    if (
+      !editMessageMode.isEdit &&
+      !replyMessageMode.isReply &&
+      !forwardMessageMode.isForward
+    ) {
       setIsTouched(true);
       event.target.value === '' ? setIsTyping(false) : setIsTyping(true);
     }

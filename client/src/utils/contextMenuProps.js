@@ -6,6 +6,7 @@ const createPropsMenu = (
   setEditMessageMode,
   setDeleteMessageMode,
   setReplyMessageMode,
+  setForwardMessageMode,
   hideContextMenu
 ) => {
   const contextMenuMap = new Map();
@@ -21,6 +22,7 @@ const createPropsMenu = (
             interlocutorId: currentDialog.interlocutorId,
             conversationId: currentDialog.conversationId,
             body: contextMenuTarget.body,
+            forwardedFrom: contextMenuTarget.forwardedFrom,
             isRead: contextMenuTarget.isRead,
           },
         });
@@ -59,6 +61,26 @@ const createPropsMenu = (
     {
       id: 4,
       handleClick: () => {
+        setForwardMessageMode({
+          isChatListOpen: true,
+          isForward: false,
+          message: {
+            messageId: contextMenuTarget.messageId,
+            sender: contextMenuTarget.sender,
+            interlocutorId: currentDialog.interlocutorId,
+            conversationId: currentDialog.conversationId,
+            body: contextMenuTarget.body,
+            forwardedFrom: contextMenuTarget.forwardedFrom,
+            isRead: contextMenuTarget.isRead,
+            isForwarded: contextMenuTarget.isForwarded,
+          },
+        });
+        hideContextMenu();
+      },
+    },
+    {
+      id: 5,
+      handleClick: () => {
         setDeleteMessageMode({
           isDelete: true,
           message: {
@@ -70,6 +92,8 @@ const createPropsMenu = (
             conversationId: currentDialog.conversationId,
             body: contextMenuTarget.body,
             isRead: contextMenuTarget.isRead,
+            isOriginal: contextMenuTarget.isOriginal,
+            isForwarded: contextMenuTarget.isForwarded,
           },
         });
         hideContextMenu();

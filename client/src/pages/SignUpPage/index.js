@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
-import Header from '../../components/Header';
 import AuthForm from '../../components/forms/AuthForm';
 import CONSTANTS from '../../constants';
 import * as ActionsCreators from '../../actions/creators'
@@ -29,7 +28,6 @@ const SignUpPage  = () => {
   }, [user]);
   return (
     <>
-      {/* <Header /> */}
       <section className={styles.container}>
       <ToastContainer
           position='top-center'

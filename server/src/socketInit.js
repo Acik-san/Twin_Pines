@@ -1,6 +1,7 @@
 const socketServer = require('socket.io');
 const {
   setOnlineStatus,
+  getOnlineStatus,
   subscribeUserProfile,
   unsubscribeUserProfile,
   getOnlineUsers,
@@ -16,6 +17,7 @@ const {
   editMessage,
   deleteMessage,
   replyMessage,
+  forwardMessage,
 } = require('./controllers/sockets/chatController');
 const {
   SOCKET_EVENTS: { CONNECT },
@@ -33,6 +35,7 @@ module.exports.createConnection = httpServer => {
 
   io.on(CONNECT, socket => {
     setOnlineStatus(socket, users);
+    getOnlineStatus(socket);
     subscribeUserProfile(socket);
     unsubscribeUserProfile(socket);
     getOnlineUsers(socket, users);
@@ -46,5 +49,6 @@ module.exports.createConnection = httpServer => {
     editMessage(socket);
     deleteMessage(socket);
     replyMessage(socket);
+    forwardMessage(socket);
   });
 };

@@ -29,6 +29,7 @@ const ChatsPreviewList = () => {
                 sender,
                 interlocutor,
                 body,
+                forwardedFrom,
                 createdAt,
                 isTyping,
                 isRead,
@@ -39,6 +40,7 @@ const ChatsPreviewList = () => {
                   sender={sender}
                   interlocutor={interlocutor}
                   body={body}
+                  forwardedFrom={forwardedFrom}
                   createdAt={createdAt}
                   isTyping={isTyping}
                   isRead={isRead}

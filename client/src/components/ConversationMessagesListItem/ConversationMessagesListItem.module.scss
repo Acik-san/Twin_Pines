@@ -45,7 +45,7 @@
   text-align: left;
   position: relative;
   & > p {
-    font-size: 16px;
+    font-size: 15px;
     line-height: 20px;
     word-wrap: break-word;
     max-width: 200px;
@@ -186,6 +186,24 @@
     right: 4px;
   }
 }
+.forwardFrom_container {
+  align-self: flex-start;
+  white-space: nowrap;
+  word-wrap: normal;
+  width: 100%;
+  max-width: 202px;
+  height: 25px;
+}
+.forwardFrom_title {
+  // position: absolute;
+  max-width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 500;
+  color: $dark_purple;
+}
 
 .notTyping {
   opacity: 0;
@@ -246,7 +264,14 @@
   .my_message_body {
     & > p {
       max-width: 300px;
+      font-size: 16px;
     }
+  }
+  .forwardFrom_container {
+    max-width: 236px;
+  }
+  .forwardFrom_title {
+    font-size: 14px;
   }
 }
 

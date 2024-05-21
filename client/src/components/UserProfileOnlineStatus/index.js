@@ -1,20 +1,26 @@
 import React from 'react';
+import { UserProfileOnlineStatusPropTypes } from '../../propTypes';
 import { calculateDate } from '../../utils/usefulFunctions';
-import styles from './UserProfileOnlineStatus.module.scss';
 
 const UserProfileOnlineStatus = props => {
-  const { userData } = props;
+  const {
+    userData,
+    classes: { online_status_container, online_status, last_seen },
+  } = props;
   return (
-    <div className={styles.container}>
-      <h4 className={styles.online_status}>{userData.onlineStatus}</h4>
+    <div className={online_status_container}>
       {userData.onlineStatus === 'offline' ? (
-        <p className={styles.last_seen}>
+        <p className={last_seen}>
           last seen{' '}
           {calculateDate(userData.lastSeen, 'HH:mm', 'eeee HH:mm', 'dd.MM.yy')}
         </p>
-      ) : null}
+      ) : (
+        <h4 className={online_status}>{userData.onlineStatus}</h4>
+      )}
     </div>
   );
 };
+
+UserProfileOnlineStatus.propTypes = UserProfileOnlineStatusPropTypes;
 
 export default UserProfileOnlineStatus;

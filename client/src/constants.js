@@ -34,7 +34,9 @@ const CONSTANTS = {
     STOP_TYPING: 'STOP_TYPING',
     TYPING_STATUS: 'TYPING_STATUS',
     SET_ONLINE_STATUS: 'SET_ONLINE_STATUS',
+    GET_ONLINE_STATUS: 'GET_ONLINE_STATUS',
     ONLINE_STATUS: 'ONLINE_STATUS',
+    GET_ONLINE_STATUS_INFO: 'GET_ONLINE_STATUS_INFO',
     GET_ONLINE_USERS: 'GET_ONLINE_USERS',
     ONLINE_USERS: 'ONLINE_USERS',
     SET_SEEN_MESSAGE: 'SET_SEEN_MESSAGE',
@@ -45,6 +47,8 @@ const CONSTANTS = {
     DELETED_MESSAGE: 'DELETED_MESSAGE',
     REPLY_MESSAGE: 'REPLY_MESSAGE',
     REPLIED_MESSAGE: 'REPLIED_MESSAGE',
+    FORWARD_MESSAGE: 'FORWARD_MESSAGE',
+    FORWARDED_MESSAGE: 'FORWARDED_MESSAGE',
   },
   ACCESS_TOKEN: 'accessToken',
   REFRESH_TOKEN: 'refreshToken',
@@ -131,6 +135,7 @@ const CONSTANTS = {
       propName: 'edit',
       propIcon: '/static/images/svg/edit.svg',
       onlyForUser: true,
+      notForForward: true,
     },
     {
       id: 3,
@@ -140,9 +145,22 @@ const CONSTANTS = {
     },
     {
       id: 4,
+      propName: 'forward',
+      propIcon: '/static/images/svg/forward.svg',
+      onlyForUser: false,
+    },
+    {
+      id: 5,
       propName: 'delete',
       propIcon: '/static/images/svg/delete.svg',
       onlyForUser: true,
+    },
+  ],
+  CHAT_INFO: [
+    {
+      id: 1,
+      iconName: 'profile_icon',
+      propertyName: 'Go to profile',
     },
   ],
 };

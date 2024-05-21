@@ -21,22 +21,25 @@ const ChatsPreview = props => {
     isTyping,
     isRead,
   } = props;
-  const { user, users } = useSelector(({ users }) => users);
-  const { unreadMessages, currentDialog, editMessageMode, replyMessageMode } =
-    useSelector(({ chats }) => chats);
-  const { chooseCurrentChat, setEditMessageMode, setReplyMessageMode } =
-    bindActionCreators(ActionsChats, useDispatch());
+  const { user } = useSelector(({ users }) => users);
+  const {
+    unreadMessages,
+    currentDialog,
+    editMessageMode,
+    replyMessageMode,
+    forwardMessageMode,
+  } = useSelector(({ chats }) => chats);
+  const {
+    chooseCurrentChat,
+    setEditMessageMode,
+    setReplyMessageMode,
+    setForwardMessageMode,
+  } = bindActionCreators(ActionsChats, useDispatch());
 
   const unreadMessagesCount = useMemo(
     () => unreadMessages.find(message => message._id === conversationId)?.count,
     [unreadMessages, conversationId]
   );
-
-  const currentStatus = useMemo(
-    () => users.find(({ id }) => id === interlocutor.id)?.status,
-    [users, interlocutor.id]
-  );
-
   return (
     <li
       className={classNames(styles.conversation_container, {
@@ -63,11 +66,23 @@ const ChatsPreview = props => {
             message: {},
           });
         }
+        if (
+          forwardMessageMode.isForward &&
+          forwardMessageMode.message.interlocutorId !== interlocutor.id
+        ) {
+          setForwardMessageMode({
+            isChatListOpen: false,
+            isForward: false,
+            message: {},
+          });
+        }
         chooseCurrentChat({
           conversationId,
           interlocutorId: interlocutor.id,
           userName: interlocutor.userName,
           avatar: interlocutor.avatar,
+          onlineStatus: interlocutor.onlineStatus,
+          lastSeen: interlocutor.lastSeen,
         });
       }}
     >
@@ -76,7 +91,7 @@ const ChatsPreview = props => {
         avatar={interlocutor.avatar}
         onlineBadge={
           <OnlineBadge
-            currentStatus={currentStatus}
+            currentStatus={interlocutor.onlineStatus}
             isMessageRead={isRead}
             messageSender={sender}
             classes={{
@@ -108,7 +123,7 @@ const ChatsPreview = props => {
           <p>{calculateDate(createdAt, 'HH:mm', 'EEE', 'dd.MM.yy')}</p>
         </div>
         <div className={styles.body_wrapper}>
-          {currentStatus === 'online' ? (
+          {interlocutor.onlineStatus === 'online' ? (
             <CSSTransition in={isTyping} timeout={300} unmountOnExit>
               <TypingAnimation
                 classes={classNames(styles.notTyping, styles.typingPosition, {

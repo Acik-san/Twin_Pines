@@ -24,7 +24,14 @@ const Schema = new mongoose.Schema(
       required: true,
       default: false,
     },
+    isOriginal: { type: 'Boolean', required: true, default: true },
+    isForwarded: { type: 'Boolean', required: true, default: false },
+    isDeletedFlag: { type: 'Boolean' },
     repliedMessage: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Message',
+    },
+    forwardedFrom: {
       type: mongoose.Schema.ObjectId,
       ref: 'Message',
     },

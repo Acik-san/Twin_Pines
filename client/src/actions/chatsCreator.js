@@ -52,9 +52,18 @@ export const chooseCurrentChat = ({
   interlocutorId,
   userName,
   avatar,
+  onlineStatus,
+  lastSeen,
 }) => ({
   type: ACTION_TYPES.CHOOSE_CURRENT_CHAT,
-  payload: { conversationId, interlocutorId, userName, avatar },
+  payload: {
+    conversationId,
+    interlocutorId,
+    userName,
+    avatar,
+    onlineStatus,
+    lastSeen,
+  },
 });
 //---------------------------------------
 //---------------------------------------
@@ -212,6 +221,26 @@ export const replyMessageError = error => ({
 });
 //---------------------------------------
 //---------------------------------------
+export const setForwardMessageMode = data => ({
+  type: ACTION_TYPES.SET_FORWARD_MESSAGE_MODE,
+  payload: { data },
+});
+//---------------------------------------
+//---------------------------------------
+export const forwardMessageRequest = data => ({
+  type: ACTION_TYPES.FORWARD_MESSAGE_REQUEST,
+  payload: { data },
+});
+export const forwardMessageSuccess = data => ({
+  type: ACTION_TYPES.FORWARD_MESSAGE_SUCCESS,
+  payload: { data },
+});
+export const forwardMessageError = error => ({
+  type: ACTION_TYPES.FORWARD_MESSAGE_ERROR,
+  payload: { error },
+});
+//---------------------------------------
+//---------------------------------------
 export const getChatsOnReconnectRequest = () => ({
   type: ACTION_TYPES.GET_CHATS_ON_RECONNECT_REQUEST,
   payload: {},
@@ -237,4 +266,10 @@ export const getMessagesOnReconnectSuccess = data => ({
 export const getMessagesOnReconnectError = error => ({
   type: ACTION_TYPES.GET_MESSAGES_ON_RECONNECT_ERROR,
   payload: { error },
+});
+//---------------------------------------
+//---------------------------------------
+export const setChatInfoOpen = isChatInfoOpen => ({
+  type: ACTION_TYPES.SET_CHAT_INFO_OPEN,
+  payload: { isChatInfoOpen },
 });

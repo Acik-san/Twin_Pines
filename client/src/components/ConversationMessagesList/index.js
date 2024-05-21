@@ -39,6 +39,14 @@ const ConversationMessagesList = memo(props => {
   } = useContextMenu();
   const chatContainerRef = useRef(null);
   const previousScrollHeightRef = useRef(0);
+  const thresholdSets = useMemo(
+    () =>
+      Array.from(
+        { length: Math.ceil(1 / 0.01) + 1 },
+        (_, index) => index * 0.01
+      ),
+    []
+  );
 
   const handleDeleteMessageMod = () =>
     setDeleteMessageMode({ isDelete: false, message: {} });
@@ -50,6 +58,8 @@ const ConversationMessagesList = memo(props => {
       prevMessage: deleteMessageMode.message.prevMessage,
       numberOfMessages: deleteMessageMode.message.numberOfMessages,
       isRead: deleteMessageMode.message.isRead,
+      isOriginal: deleteMessageMode.message.isOriginal,
+      isForwarded: deleteMessageMode.message.isForwarded,
     });
     handleDeleteMessageMod();
   };
@@ -57,15 +67,13 @@ const ConversationMessagesList = memo(props => {
 
   const replyObserver = useMemo(
     () =>
-      new IntersectionObserver(
-        entries => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              setReplyOn(null);
-            }
-          });
-        },
-      ),
+      new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setReplyOn(null);
+          }
+        });
+      }),
     []
   );
 
@@ -74,13 +82,14 @@ const ConversationMessagesList = memo(props => {
       new IntersectionObserver(
         entries => {
           entries.forEach(entry => {
-            if (entry.isIntersecting) {
+            const visiblePct = Math.floor(entry.intersectionRatio * 100);
+            if (visiblePct > 48 && visiblePct <= 100) {
               const messageId = entry.target.attributes.id.value;
               setSeenMessageRequest(messageId);
             }
           });
         },
-        { threshold: 1 }
+        { threshold: thresholdSets }
       ),
     []
   );
@@ -181,8 +190,11 @@ const ConversationMessagesList = memo(props => {
                 createdAt,
                 isRead,
                 isEdited,
+                isOriginal,
+                isForwarded,
                 conversation,
                 repliedMessage,
+                forwardedFrom,
               },
               i
             ) => (
@@ -194,6 +206,8 @@ const ConversationMessagesList = memo(props => {
                 typingStatus={typingStatus}
                 isRead={isRead}
                 isEdited={isEdited}
+                isOriginal={isOriginal}
+                isForwarded={isForwarded}
                 i={i}
                 observer={observer}
                 id={_id}
@@ -203,6 +217,7 @@ const ConversationMessagesList = memo(props => {
                 replyOn={replyOn}
                 setReplyOn={setReplyOn}
                 replyObserver={replyObserver}
+                forwardedFrom={forwardedFrom}
               />
             )
           )

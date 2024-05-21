@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as ActionChat from '../actions/chatsCreator';
@@ -14,30 +14,42 @@ const useTypingStatus = () => {
   const [isTouched, setIsTouched] = useState(false);
   const textArea = useRef(null);
 
-  const dialog = useMemo(() => currentDialog, [currentDialog]);
   const setTypingStatus = useCallback(status => setIsTyping(status), []);
   const setTouchedStatus = useCallback(status => setIsTouched(status), []);
 
   useEffect(() => {
     let intervalId;
-    if (isTyping) {
+    if (currentDialog && isTouched && isTyping) {
       startTypingRequest(currentDialog?.conversationId);
       intervalId = setInterval(
         () => startTypingRequest(currentDialog?.conversationId),
         3000
       );
-    } else if (isTouched && !isTyping && textArea.current?.value === '') {
+    }
+    if (
+      currentDialog &&
+      isTouched &&
+      !isTyping &&
+      textArea.current?.value === ''
+    ) {
       stopTypingRequest(currentDialog?.conversationId);
     }
     return () => {
       clearInterval(intervalId);
-      if (currentDialog && isTyping && textArea.current?.value !== '') {
+      if (
+        currentDialog &&
+        isTouched &&
+        isTyping &&
+        textArea.current?.value !== ''
+      ) {
         stopTypingRequest(currentDialog?.conversationId);
+        setIsTyping(false);
+        setIsTouched(false);
       }
     };
-  }, [isTyping, currentDialog?.conversationId]);
+  }, [isTouched, isTyping, currentDialog?.conversationId]);
 
-  return { textArea, dialog, setTypingStatus, setTouchedStatus };
+  return { textArea, setTypingStatus, setTouchedStatus };
 };
 
 export default useTypingStatus;

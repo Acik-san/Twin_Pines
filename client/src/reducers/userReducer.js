@@ -99,21 +99,6 @@ const handlers = {
       draftState.userProfile.onlineStatus = status;
       draftState.userProfile.lastSeen = new Date().toISOString();
     }
-    userId
-      ? draftState.users.forEach(user =>
-          user.id === userId ? (user.status = status) : null
-        )
-      : draftState.users.forEach(user => (user.status = status));
-  }),
-  [ACTION_TYPES.GET_ONLINE_USERS]: produce((draftState, action) => {
-    const {
-      payload: { users },
-    } = action;
-    draftState.users.forEach(user =>
-      users.includes(user.id)
-        ? (user.status = 'online')
-        : (user.status = 'offline')
-    );
   }),
   [ACTION_TYPES.GET_USER_FOLLOWERS_SUCCESS]: produce((draftState, action) => {
     const {

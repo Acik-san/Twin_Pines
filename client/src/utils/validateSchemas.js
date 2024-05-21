@@ -42,7 +42,7 @@ const SCHEMA_NAME = Yup.string('Must be string')
       });
     }
     return true;
-  })
+  });
 const SCHEMA_EMAIL = Yup.string()
   .matches(
     /^[a-zA-Z0-9.@]+$/,
@@ -109,6 +109,15 @@ const Schems = {
         return strippedValue.length > 0;
       })
       .required('Must be required'),
+  }),
+  ForwardMessageSchem: Yup.object({
+    messageBody: Yup.string('Must be string')
+      .matches(/^[\s\S]{0,4096}$/, 'Invalid amount of symbols')
+      .test('has-content', 'Invalid amount of symbols', value => {
+        if (!value) return true;
+        const strippedValue = value?.replace(/\n/g, '');
+        return strippedValue?.length > 0;
+      }),
   }),
   UsernameUpdateSchem: Yup.object({
     userName: SCHEMA_USERNAME,

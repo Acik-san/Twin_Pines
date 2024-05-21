@@ -1,21 +1,23 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { CSSTransition } from 'react-transition-group';
 import FixedBackground from '../../components/FixedBackground';
 import Header from '../../components/Header';
 import Chats from '../../components/Chats';
 import Conversation from '../../components/Conversation';
+import ChatInfo from '../../components/ChatInfo';
+import ChatsList from '../../components/ChatsList';
 import * as ActionUser from '../../actions/userCreators';
 import * as ActionChat from '../../actions/chatsCreator';
 import styles from './ChatsPage.module.scss';
 
 const ChatsPage = () => {
   const { user, users } = useSelector(({ users }) => users);
-  const { messagesPreview } = useSelector(({ chats }) => chats);
-  const { getUsersRequest, getOnlineUsersRequest } = bindActionCreators(
-    ActionUser,
-    useDispatch()
+  const { messagesPreview, isChatInfoOpen, forwardMessageMode } = useSelector(
+    ({ chats }) => chats
   );
+  const { getUsersRequest } = bindActionCreators(ActionUser, useDispatch());
   const {
     getChatsRequest,
     clearCurrentChat,
@@ -23,7 +25,9 @@ const ChatsPage = () => {
     setEditMessageMode,
     setDeleteMessageMode,
     setReplyMessageMode,
+    setForwardMessageMode,
     setContextMenuTarget,
+    setChatInfoOpen,
   } = bindActionCreators(ActionChat, useDispatch());
   useEffect(() => {
     if (users.length === 0) {
@@ -38,6 +42,12 @@ const ChatsPage = () => {
       setEditMessageMode({ isEdit: false, message: {} });
       setDeleteMessageMode({ isDelete: false, message: {} });
       setReplyMessageMode({ isReply: false, message: {} });
+      setForwardMessageMode({
+        isChatListOpen: false,
+        isForward: false,
+        message: {},
+      });
+      setChatInfoOpen(false);
     };
   }, []);
   useEffect(() => {
@@ -49,7 +59,6 @@ const ChatsPage = () => {
           interlocutorId: id,
         })),
       });
-      getOnlineUsersRequest(user.id);
     }
   }, [messagesPreview.length]);
   return (
@@ -60,6 +69,32 @@ const ChatsPage = () => {
         <Chats />
         <Conversation />
       </section>
+      <CSSTransition
+        in={isChatInfoOpen}
+        timeout={150}
+        classNames={{
+          enter: styles['fade-enter'],
+          enterActive: styles['fade-enter-active'],
+          exit: styles['fade-exit'],
+          exitActive: styles['fade-exit-active'],
+        }}
+        unmountOnExit
+      >
+        <ChatInfo />
+      </CSSTransition>
+      <CSSTransition
+        in={forwardMessageMode.isChatListOpen}
+        timeout={150}
+        classNames={{
+          enter: styles['fade-enter'],
+          enterActive: styles['fade-enter-active'],
+          exit: styles['fade-exit'],
+          exitActive: styles['fade-exit-active'],
+        }}
+        unmountOnExit
+      >
+        <ChatsList />
+      </CSSTransition>
     </>
   );
 };

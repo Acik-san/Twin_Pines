@@ -1,0 +1,110 @@
+@import '../../common/styles/breakpoints';
+@import '../../common/styles/templates';
+@import '../../common/styles/colors';
+
+.chats_list_wrapper {
+  z-index: 100;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2392156863);
+  .chats_list_container {
+    @include user_card;
+    position: absolute;
+    margin: 0;
+    width: 93%;
+    max-width: 350px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    .button_container {
+      display: flex;
+      margin-bottom: 20px;
+      .title {
+        font-size: 18px;
+        font-weight: 500;
+      }
+      .close_icon {
+        width: 25px;
+        height: 25px;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        padding: 0;
+        border: none;
+        background-color: transparent;
+        &::after {
+          content: url('../../../public/static/images/svg/close.svg');
+          display: inline-block;
+          width: 25px;
+          height: 25px;
+          filter: invert(88%) sepia(32%) saturate(3504%) hue-rotate(251deg)
+            brightness(88%) contrast(105%);
+        }
+        &:hover {
+          &::after {
+            filter: invert(70%) sepia(32%) saturate(3504%) hue-rotate(251deg)
+              brightness(88%) contrast(105%);
+          }
+        }
+      }
+    }
+
+    .chats_list {
+      margin-top: 20px;
+      max-height: 350px;
+      overflow-y: auto;
+      .chats_list_item {
+        display: flex;
+        align-items: center;
+        padding: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+        &:hover {
+          background-color: $hovered_grey;
+        }
+        .photo_wrapper {
+          @include photo_wrapper;
+          margin: 0;
+          width: 60px;
+          height: 60px;
+        }
+        .photo_inner {
+          @include photo_inner;
+          width: 60px;
+          height: 60px;
+        }
+        .photo_inner_img {
+          @include photo_inner_img;
+          width: 60px;
+          height: 60px;
+        }
+        .chats_list_username {
+          @include userName;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 220px;
+          margin-left: 10px;
+          margin-bottom: 5px;
+          margin-top: 0;
+        }
+        .online_status_container {
+          text-align: left;
+          margin-left: 10px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 220px;
+          .online_status,
+          .last_seen {
+            color: #000000;
+            font-size: 16px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 220px;
+          }
+        }
+      }
+    }
+  }
+}

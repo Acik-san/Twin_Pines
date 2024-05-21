@@ -92,7 +92,10 @@ export const getUserFollowersRequest = (
   type: ACTION_TYPES.GET_USER_FOLLOWERS_REQUEST,
   payload: { userName, subscriptionsLimit, subscriptionsOffset },
 });
-export const getUserFollowersSuccess = ({ followers, haveMoreSubscriptions }) => ({
+export const getUserFollowersSuccess = ({
+  followers,
+  haveMoreSubscriptions,
+}) => ({
   type: ACTION_TYPES.GET_USER_FOLLOWERS_SUCCESS,
   payload: { followers, haveMoreSubscriptions },
 });
@@ -110,7 +113,10 @@ export const getUserFollowingRequest = (
   type: ACTION_TYPES.GET_USER_FOLLOWING_REQUEST,
   payload: { userName, subscriptionsLimit, subscriptionsOffset },
 });
-export const getUserFollowingSuccess = ({ following, haveMoreSubscriptions }) => ({
+export const getUserFollowingSuccess = ({
+  following,
+  haveMoreSubscriptions,
+}) => ({
   type: ACTION_TYPES.GET_USER_FOLLOWING_SUCCESS,
   payload: { following, haveMoreSubscriptions },
 });
@@ -143,6 +149,20 @@ export const setOnlineStatusError = error => ({
 export const setOnlineStatus = ({ userId, status }) => ({
   type: ACTION_TYPES.SET_ONLINE_STATUS,
   payload: { userId, status },
+});
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+export const getOnlineStatusRequest = userId => ({
+  type: ACTION_TYPES.GET_ONLINE_STATUS_REQUEST,
+  payload: { userId },
+});
+export const getOnlineStatusError = error => ({
+  type: ACTION_TYPES.GET_ONLINE_STATUS_ERROR,
+  payload: { error },
+});
+export const getOnlineStatus = onlineStatusInfo => ({
+  type: ACTION_TYPES.GET_ONLINE_STATUS,
+  payload: { onlineStatusInfo },
 });
 //-----------------------------------------------------------
 //-----------------------------------------------------------

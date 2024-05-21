@@ -6,3 +6,4 @@ export { default as useWindowResize } from './useWindowResize';
 export { default as useContextMenu } from './useContextMenu';
 export { default as useClickOutside } from './useClickOutside';
 export { default as useDataForContextMenu } from './useDataForContextMenu';
+export { default as useMenuForChat } from './useMenuForChat';

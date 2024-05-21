@@ -14,7 +14,7 @@ import styles from './UserProfile.module.scss';
 const UserProfile = () => {
   const { isEdit, name, value, type, editProfile, handleSetting } =
     useSettingsForUser();
-  const isFirstRender = useIsFirstRender();
+  // const isFirstRender = useIsFirstRender();
   const navigate = useNavigate();
 
   const { userName } = useParams();

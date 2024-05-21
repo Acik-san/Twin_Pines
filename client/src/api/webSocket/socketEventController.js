@@ -7,6 +7,9 @@ export const createMessage = data =>
 export const setOnlineStatus = data => {
   socket.emit(CONSTANTS.SOCKET_EVENTS.SET_ONLINE_STATUS, data);
 };
+export const getOnlineStatus = data => {
+  socket.emit(CONSTANTS.SOCKET_EVENTS.GET_ONLINE_STATUS, data);
+};
 export const getOnlineUsers = () => {
   socket.emit(CONSTANTS.SOCKET_EVENTS.GET_ONLINE_USERS);
 };
@@ -46,4 +49,8 @@ export const deleteMessage = data => {
 
 export const replyMessage = data => {
   socket.emit(CONSTANTS.SOCKET_EVENTS.REPLY_MESSAGE, data);
+};
+
+export const forwardMessage = data => {
+  socket.emit(CONSTANTS.SOCKET_EVENTS.FORWARD_MESSAGE, data);
 };

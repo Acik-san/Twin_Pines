@@ -14,10 +14,14 @@ socket.io.on('reconnect', () => {
     chats: { messagesPreview, currentDialog, messages, limit, offset },
   } = store.getState();
   if (user) {
+    store.dispatch(ChatCreator.getChatsOnReconnectRequest());
     store.dispatch(
       ChatCreator.subscribeChatsRequest({
         userId: user.id,
-        conversations: messagesPreview.map(({ _id }) => _id),
+        conversations: messagesPreview.map(({ _id, interlocutor: { id } }) => ({
+          conversationId: _id,
+          interlocutorId: id,
+        })),
       })
     );
     store.dispatch(
@@ -30,9 +34,10 @@ socket.io.on('reconnect', () => {
       store.dispatch(UserCreator.getUserRequest(userProfile.userName));
       store.dispatch(UserCreator.subscribeUserProfileRequest(userProfile.id));
     }
-    store.dispatch(UserCreator.getOnlineUsersRequest());
-    store.dispatch(ChatCreator.getChatsOnReconnectRequest());
     if (currentDialog) {
+      store.dispatch(
+        UserCreator.getOnlineStatusRequest(currentDialog.interlocutorId)
+      );
       if (messages.length === 0) {
         store.dispatch(
           ChatCreator.getMessagesRequest({
@@ -66,8 +71,11 @@ socket.on('disconnect', () => {
 });
 
 socket.on(CONSTANTS.SOCKET_EVENTS.ONLINE_STATUS, data => {
-  console.log(data)
   store.dispatch(UserCreator.setOnlineStatus(data));
+});
+
+socket.on(CONSTANTS.SOCKET_EVENTS.GET_ONLINE_STATUS_INFO, data => {
+  store.dispatch(UserCreator.getOnlineStatus(data));
 });
 
 socket.on(CONSTANTS.SOCKET_EVENTS.ONLINE_USERS, users => {
@@ -96,6 +104,10 @@ socket.on(CONSTANTS.SOCKET_EVENTS.DELETED_MESSAGE, data => {
 
 socket.on(CONSTANTS.SOCKET_EVENTS.REPLIED_MESSAGE, data => {
   store.dispatch(ChatCreator.replyMessageSuccess(data));
+});
+
+socket.on(CONSTANTS.SOCKET_EVENTS.FORWARDED_MESSAGE, data => {
+  store.dispatch(ChatCreator.forwardMessageSuccess(data));
 });
 
 export default socket;

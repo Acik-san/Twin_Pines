@@ -9,6 +9,7 @@
   border-top-left-radius: 10px;
   background-color: $dark_purple;
   color: $white;
+  cursor: pointer;
 }
 .back-button {
   position: relative;
@@ -41,6 +42,33 @@
     margin-left: 10px;
     padding-top: 4px;
     padding-bottom: 4px;
+  }
+  .online_status_container {
+    text-align: left;
+    margin-left: 10px;
+    .online_status,
+    .last_seen {
+      color: $white;
+      font-size: 16px;
+    }
+  }
+}
+
+.dots-menu-button {
+  margin-left: auto;
+  border: none;
+  border-top-right-radius: 10px;
+  background-color: transparent;
+  position: relative;
+  cursor: pointer;
+  &::after {
+    content: url('../../../public/static/images/svg/dots-menu.svg');
+    display: inline-block;
+    width: 50px;
+  }
+  &:hover::after {
+    filter: invert(66%) sepia(32%) saturate(3504%) hue-rotate(251deg)
+      brightness(88%) contrast(105%);
   }
 }
 

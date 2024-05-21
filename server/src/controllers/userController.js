@@ -7,10 +7,9 @@ module.exports.getUsers = async (req, res, next) => {
   try {
     const users = await User.findAll({
       attributes: {
-        exclude: ['password', 'createdAt', 'updatedAt'],
+        exclude: ['email', 'password', 'createdAt', 'updatedAt'],
       },
     });
-    users.forEach(user => (user.dataValues.status = 'offline'));
     res.status(200).send({ data: { users } });
   } catch (error) {
     next(error);
