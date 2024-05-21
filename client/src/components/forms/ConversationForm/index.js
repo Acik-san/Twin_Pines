@@ -99,7 +99,7 @@ const ConversationForm = memo(props => {
         {editMessageMode.isEdit ||
         replyMessageMode.isReply ||
         forwardMessageMode.isForward ? (
-          <ConversationMessageMode />
+          <ConversationMessageMode setIsTyping={setIsTyping} />
         ) : null}
         <div className={styles.input_container}>
           <ConversationFormInput

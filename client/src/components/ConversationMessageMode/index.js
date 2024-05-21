@@ -6,7 +6,8 @@ import CONSTANTS from '../../constants';
 import * as ActionChat from '../../actions/chatsCreator';
 import styles from './ConversationMessageMode.module.scss';
 
-const ConversationMessageMode = () => {
+const ConversationMessageMode = props => {
+  const { setIsTyping } = props;
   const {
     currentDialog,
     editMessageMode,
@@ -34,6 +35,7 @@ const ConversationMessageMode = () => {
         message: {},
       });
     }
+    setIsTyping(false);
     handleReset();
   };
   useEffect(() => {
@@ -49,6 +51,7 @@ const ConversationMessageMode = () => {
         isForward: false,
         message: {},
       });
+      setIsTyping(false);
       handleReset();
     }
   }, [editMessageMode.isEdit]);
@@ -60,6 +63,7 @@ const ConversationMessageMode = () => {
         isForward: false,
         message: {},
       });
+      setIsTyping(false);
       handleReset();
     }
   }, [replyMessageMode.isReply]);
@@ -70,6 +74,7 @@ const ConversationMessageMode = () => {
         message: {},
       });
       setReplyMessageMode({ isReply: false, message: {} });
+      setIsTyping(false);
       handleReset();
     }
   }, [forwardMessageMode.isForward]);

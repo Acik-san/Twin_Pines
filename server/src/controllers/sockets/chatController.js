@@ -26,6 +26,7 @@ module.exports.subscribeChats = socket =>
     socket.join(userId);
     conversations.forEach(({ conversationId, interlocutorId }) => {
       socket.join(conversationId);
+      socket.join(`${conversationId}+${userId}`);
       socket.join(interlocutorId);
     });
   });
@@ -34,6 +35,7 @@ module.exports.unsubscribeChats = socket =>
     socket.leave(userId);
     conversations.forEach(({ conversationId, interlocutorId }) => {
       socket.leave(conversationId);
+      socket.leave(`${conversationId}+${userId}`);
       socket.leave(interlocutorId);
     });
   });
@@ -111,14 +113,16 @@ module.exports.sendMessage = socket =>
       if (!conversations.includes(newConversation._id.toString())) {
         socket.join(newConversation._id.toString());
       }
-      socket.to(interlocutor).emit(NEW_MESSAGE, {
-        message: newMessage,
-        preview: {
-          ...preview,
-          interlocutor: users.filter(user => user.dataValues.id === userId)[0]
-            .dataValues,
-        },
-      });
+      socket
+        .to(`${newConversation._id.toString()}+${interlocutor}`)
+        .emit(NEW_MESSAGE, {
+          message: newMessage,
+          preview: {
+            ...preview,
+            interlocutor: users.filter(user => user.dataValues.id === userId)[0]
+              .dataValues,
+          },
+        });
       socket.emit(NEW_MESSAGE, {
         message: newMessage,
         preview: {
