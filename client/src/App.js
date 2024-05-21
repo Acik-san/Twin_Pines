@@ -36,7 +36,7 @@ const App = () => {
           <Route exact path='/' element={<HomePage />} />
           {user ? (
             <>
-              <Route exact path='/profile' element={<UserPage />} />
+              <Route exact path='/profile/:userName' element={<UserPage />} />
               <Route exact path='/chats' element={<ChatsPage />} />
             </>
           ) : (

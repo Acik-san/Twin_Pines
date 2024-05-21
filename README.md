@@ -1,11 +1,11 @@
 # Twin_Pines
-# Инструкции для запуска приложения
+# Инструкции для запуска приложения в development режиме
 
 1. (Один раз). <br>
    Вам понадобится новый терминал. <br>
    Установить приложение для контейнеризации [Docker](https://docs.docker.com/):
 
-   - [Ubultu](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository) (выполнить 3 шага)
+   - [Ubuntu](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository) (выполнить 3 шага)
    - [Windows](https://docs.docker.com/docker-for-windows/install/)
    - [Mac](https://docs.docker.com/docker-for-mac/install/)
 
@@ -19,4 +19,7 @@
 
 ## Примечания
 
+- Укажите свой локальный (внутренний) IP-адрес в файлах:
+  - ./client/src/constants.js > serverIP = 'ВАШ IP-адрес'
+  - ./vscode/settings.json > "server": "ВАШ IP-адрес"
 - Пароль для уже созданных юзеров: '1Qwerty_'

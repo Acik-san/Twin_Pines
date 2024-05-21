@@ -5,8 +5,15 @@ import {
   getAuthUserSaga,
   updateUserSaga,
   getUsersSaga,
+  getUserSaga,
+  subscribeUserSaga,
+  unsubscribeUserSaga,
   setOnlineStatusSaga,
+  subscribeUserProfileSaga,
+  unsubscribeUserProfileSaga,
   getOnlineUsersSaga,
+  getUserFollowersSaga,
+  getUserFollowingSaga,
 } from './userSagas';
 import {
   createMessageSaga,
@@ -50,6 +57,25 @@ function* rootSaga () {
   yield takeLatest(
     ACTION_TYPES.GET_MESSAGES_ON_RECONNECT_REQUEST,
     getMessagesOnReconnectSaga
+  );
+  yield takeLatest(ACTION_TYPES.GET_USER_REQUEST, getUserSaga);
+  yield takeLatest(ACTION_TYPES.SUBSCRIBE_USER_REQUEST, subscribeUserSaga);
+  yield takeLatest(ACTION_TYPES.UNSUBSCRIBE_USER_REQUEST, unsubscribeUserSaga);
+  yield takeLatest(
+    ACTION_TYPES.SUBSCRIBE_USER_PROFILE_REQUEST,
+    subscribeUserProfileSaga
+  );
+  yield takeLatest(
+    ACTION_TYPES.UNSUBSCRIBE_USER_PROFILE_REQUEST,
+    unsubscribeUserProfileSaga
+  );
+  yield takeLatest(
+    ACTION_TYPES.GET_USER_FOLLOWERS_REQUEST,
+    getUserFollowersSaga
+  );
+  yield takeLatest(
+    ACTION_TYPES.GET_USER_FOLLOWING_REQUEST,
+    getUserFollowingSaga
   );
 }
 

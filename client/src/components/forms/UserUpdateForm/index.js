@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Form, Formik } from 'formik';
 import classNames from 'classnames';
 import { UserUpdateFormPropTypes } from '../../../propTypes';
+import { useClickOutside } from '../../../hooks';
 import AvatarCropper from '../../AvatarCropper';
 import UserFormInput from '../UserFormInput';
 import Schems from '../../../utils/validateSchemas';
@@ -11,21 +12,29 @@ import * as ActionsUser from '../../../actions/userCreators';
 import * as ActionsCreators from '../../../actions/creators';
 import styles from './UserUpdateForm.module.scss';
 import UserFormButton from '../UserFormButton';
-const { LoginUpdateSchem, EmailUpdateSchem, PasswordUpdateSchem } = Schems;
+const {
+  UsernameUpdateSchem,
+  NameUpdateSchem,
+  EmailUpdateSchem,
+  PasswordUpdateSchem,
+} = Schems;
 
 const UserUpdateForm = props => {
   const { id, name, value, type, editProfile } = props;
   const { error } = useSelector(({ users }) => users);
   const { updateUserRequest } = bindActionCreators(ActionsUser, useDispatch());
   const { cleanUserError } = bindActionCreators(ActionsCreators, useDispatch());
+
   const [initialFormValues, setInitialFormValues] = useState({
     [name]: !value ? '' : value,
   });
   const [prevValues, setPrevValues] = useState(null);
   const validationSchema = useMemo(
     () =>
-      name === 'login'
-        ? LoginUpdateSchem
+      name === 'userName'
+        ? UsernameUpdateSchem
+        : name === 'name'
+        ? NameUpdateSchem
         : name === 'email'
         ? EmailUpdateSchem
         : name === 'password'
@@ -33,6 +42,9 @@ const UserUpdateForm = props => {
         : null,
     [name]
   );
+  const containerRef = useRef(null);
+  useClickOutside(containerRef, editProfile);
+
   useEffect(() => {
     return () => {
       cleanUserError();
@@ -49,7 +61,7 @@ const UserUpdateForm = props => {
     setInitialFormValues(values);
   };
   return (
-    <div className={styles.container} onClick={editProfile}>
+    <div className={styles.container} /*onMouseDown={editProfile}*/>
       <Formik
         enableReinitialize
         initialValues={initialFormValues}
@@ -61,7 +73,8 @@ const UserUpdateForm = props => {
             [styles.form]: type !== 'file',
             [styles.cropper]: type === 'file',
           })}
-          onClick={e => e.stopPropagation()}
+          // onMouseDown={e => e.stopPropagation()}
+          ref={containerRef}
         >
           {type === 'file' ? (
             <AvatarCropper editProfile={editProfile} fieldName={name} />

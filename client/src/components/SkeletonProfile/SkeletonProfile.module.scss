@@ -1,0 +1,233 @@
+@import '../../common/styles/breakpoints';
+@import '../../common/styles/templates';
+@import '../../common/styles/colors';
+
+.user_card {
+  @include user_card;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  width: 93%;
+  padding: 20px 12px;
+  margin-top: 110px;
+  background-color: #ffffffe6;
+}
+
+.profile_head,
+.profile_body {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile_head {
+  justify-content: space-between;
+  .user_info_container {
+    display: flex;
+    flex-direction: column;
+    .user_photo {
+      width: 80px;
+      height: 80px;
+      margin: auto;
+      transform: none;
+    }
+    .user_info {
+      margin-left: 0px;
+      .user_name,
+      .name,
+      .bio {
+        margin: auto;
+        transform: none;
+      }
+      .user_name {
+        width: 110px;
+        height: 25px;
+        margin-top: 10px;
+      }
+      .name,
+      .bio {
+        width: 150px;
+        height: 10px;
+      }
+      .name {
+        margin-top: 10px;
+      }
+      .bio {
+        margin-top: 5px;
+      }
+    }
+  }
+  .subscription_container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    .subscriptions {
+      width: 100%;
+      height: 45px;
+      transform: none;
+    }
+    .button_container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+      .subscribe_button,
+      .options_button {
+        height: 30px;
+        transform: none;
+      }
+      .subscribe_button {
+        width: 65%;
+      }
+      .options_button {
+        width: 33%;
+      }
+    }
+  }
+}
+.profile_body {
+  .left_column,
+  .right_column {
+    display: flex;
+    flex-direction: column;
+  }
+  .left_column {
+    order: 1;
+    .user_stories,
+    .user_posts {
+      width: 100%;
+      transform: none;
+    }
+    .user_stories {
+      height: 200px;
+      margin-top: 10px;
+    }
+    .user_posts {
+      height: 350px;
+      margin-top: 15px;
+    }
+  }
+  .right_column {
+    justify-content: flex-end;
+    .container {
+      width: 100%;
+      height: 100px;
+      margin-top: 15px;
+      transform: none;
+    }
+  }
+}
+
+@media screen and (min-width: 375px) {
+  .user_card {
+    width: 94%;
+  }
+  .profile_head {
+    margin-bottom: 10px;
+    flex-direction: row;
+    .user_info_container {
+      .user_photo {
+        margin: 0;
+      }
+      .user_info {
+        .user_name,
+        .name,
+        .bio {
+          margin-left: 0;
+          margin-right: 0;
+        }
+      }
+    }
+    .subscription_container {
+      position: absolute;
+      right: 12px;
+      width: 63%;
+      margin-top: 0px;
+    }
+  }
+  .profile_body {
+    .right_column {
+      margin-left: 0px;
+      .container {
+        margin-top: 0px;
+      }
+    }
+  }
+}
+@media screen and (min-width: 475px) {
+  .profile_head {
+    .subscription_container {
+      position: relative;
+      right: 0;
+      width: 288px;
+    }
+  }
+}
+@media screen and (min-width: 500px) {
+  .profile_head {
+    .user_info_container {
+      .user_photo {
+        width: 100px;
+        height: 100px;
+      }
+    }
+  }
+}
+@media screen and (min-width: 768px) {
+  .user_card {
+    width: 95%;
+  }
+  .profile_head {
+    .user_info_container {
+      flex-direction: row;
+      .user_photo {
+        width: 145px;
+        height: 145px;
+      }
+      .user_info {
+        margin-left: 15px;
+      }
+    }
+    .subscription_container {
+      .subscriptions {
+        height: 60px;
+      }
+      .button_container {
+        margin-top: 10px;
+      }
+    }
+  }
+  .profile_body {
+    flex-direction: row;
+    .left_column {
+      width: 100%;
+      max-width: 652px;
+      order: 0;
+      .user_stories {
+        margin-top: 0px;
+      }
+    }
+    .right_column {
+      margin-left: 12px;
+      width: 50%;
+      max-width: 288px;
+      .container {
+        height: 565px;
+      }
+    }
+  }
+}
+@media screen and (min-width: 1000px) {
+  .user_card {
+    width: 976px;
+    padding: 20px 12px;
+    margin-top: 110px;
+  }
+  .profile_head {
+    .user_info_container {
+      .user_photo {
+        width: 164px;
+        height: 164px;
+      }
+    }
+  }
+}

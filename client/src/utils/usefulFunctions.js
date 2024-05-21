@@ -35,16 +35,16 @@ export const dateToString = task => {
   return task.deadLine.slice(0, 10).concat(' ', task.deadLine.slice(11, 19));
 };
 
-export const calculateMessageDate = createdAt => {
-  const messageDate = parseISO(createdAt);
+export const calculateDate = (createdAt, format1, format2, format3) => {
+  const date = parseISO(createdAt);
   const currentDate = new Date();
-  return isSameDay(messageDate, currentDate)
-    ? format(messageDate, 'HH:mm')
-    : !isSameDay(messageDate, currentDate) &&
-      isWithinInterval(messageDate, {
+  return isSameDay(date, currentDate)
+    ? format(date, format1)
+    : !isSameDay(date, currentDate) &&
+      isWithinInterval(date, {
         start: startOfDay(subDays(currentDate, 6)),
         end: endOfDay(currentDate),
       })
-    ? format(messageDate, 'EEE')
-    : format(messageDate, 'dd.MM.yy');
+    ? format(date, format2)
+    : format(date, format3);
 };

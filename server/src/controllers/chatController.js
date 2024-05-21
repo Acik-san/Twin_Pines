@@ -193,14 +193,14 @@ module.exports.getPreview = async (req, res, next) => {
       where: {
         id: interlocutors,
       },
-      attributes: ['id', 'login', 'email', 'avatar'],
+      attributes: ['id', 'userName', 'email', 'avatar'],
     });
     conversations.forEach(conversation => {
       senders.forEach(sender => {
         if (conversation.participants.includes(sender.dataValues.id)) {
           conversation.interlocutor = {
             id: sender.dataValues.id,
-            login: sender.dataValues.login,
+            userName: sender.dataValues.userName,
             email: sender.dataValues.email,
             avatar: sender.dataValues.avatar,
           };

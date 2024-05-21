@@ -10,7 +10,7 @@ const socket = io(CONSTANTS.WS_BASE_URL, {
 
 socket.io.on('reconnect', () => {
   const {
-    users: { user },
+    users: { user, userProfile },
     chats: { messagesPreview, currentDialog, messages, limit, offset },
   } = store.getState();
   if (user) {
@@ -26,6 +26,10 @@ socket.io.on('reconnect', () => {
         status: 'online',
       })
     );
+    if (userProfile) {
+      store.dispatch(UserCreator.getUserRequest(userProfile.userName));
+      store.dispatch(UserCreator.subscribeUserProfileRequest(userProfile.id));
+    }
     store.dispatch(UserCreator.getOnlineUsersRequest());
     store.dispatch(ChatCreator.getChatsOnReconnectRequest());
     if (currentDialog) {
@@ -54,12 +58,15 @@ socket.on('disconnect', () => {
     users: { user },
   } = store.getState();
   if (user) {
-    store.dispatch(UserCreator.setOnlineStatus({ status: 'offline' }));
+    store.dispatch(
+      UserCreator.setOnlineStatus({ userId: user.id, status: 'offline' })
+    );
     store.dispatch(ChatCreator.setTypingStatus({ status: false }));
   }
 });
 
 socket.on(CONSTANTS.SOCKET_EVENTS.ONLINE_STATUS, data => {
+  console.log(data)
   store.dispatch(UserCreator.setOnlineStatus(data));
 });
 

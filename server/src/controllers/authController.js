@@ -15,6 +15,8 @@ module.exports.signIn = async (req, res, next) => {
     }
     if (user && (await user.comparePassword(password))) {
       const data = await AuthService.createSession(user);
+      data.user.followers = await user.countTarget();
+      data.user.following = await user.countSubscriber();
       return res.status(201).send({
         data,
       });

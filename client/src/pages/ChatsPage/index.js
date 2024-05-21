@@ -41,10 +41,13 @@ const ChatsPage = () => {
     };
   }, []);
   useEffect(() => {
-    if (user) {
+    if (user && messagesPreview.length !== 0) {
       subscribeChatsRequest({
         userId: user.id,
-        conversations: messagesPreview.map(({ _id }) => _id),
+        conversations: messagesPreview.map(({ _id, interlocutor: { id } }) => ({
+          conversationId: _id,
+          interlocutorId: id,
+        })),
       });
       getOnlineUsersRequest(user.id);
     }

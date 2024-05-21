@@ -1,0 +1,33 @@
+@import '../../common/styles/breakpoints';
+@import '../../common/styles/templates';
+@import '../../common/styles/colors';
+
+// @media screen and (min-width: 300px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    border-radius: 4px/6.7px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 100%;
+    height: 100px;
+    background-color: #0000001c;
+    backdrop-filter: blur(10px);
+  }
+// }
+
+@media screen and (min-width: 375px) {
+  .container {
+    margin-top: 0px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .container {
+    height: 565px;
+    margin-bottom: 0px;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+}

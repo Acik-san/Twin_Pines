@@ -8,7 +8,7 @@ const CONSTANTS = {
   ],
   SIGN_UP_FORM_FIELDS: [
     { id: 1, name: 'email', placeholder: 'Email' },
-    { id: 3, name: 'login', placeholder: 'Login' },
+    { id: 3, name: 'userName', placeholder: 'Username' },
     { id: 2, type: 'password', name: 'password', placeholder: 'Password' },
     {
       id: 4,
@@ -26,6 +26,8 @@ const CONSTANTS = {
   SOCKET_EVENTS: {
     NEW_MESSAGE: 'NEW_MESSAGE',
     NEW_MESSAGE_ERROR: 'NEW_MESSAGE_ERROR',
+    SUBSCRIBE_USER_PROFILE: 'SUBSCRIBE_USER_PROFILE',
+    UNSUBSCRIBE_USER_PROFILE: 'UNSUBSCRIBE_USER_PROFILE',
     SUBSCRIBE_CHATS: 'SUBSCRIBE_CHATS',
     UNSUBSCRIBE_CHATS: 'UNSUBSCRIBE_CHATS',
     START_TYPING: 'START_TYPING',
@@ -91,19 +93,26 @@ const CONSTANTS = {
     {
       id: 2,
       iconName: 'user_icon',
-      propertyName: 'User login',
-      name: 'login',
+      propertyName: 'Username',
+      name: 'userName',
       type: 'text',
     },
     {
       id: 3,
+      iconName: 'name_icon',
+      propertyName: 'Name',
+      name: 'name',
+      type: 'text',
+    },
+    {
+      id: 4,
       iconName: 'email_icon',
       propertyName: 'User email',
       name: 'email',
       type: 'text',
     },
     {
-      id: 4,
+      id: 5,
       iconName: 'password_icon',
       propertyName: 'Change password',
       name: 'password',

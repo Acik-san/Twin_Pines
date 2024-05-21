@@ -32,13 +32,13 @@ const handleError = produce((draftState, action) => {
 
 const handleCurrentChat = produce((draftState, action) => {
   const {
-    payload: { conversationId, interlocutorId, login, avatar },
+    payload: { conversationId, interlocutorId, userName, avatar },
   } = action;
   draftState.isFetching = false;
   if (
     // draftState.currentDialog?.conversationId !== conversationId &&
     draftState.currentDialog?.interlocutorId !== interlocutorId &&
-    draftState.currentDialog?.login !== login
+    draftState.currentDialog?.userName !== userName
   ) {
     draftState.messages = [];
     draftState.offset = 0;
@@ -46,7 +46,7 @@ const handleCurrentChat = produce((draftState, action) => {
     draftState.currentDialog = {
       conversationId,
       interlocutorId,
-      login,
+      userName,
       avatar,
     };
   }
@@ -86,16 +86,24 @@ const handlers = {
         conversation._id === preview._id ? (conversation.count += 1) : null
       );
     }
-    draftState.messagesPreview.forEach(conversation => {
-      if (conversation._id === preview._id) {
-        conversation.messageId = preview.messageId;
-        conversation.body = preview.body;
-        conversation.sender = preview.sender;
-        conversation.createdAt = preview.createdAt;
-        conversation.isRead = preview.isRead;
-        conversation.isTyping = preview.isTyping;
-      }
-    });
+    if (
+      draftState.messagesPreview.find(
+        conversation => conversation._id === preview._id
+      )
+    ) {
+      draftState.messagesPreview.forEach(conversation => {
+        if (conversation._id === preview._id) {
+          conversation.messageId = preview.messageId;
+          conversation.body = preview.body;
+          conversation.sender = preview.sender;
+          conversation.createdAt = preview.createdAt;
+          conversation.isRead = preview.isRead;
+          conversation.isTyping = preview.isTyping;
+        }
+      });
+    } else {
+      draftState.messagesPreview.push(preview);
+    }
   }),
   [ACTION_TYPES.GET_MESSAGES_SUCCESS]: produce((draftState, action) => {
     const {

@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const CONSTANTS = require('../constants');
 
 const generateUser = key => ({
-  login: `user_${key}`,
+  user_name: `user_${key}`,
   email: `user.${key}@gmail.com`,
   password_hash: bcrypt.hashSync(
     '1Qwerty_',

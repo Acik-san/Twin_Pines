@@ -22,6 +22,7 @@ const UserProfileSettings = props => {
             name={name}
             type={type}
             handleSetting={handleSetting}
+            isEdit={isEdit}
           />
         )
       )}

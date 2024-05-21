@@ -1,0 +1,35 @@
+@import '../../common/styles/breakpoints';
+@import '../../common/styles/templates';
+@import '../../common/styles/colors';
+
+.profile_settings_wrapper {
+  z-index: 100;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2392156863);
+}
+
+.settings {
+  @include user_card;
+  position: absolute;
+  margin: 0;
+  width: 350px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  .photo_wrapper {
+    @include photo_wrapper;
+  }
+  .photo_inner {
+    @include photo_inner;
+  }
+  .photo_inner_img {
+    @include photo_inner_img;
+  }
+}
+
+.settings_username {
+  @include userName;
+}

@@ -1,0 +1,17 @@
+@import '../../common/styles/breakpoints';
+@import '../../common/styles/templates';
+@import '../../common/styles/colors';
+
+button {
+  border: none;
+  background-color: transparent;
+  color: #fff;
+  background-color: $dark_purple;
+  border-radius: 5px;
+  &:hover {
+    background-color: $purple;
+  }
+  &:active {
+    background-color: $hover_purple;
+  }
+}

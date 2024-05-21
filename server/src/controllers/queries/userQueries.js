@@ -6,6 +6,8 @@ module.exports.findUser = async (predicate, transaction) => {
   if (!result) {
     throw createError(404, 'User not found');
   } else {
-    return result.get({ plain: true });
+    const followers = await result.countTarget();
+    const following = await result.countSubscriber();
+    return { ...result.get({ plain: true }), followers, following };
   }
 };

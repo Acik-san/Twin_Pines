@@ -20,7 +20,7 @@ const createToken = (payload, { secret, time }) => {
     {
       userId: payload.id,
       email: payload.email,
-      login: payload.login,
+      userName: payload.userName,
       avatar: payload.avatar,
     },
     secret,

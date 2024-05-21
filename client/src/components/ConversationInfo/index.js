@@ -22,7 +22,7 @@ const ConversationInfo = memo(props => {
         ></button>
       </label>
       <div className={styles.wrapper}>
-        <h3>{currentDialog.login}</h3>
+        <h3>{currentDialog.userName}</h3>
         <p>{onlineStatus}</p>
       </div>
     </div>

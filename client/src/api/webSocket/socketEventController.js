@@ -10,11 +10,16 @@ export const setOnlineStatus = data => {
 export const getOnlineUsers = () => {
   socket.emit(CONSTANTS.SOCKET_EVENTS.GET_ONLINE_USERS);
 };
+export const subscribeUserProfile = data => {
+  socket.emit(CONSTANTS.SOCKET_EVENTS.SUBSCRIBE_USER_PROFILE, data);
+};
+export const unsubscribeUserProfile = data =>
+  socket.emit(CONSTANTS.SOCKET_EVENTS.UNSUBSCRIBE_USER_PROFILE, data);
 
 export const subscribeChats = data => {
   socket.emit(CONSTANTS.SOCKET_EVENTS.SUBSCRIBE_CHATS, data);
 };
-export const unSubscribeChats = data =>
+export const unsubscribeChats = data =>
   socket.emit(CONSTANTS.SOCKET_EVENTS.UNSUBSCRIBE_CHATS, data);
 export const startTyping = conversationId => {
   if (conversationId !== undefined) {
